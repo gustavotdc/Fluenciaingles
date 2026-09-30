@@ -505,6 +505,14 @@ const RED_TOTAL = R.length;
 const CHK_TOTAL = C.length;
 const STORE = "fluencia_v1";
 
+/* Sincronização via Supabase — só é usada fora do Claude Artifact (ex: GitHub
+   Pages), quando window.claude não existe. Chave "publishable" (anon): é
+   segura em código de navegador, o acesso é controlado pelas políticas de
+   RLS da tabela "estado" no banco. */
+const SUPA_URL = "https://iopcocewxebrsiyqqezx.supabase.co";
+const SUPA_KEY = "sb_publishable_ETBGBBnITeX2tI1YJFrVTA_INsQkRtp";
+const SUPA_ROW = "principal";
+
 const STATUS = {
   nova:    {label:"Nova",        cls:"s-nova"},
   aprend:  {label:"Aprendendo",  cls:"s-aprend"},
@@ -1165,6 +1173,33 @@ async function pushRemote(){
     if(pushAgain){ pushAgain = false; setTimeout(pushRemote, 500); }
   }
 }
+/* dbRef "de mentira" que fala com o Supabase pela REST (PostgREST), com a
+   mesma forma (get/set) que o dbRef do Claude Artifact usa. */
+function supaRef(){
+  return {
+    get: async () => {
+      const r = await fetch(SUPA_URL + "/rest/v1/estado?id=eq." + SUPA_ROW + "&select=dados", {
+        headers: { apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY }
+      });
+      if(!r.ok) throw new Error("supa get " + r.status);
+      const rows = await r.json();
+      const dados = rows.length ? rows[0].dados : null;
+      return { exists: !!dados, data: () => dados };
+    },
+    set: async (obj) => {
+      const r = await fetch(SUPA_URL + "/rest/v1/estado", {
+        method: "POST",
+        headers: {
+          apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY,
+          "Content-Type": "application/json",
+          Prefer: "resolution=merge-duplicates,return=minimal"
+        },
+        body: JSON.stringify([{ id: SUPA_ROW, dados: obj }])
+      });
+      if(!r.ok) throw new Error("supa set " + r.status);
+    }
+  };
+}
 function normaliza(o){
   if(!o) return o;
   if(!o.pav) o.pav = {};
@@ -1189,8 +1224,28 @@ function adota(remoto, msg){
 async function initSync(){
   let db = null;
   try{ db = (window.claude && window.claude.use) ? await window.claude.use("db") : null; }catch(e){ db = null; }
-  if(!db){ setSync("off"); return; }
-  dbRef = db.doc("estado/principal");
+  if(db){
+    dbRef = db.doc("estado/principal");
+    try{
+      const snap = await dbRef.get();
+      const remoto = snap.exists ? unpack(snap.data()) : null;
+      if(remoto && (remoto.ultimo||0) > (S.ultimo||0)) adota(remoto, null);
+      else if(!remoto || (S.ultimo||0) > (remoto.ultimo||0)) await pushRemote();
+      setSync("on");
+    }catch(e){ setSync("wait"); }
+    dbUnsub = dbRef.onSnapshot(snap => {
+      if(!snap.exists || snap.metadata.hasPendingWrites) return;
+      const r = unpack(snap.data());
+      if(!r || (r.ultimo||0) <= (S.ultimo||0)) return;
+      if(SESSION) return;                       // não troca o estado no meio de uma sessão
+      adota(r, "Progresso atualizado do outro aparelho.");
+      setSync("on");
+    }, () => { dbRef = null; dbUnsub = null; setSync("off"); });
+    return;
+  }
+  /* fora do Claude Artifact (ex: GitHub Pages): usa o Supabase, se configurado */
+  if(!SUPA_URL || !SUPA_KEY){ setSync("off"); return; }
+  dbRef = supaRef();
   try{
     const snap = await dbRef.get();
     const remoto = snap.exists ? unpack(snap.data()) : null;
@@ -1198,14 +1253,17 @@ async function initSync(){
     else if(!remoto || (S.ultimo||0) > (remoto.ultimo||0)) await pushRemote();
     setSync("on");
   }catch(e){ setSync("wait"); }
-  dbUnsub = dbRef.onSnapshot(snap => {
-    if(!snap.exists || snap.metadata.hasPendingWrites) return;
-    const r = unpack(snap.data());
-    if(!r || (r.ultimo||0) <= (S.ultimo||0)) return;
-    if(SESSION) return;                       // não troca o estado no meio de uma sessão
-    adota(r, "Progresso atualizado do outro aparelho.");
-    setSync("on");
-  }, () => { dbRef = null; dbUnsub = null; setSync("off"); });
+  /* sem tempo real por REST simples: ao voltar pra aba, busca de novo pra
+     pegar o que foi feito no outro aparelho */
+  document.addEventListener("visibilitychange", async () => {
+    if(document.hidden || !dbRef || SESSION) return;
+    try{
+      const snap = await dbRef.get();
+      const r = snap.exists ? unpack(snap.data()) : null;
+      if(r && (r.ultimo||0) > (S.ultimo||0)) adota(r, "Progresso atualizado do outro aparelho.");
+      setSync("on");
+    }catch(e){ setSync("wait"); }
+  });
 }
 async function writeFile(){
   if(!fileHandle) return;
