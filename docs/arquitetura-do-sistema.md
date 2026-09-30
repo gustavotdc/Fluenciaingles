@@ -5,6 +5,9 @@ do Gustavo deve ler isto antes.
 
 Atualizado em 30/09/2026 (versão 20 do sistema — push imediato ao marcar
 leitura como concluída, corrige texto "lido" que não sincronizava; sistema
+| Segunda plataforma (código) | `https://github.com/gustavotdc/Fluenciaingles` | Repositório público, fonte de verdade versionada. Ver seção "Segunda plataforma". |
+| Segunda plataforma (site) | `https://gustavotdc.github.io/Fluenciaingles/` | Publicado sozinho a cada push em `main` via GitHub Actions. |
+| Segunda plataforma (progresso) | Supabase, projeto `iopcocewxebrsiyqqezx`, tabela `estado` | Banco separado do Artifact — não sincroniza entre as duas plataformas. |
 migrado também pro GitHub Pages, com banco Supabase próprio — ver seção
 "Segunda plataforma").
 
