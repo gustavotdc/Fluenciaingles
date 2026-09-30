@@ -1,0 +1,413 @@
+How's it going?|RÁU-zit GÔU-in|Como vão as coisas?|Social
+What's up?|UÁTS ÂP|E aí?|Social
+How have you been?|RÁU rév iu BÍN|Como você tem estado?|Social
+Long time no see.|LÓNG TÁIM nôu SÍ|Quanto tempo.|Social
+Good to see you.|GÚD tu SÍ iu|Que bom te ver.|Social
+Nice to meet you.|NÁIS tu MÍT iu|Prazer em conhecer.|Social
+How's your day going?|RÁUZ iór DÊI GÔU-in|Como está seu dia?|Social
+Not much, you?|NÁT MÂTCH iú|Nada demais, e você?|Social
+I'm doing great.|áim DÚ-in GRÊIT|Estou ótimo.|Social
+Same as always.|SÊIM éz ÓL-uêiz|O de sempre.|Social
+Take care.|TÊIK KÉR|Se cuida.|Social
+Have a good one.|RÉ-va GÚD UÂN|Tenha um bom dia.|Social
+See you around.|SÍ iu a-RÁUND|A gente se vê.|Social
+Talk to you later.|TÓK tu iu LÊI-rer|Falo com você depois.|Social
+It was nice talking to you.|it uóz NÁIS TÓ-kin tu iu|Foi bom falar com você.|Social
+Say hi to her for me.|SÊI RÁI tu rer fór mi|Manda um oi pra ela por mim.|Social
+Sorry to bother you.|SÓ-ri tu BÁ-dher iu|Desculpa incomodar.|Social
+No worries.|NÔU UÓ-riz|Sem problema.|Social
+My pleasure.|mái PLÉ-jer|O prazer é meu.|Social
+Thanks a lot.|THÉNKS a LÁT|Muito obrigado.|Social
+I appreciate it.|ái a-PRÍ-chi-êi-rit|Eu agradeço.|Social
+Don't mention it.|DÔUNT MÉN-chan it|Não há de quê.|Social
+That makes sense.|dhét MÊIKS SÉNS|Isso faz sentido.|Concordar
+I see your point.|ái SÍ iór PÓINT|Entendi seu ponto.|Concordar
+You're right.|iór RÁIT|Você está certo.|Concordar
+Exactly.|ig-ZÉK-li|Exatamente.|Concordar
+That's true.|dhéts TRÚ|É verdade.|Concordar
+I agree with you.|ái a-GRÍ uidh iu|Concordo com você.|Concordar
+Fair enough.|FÉR i-NÂF|Justo. Aceito.|Concordar
+I couldn't agree more.|ái CÚ-dent a-GRÍ MÓR|Concordo plenamente.|Concordar
+Good point.|GÚD PÓINT|Boa observação.|Concordar
+I'm not so sure.|áim NÁT sôu CHÚR|Não tenho tanta certeza.|Concordar
+I don't think so.|ái DÔUNT THÍNK sôu|Acho que não.|Concordar
+I see it differently.|ái SÍ it DÍ-fren-tli|Eu vejo diferente.|Concordar
+That's not quite right.|dhéts NÁT KUÁIT RÁIT|Não é bem assim.|Concordar
+I beg to differ.|ái BÉG tu DÍ-fer|Discordo, com todo respeito.|Concordar
+It depends.|it di-PÉNDZ|Depende.|Concordar
+Yes and no.|IÉS end NÔU|Sim e não.|Concordar
+Kind of.|CÁIN-da|Mais ou menos.|Concordar
+Not really.|NÁT RÍ-li|Na verdade não.|Concordar
+Absolutely.|éb-sa-LÚT-li|Com certeza.|Concordar
+No way.|NÔU UÊI|De jeito nenhum.|Concordar
+That's fine with me.|dhéts FÁIN uidh mi|Por mim tudo bem.|Concordar
+Whatever works for you.|uat-É-ver UÓRKS fór iu|O que for melhor pra você.|Concordar
+I think that...|ái THÍNK dhét|Eu acho que...|Opinião
+In my opinion,|in mái a-PÍ-nian|Na minha opinião,|Opinião
+If you ask me,|if iu ÉSK mi|Se quer saber,|Opinião
+The way I see it,|dha UÊI ái SÍ it|Do jeito que eu vejo,|Opinião
+It seems to me that...|it SÍMZ tu mi dhét|Me parece que...|Opinião
+I feel like...|ái FÍL láik|Eu sinto que...|Opinião
+To be honest,|tu bi Á-nest|Pra ser sincero,|Opinião
+Honestly,|Á-nest-li|Sinceramente,|Opinião
+I'd say...|áid SÊI|Eu diria...|Opinião
+From what I've seen,|fram UÁT áiv SÍN|Pelo que eu vi,|Opinião
+As far as I know,|éz FÁ-ré-zái NÔU|Até onde eu sei,|Opinião
+I'm pretty sure.|áim PRÍ-ri CHÚR|Tenho quase certeza.|Opinião
+I have no idea.|ái rév NÔU ái-DÍ-a|Não faço ideia.|Opinião
+That's a good question.|dhét-sa GÚD KUÉS-tchan|Essa é uma boa pergunta.|Opinião
+It's hard to say.|its RÁRD tu SÊI|É difícil dizer.|Opinião
+It's up to you.|its ÂP tu iu|Você que sabe.|Opinião
+I don't mind.|ái DÔUNT MÁIND|Por mim tanto faz.|Opinião
+I'd rather not.|áid RÉ-dher NÁT|Prefiro não.|Opinião
+I'm okay with that.|áim ôu-KÊI uidh dhét|Estou de acordo com isso.|Opinião
+That works for me.|dhét UÓRKS fór mi|Por mim funciona.|Opinião
+Can you help me?|kn iu RÉLP mi|Você pode me ajudar?|Pedir
+Could you do me a favor?|CÚ-dja DÚ mi a FÊI-ver|Pode me fazer um favor?|Pedir
+Do you mind if I...?|dju MÁIND if ái|Você se importa se eu...?|Pedir
+Would it be possible to...?|UÚ-rit bi PÁ-sa-bol tu|Seria possível...?|Pedir
+I was wondering if...|ái uóz UÂN-de-rin if|Eu queria saber se...|Pedir
+Let me know if you need anything.|LÉ-mi NÔU if iu NÍD É-ni-thin|Me avisa se precisar de algo.|Pedir
+Do you need a hand?|dju NÍD a RÉND|Precisa de uma ajuda?|Pedir
+I can take care of that.|ái kn TÊIK KÉ-rav dhét|Eu posso cuidar disso.|Pedir
+Leave it to me.|LÍ-vi-ta-mi|Deixa comigo.|Pedir
+I'll take care of it.|áil TÊIK KÉ-ra-vit|Eu resolvo isso.|Pedir
+Feel free to ask.|FÍL FRÍ tu ÉSK|Pode perguntar à vontade.|Pedir
+Go ahead.|GÔU a-RÉD|Pode ir. Manda.|Pedir
+Be my guest.|BI mái GUÉST|Fique à vontade.|Pedir
+Help yourself.|RÉLP iór-SÉLF|Sirva-se.|Pedir
+Would you like some?|UÚ-dju LÁIK sâm|Você quer um pouco?|Pedir
+Can I get you anything?|kn ái GUÉT iu É-ni-thin|Posso te trazer alguma coisa?|Pedir
+Just let me know.|DJÂST LÉ-mi NÔU|É só me avisar.|Pedir
+I need a favor.|ái NÍ-da FÊI-ver|Preciso de um favor.|Pedir
+Would you mind helping me?|UÚ-dju MÁIND RÉL-pin mi|Você se importaria de me ajudar?|Pedir
+Can I ask you something?|kn ái ÉSK iu SÂM-thin|Posso te perguntar uma coisa?|Pedir
+Hold on a second.|RÔULD ÁN a SÉ-kand|Espera um segundo.|Pedir
+Give me a sec.|GUÍ-mi a SÉK|Me dá um segundo.|Pedir
+What do you mean?|UÓ-da-ia MÍN|O que você quer dizer?|Entender
+Could you say that again?|CÚ-dju SÊI dhét a-GUÉN|Pode repetir?|Entender
+I didn't catch that.|ái DÍ-dent KÉTCH dhét|Não peguei o que você disse.|Entender
+Sorry, I missed that.|SÓ-ri ái MÍST dhét|Desculpa, me perdi.|Entender
+Can you speak more slowly?|kn iu SPÍK MÓR SLÔU-li|Pode falar mais devagar?|Entender
+How do you spell that?|RÁU-dju SPÉL dhét|Como se escreve?|Entender
+What does that mean?|UÁT dâz dhét MÍN|O que isso significa?|Entender
+How do you say this in English?|RÁU-dju SÊI dhís in ÍN-glich|Como se diz isso em inglês?|Entender
+Let me make sure I understand.|LÉ-mi MÊIK CHÚR ái ân-der-STÉND|Deixa eu ver se entendi.|Entender
+So you're saying that...|sôu iór SÊI-in dhét|Então você está dizendo que...|Entender
+Correct me if I'm wrong.|ka-RÉKT mi if áim RÓNG|Me corrija se eu estiver errado.|Entender
+Does that make sense?|dâz dhét MÊIK SÉNS|Faz sentido?|Entender
+Am I clear?|ém ái CLÍR|Fui claro?|Entender
+Are you with me?|ár iu UÍDH mi|Está me acompanhando?|Entender
+Just to be clear,|DJÂST tu bi CLÍR|Só pra deixar claro,|Entender
+In other words,|in Â-dher UÓRDZ|Em outras palavras,|Entender
+What I mean is...|UÁ-rái MÍN iz|O que eu quero dizer é...|Entender
+Let me put it this way.|LÉ-mi PÚ-rit dhís UÊI|Deixa eu colocar assim.|Entender
+Right now.|RÁIT NÁU|Agora mesmo.|Tempo
+In a minute.|í-na MÍ-nit|Em um minuto.|Tempo
+Any minute now.|É-ni MÍ-nit NÁU|A qualquer momento.|Tempo
+As soon as possible.|éz SÚN éz PÁ-sa-bol|O quanto antes.|Tempo
+Sooner or later.|SÚ-ner ór LÊI-rer|Mais cedo ou mais tarde.|Tempo
+The other day.|dhi Â-dher DÊI|Outro dia.|Tempo
+From time to time.|fram TÁIM tu TÁIM|De vez em quando.|Tempo
+Once in a while.|UÂN-si-na UÁIL|De vez em quando.|Tempo
+All the time.|ÓL dha TÁIM|O tempo todo.|Tempo
+Most of the time.|MÔUS-tav dha TÁIM|Na maior parte do tempo.|Tempo
+Hardly ever.|RÁRD-li É-ver|Quase nunca.|Tempo
+For a while.|fó-ra UÁIL|Por um tempo.|Tempo
+In the meantime,|in dha MÍN-táim|Enquanto isso,|Tempo
+By the end of the day.|bái dhi ÉN-dav dha DÊI|Até o fim do dia.|Tempo
+First thing in the morning.|FÉRST THÍNG in dha MÓR-nin|Logo cedo.|Tempo
+Later today.|LÊI-rer tu-DÊI|Mais tarde hoje.|Tempo
+The day after tomorrow.|dha DÊI ÉF-ter tu-MÁ-rôu|Depois de amanhã.|Tempo
+It takes a while.|it TÊIK-sa UÁIL|Demora um pouco.|Tempo
+We're running late.|uír RÂ-nin LÊIT|Estamos atrasados.|Tempo
+Take your time.|TÊIK iór TÁIM|Sem pressa.|Tempo
+Let's get started.|LÉTS GUÉD STÁR-rid|Vamos começar.|Trabalho
+Can everyone hear me?|kn É-vri-uân RÍR mi|Todo mundo me ouve?|Trabalho
+You're on mute.|iór ÁN MIÚT|Você está no mudo.|Trabalho
+Can you see my screen?|kn iu SÍ mái SCRÍN|Consegue ver minha tela?|Trabalho
+Let me share my screen.|LÉ-mi CHÉR mái SCRÍN|Vou compartilhar minha tela.|Trabalho
+Sorry, you go first.|SÓ-ri iu GÔU FÉRST|Desculpa, pode falar você.|Trabalho
+Go ahead, I'm listening.|GÔU a-RÉD áim LÍ-se-nin|Pode falar, estou ouvindo.|Trabalho
+Let me get back to you on that.|LÉ-mi GUÉT BÉK tu iu ÁN dhét|Eu te retorno sobre isso.|Trabalho
+I'll follow up with you.|áil FÁ-lôu ÂP uidh iu|Eu te dou um retorno.|Trabalho
+Let's circle back to that.|LÉTS SÉR-kol BÉK tu dhét|Vamos voltar nisso depois.|Trabalho
+That's on my list.|dhéts ÁN mái LÍST|Está na minha lista.|Trabalho
+I'm on it.|áim Á-nit|Estou cuidando disso.|Trabalho
+It's in progress.|its in PRÁ-gres|Está em andamento.|Trabalho
+We're almost there.|uír ÓL-môust DHÉR|Estamos quase lá.|Trabalho
+It's done.|its DÂN|Está pronto.|Trabalho
+I'm running behind.|áim RÂ-nin bi-RÁIND|Estou atrasado com as coisas.|Trabalho
+Can we push it to tomorrow?|kn ui PÚ-chit tu tu-MÁ-rôu|Dá pra empurrar pra amanhã?|Trabalho
+Does that work for you?|dâz dhét UÓRK fór iu|Isso funciona pra você?|Trabalho
+Let's schedule a call.|LÉTS SKÉ-djul a CÓL|Vamos marcar uma call.|Trabalho
+I'll send you the details.|áil SÉND iu dha di-TÊILZ|Vou te mandar os detalhes.|Trabalho
+Keep me posted.|KÍP mi PÔUS-tid|Me mantenha informado.|Trabalho
+Let me know how it goes.|LÉ-mi NÔU RÁU it GÔUZ|Me conta como foi.|Trabalho
+I'll loop you in.|áil LÚP iu ÍN|Vou te incluir na conversa.|Trabalho
+Who's taking the lead?|RÚZ TÊI-kin dha LÍD|Quem está puxando isso?|Trabalho
+What's the next step?|UÁTS dha NÉKST STÉP|Qual é o próximo passo?|Trabalho
+What brought you here today?|UÁT BRÓT iu RÍR tu-DÊI|O que te trouxe aqui hoje?|Vendas
+Tell me more about that.|TÉL mi MÓR a-BÁUT dhét|Me conta mais sobre isso.|Vendas
+Walk me through it.|UÓK mi THRÚ it|Me explica passo a passo.|Vendas
+What's holding you back?|UÁTS RÔUL-din iu BÉK|O que está te segurando?|Vendas
+How are you handling that today?|RÁU ár iu RÉND-lin dhét tu-DÊI|Como você lida com isso hoje?|Vendas
+What would that mean for you?|UÁT uúd dhét MÍN fór iu|O que isso significaria pra você?|Vendas
+Makes sense so far?|MÊIKS SÉNS sôu FÁR|Faz sentido até aqui?|Vendas
+I hear you.|ái RÍR iu|Eu te entendo.|Vendas
+I understand your concern.|ái ân-der-STÉND iór kan-SÉRN|Entendo sua preocupação.|Vendas
+That's a fair question.|dhét-sa FÉR KUÉS-tchan|É uma pergunta justa.|Vendas
+Let me be straight with you.|LÉ-mi bi STRÊIT uidh iu|Vou ser direto com você.|Vendas
+Here's the thing.|RÍRZ dha THÍNG|Olha, é o seguinte.|Vendas
+What's your budget?|UÁTS iór BÂ-djet|Qual é o seu orçamento?|Vendas
+Is that within your range?|iz dhét uidh-ÍN iór RÊINDJ|Isso está dentro da sua faixa?|Vendas
+What do we need to do to move forward?|UÓ-da-ui NÍD tu DÚ tu MÚV FÓR-uerd|O que falta pra avançarmos?|Vendas
+Are you the one who decides?|ár iu dha UÂN RÚ di-SÁIDZ|Você é quem decide?|Vendas
+When would you want to start?|UÉN uúd iu UÓ-na STÁRT|Quando você gostaria de começar?|Vendas
+Let's put it this way.|LÉTS PÚ-rit dhís UÊI|Vamos colocar assim.|Vendas
+Think it over.|THÍNK i-RÔU-ver|Pensa com calma.|Vendas
+No pressure.|NÔU PRÉ-cher|Sem pressão.|Vendas
+Are you serious?|ár iu SÍ-rias|Você está falando sério?|Reação
+You're kidding.|iór KÍ-din|Você está brincando.|Reação
+No kidding.|NÔU KÍ-din|Sério mesmo.|Reação
+That's crazy.|dhéts CRÊI-zi|Que loucura.|Reação
+That's awesome.|dhéts Ó-sam|Isso é demais.|Reação
+That's too bad.|dhéts TÚ BÉD|Que pena.|Reação
+I'm sorry to hear that.|áim SÓ-ri tu RÍR dhét|Sinto muito por isso.|Reação
+Good for you.|GÚD fór iu|Que bom pra você.|Reação
+Way to go.|UÊI tu GÔU|Mandou bem.|Reação
+That's a relief.|dhét-sa ri-LÍF|Que alívio.|Reação
+What a mess.|UÁ-ra MÉS|Que bagunça.|Reação
+That's weird.|dhéts UÍRD|Que estranho.|Reação
+It happens.|it RÉ-panz|Acontece.|Reação
+Better luck next time.|BÉ-rer LÂK NÉKST TÁIM|Mais sorte na próxima.|Reação
+I can't believe it.|ái KÉNT bi-LÍ-vit|Não acredito.|Reação
+That explains it.|dhé-tik-SPLÊI-nzit|Isso explica tudo.|Reação
+I knew it.|ái NIÚ it|Eu sabia.|Reação
+Told you.|TÔULD iu|Eu avisei.|Reação
+Oh, come on.|ôu ca-MÁN|Ah, qual é.|Reação
+Give me a break.|GUÍ-mi a BRÊIK|Faça-me o favor.|Reação
+Never mind.|NÉ-ver MÁIND|Deixa pra lá.|Reação
+Forget about it.|fer-GUÉ-ra-báu-rit|Esquece isso.|Reação
+By the way,|bái dha UÊI|A propósito,|Conectar
+Anyway,|É-ni-uêi|Enfim,|Conectar
+Actually,|ÉK-tchu-li|Na verdade,|Conectar
+Basically,|BÊI-si-kli|Basicamente,|Conectar
+The thing is,|dha THÍN-giz|O negócio é que,|Conectar
+The point is,|dha PÓIN-tiz|A questão é que,|Conectar
+On top of that,|án TÁ-pav dhét|Além disso,|Conectar
+Other than that,|Â-dher dhén dhét|Fora isso,|Conectar
+As I was saying,|é-zái uóz SÊI-in|Como eu estava dizendo,|Conectar
+Speaking of which,|SPÍ-kin av UÍTCH|Falando nisso,|Conectar
+That reminds me.|dhét ri-MÁINDZ mi|Isso me lembra uma coisa.|Conectar
+Long story short,|LÓNG STÓ-ri CHÓRT|Resumindo,|Conectar
+At the end of the day,|é-dhi ÉN-dav dha DÊI|No fim das contas,|Conectar
+For example,|fó-rig-ZÉM-pol|Por exemplo,|Conectar
+Such as...|SÂTCH éz|Como por exemplo...|Conectar
+In fact,|in FÉKT|Na verdade,|Conectar
+Even so,|Í-van SÔU|Mesmo assim,|Conectar
+That said,|dhét SÉD|Dito isso,|Conectar
+On the other hand,|án dhi Â-dher RÉND|Por outro lado,|Conectar
+Either way,|Í-dher UÊI|De qualquer jeito,|Conectar
+In case you didn't know,|in KÊIS iu DÍ-dent NÔU|Caso você não saiba,|Conectar
+Believe it or not,|bi-LÍ-vi-rór NÁT|Acredite ou não,|Conectar
+How much is it?|RÁU MÂ-chi-zit|Quanto custa?|Dia a dia
+Can I pay by card?|kn ái PÊI bái CÁRD|Posso pagar no cartão?|Dia a dia
+I'm just looking.|áim DJÂST LÚ-kin|Só estou olhando.|Dia a dia
+Do you have this in another size?|dju RÉV dhís in a-NÂ-dher SÁIZ|Tem isso em outro tamanho?|Dia a dia
+Where is the bathroom?|UÉ-riz dha BÉTH-rum|Onde é o banheiro?|Dia a dia
+Could I get the check?|CÚ-rái GUÉT dha TCHÉK|Pode trazer a conta?|Dia a dia
+I'll have the same.|áil RÉV dha SÊIM|Vou querer o mesmo.|Dia a dia
+To go, please.|tu GÔU PLÍZ|Para viagem, por favor.|Dia a dia
+What do you recommend?|UÓ-da-ia re-ka-MÉND|O que você recomenda?|Dia a dia
+I'm allergic to that.|áim a-LÉR-djik tu dhét|Sou alérgico a isso.|Dia a dia
+Is this seat taken?|iz dhís SÍT TÊI-kan|Esse lugar está ocupado?|Dia a dia
+Excuse me, coming through.|iks-KIÚZ mi CÂ-min THRÚ|Com licença, passando.|Dia a dia
+I'm lost.|áim LÓST|Estou perdido.|Dia a dia
+How do I get there?|RÁU du ái GUÉT DHÉR|Como eu chego lá?|Dia a dia
+Is it far from here?|Í-zit FÁR fram RÍR|É longe daqui?|Dia a dia
+It's right around the corner.|its RÁIT a-RÁUND dha CÓR-ner|É logo ali na esquina.|Dia a dia
+Can you call me back?|kn iu CÓL mi BÉK|Pode me ligar de volta?|Dia a dia
+The line is bad.|dha LÁIN iz BÉD|A ligação está ruim.|Dia a dia
+I'll text you.|áil TÉKST iu|Vou te mandar mensagem.|Dia a dia
+My phone died.|mái FÔUN DÁID|Meu celular descarregou.|Dia a dia
+I'm on my way.|áim án mái UÊI|Estou a caminho.|Dia a dia
+I'm almost there.|áim ÓL-môust DHÉR|Estou quase chegando.|Dia a dia
+Traffic is terrible.|TRÉ-fi-kiz TÉ-ri-bol|O trânsito está horrível.|Dia a dia
+I overslept.|ái ôu-ver-SLÉPT|Perdi a hora.|Dia a dia
+I'm starving.|áim STÁR-vin|Estou morrendo de fome.|Dia a dia
+That's about it.|dhéts a-BÁU-rit|É isso.|Fechar
+That's all for now.|dhéts ÓL fór NÁU|Por enquanto é isso.|Fechar
+Let's wrap it up.|LÉTS RÉ-pi-RÂP|Vamos encerrar.|Fechar
+To sum up,|tu SÂM ÂP|Resumindo,|Fechar
+Any questions?|É-ni KUÉS-tchanz|Alguma pergunta?|Fechar
+Anything else?|É-ni-thin ÉLS|Mais alguma coisa?|Fechar
+We'll be in touch.|UÍL bi in TÂTCH|Entramos em contato.|Fechar
+I'll get back to you.|áil GUÉT BÉK tu iu|Eu te retorno.|Fechar
+Sounds good.|SÁUNDZ GÚD|Parece bom.|Fechar
+Sounds like a plan.|SÁUNDZ LÁI-ka PLÉN|Combinado.|Fechar
+Count me in.|KÁUNT mi ÍN|Conta comigo.|Fechar
+Let's do it.|LÉTS DÚ it|Vamos fazer isso.|Fechar
+I'm in.|áim ÍN|Tô dentro.|Fechar
+Deal.|DÍL|Fechado.|Fechar
+It's settled then.|its SÉ-told DHÉN|Então está resolvido.|Fechar
+Thanks for your time.|THÉNKS fór iór TÁIM|Obrigado pelo seu tempo.|Fechar
+Looking forward to it.|LÚ-kin FÓR-uerd tu it|Estou ansioso por isso.|Fechar
+Talk soon.|TÓK SÚN|Falamos em breve.|Fechar
+deal with|DÍL uíd|lidar com|Verbos frasais
+log in|LÓG in|fazer login|Verbos frasais
+throw away|FRÔU a-uêi|jogar fora|Verbos frasais
+wait for|UÊIT fôr|esperar por|Verbos frasais
+watch out|UÁTCH áut|tomar cuidado|Verbos frasais
+work on|UÊRK on|trabalhar em|Verbos frasais
+check in|TCHÉC in|fazer check-in|Verbos frasais
+check out|TCHÉC áut|fazer check-out/conferir|Verbos frasais
+count on|KÁUNT on|contar com|Verbos frasais
+give away|GUÍV a-uêi|dar de graça/revelar|Verbos frasais
+go through|GÔU fru|passar por|Verbos frasais
+hang out|RÉNG áut|sair com amigos|Verbos frasais
+keep up|KÍP âp|acompanhar o ritmo|Verbos frasais
+look after|LÚK áf-târ|cuidar de|Verbos frasais
+move on|MÚV on|seguir em frente|Verbos frasais
+pay off|PÉI óf|valer a pena/quitar|Verbos frasais
+run into|RÂN ín-tu|encontrar por acaso|Verbos frasais
+speak up|esPÍK âp|falar mais alto|Verbos frasais
+come across|KÂM a-CRÓS|encontrar por acaso|Verbos frasais
+long for|LÓNG fôr|ansiar por|Verbos frasais
+run off|RÂN óf|fugir correndo|Verbos frasais
+because of|bi-CÓZ âv|por causa de|Verbos frasais
+next to|NÉKST tu|ao lado de|Verbos frasais
+instead of|ins-TÉD âv|em vez de|Verbos frasais
+along with|a-LÓNG uíd|junto com|Verbos frasais
+according to|a-CÓR-din tu|de acordo com|Verbos frasais
+apart from|a-PÁRT frâm|além de|Verbos frasais
+other than|Â-dhâr dhén|além de|Verbos frasais
+due to|DIÚ tu|devido a|Verbos frasais
+in spite of|in es-PÁIT âv|apesar de|Verbos frasais
+as opposed to|éz a-PÔUZD tu|ao contrário de|Verbos frasais
+even though|Í-vân dhôu|mesmo que|Verbos frasais
+even if|Í-vân if|mesmo se|Verbos frasais
+as long as|éz LÓNG éz|contanto que|Verbos frasais
+as soon as|éz SÚN éz|assim que|Verbos frasais
+so that|SÔU dhét|para que|Verbos frasais
+rather than|RÉ-dhâr dhén|em vez de|Verbos frasais
+as if|éz IF|como se|Verbos frasais
+no matter|NÔU MÉ-târ|não importa|Verbos frasais
+as well as|éz UÉL éz|assim como|Verbos frasais
+a little|a LÍ-tâu|um pouco|Verbos frasais
+each other|ÍTCH Â-dhâr|um ao outro|Verbos frasais
+good luck|GUD LÂK|boa sorte|Verbos frasais
+no worries|NÔU UÂ-riz|sem problemas|Verbos frasais
+never mind|NÉ-vâr MÁIND|deixa pra lá|Verbos frasais
+come on|KÂM on|vamos lá|Verbos frasais
+i mean|ÁI MÍN|quer dizer|Verbos frasais
+go ahead|GÔU a-RÉD|pode ir em frente|Verbos frasais
+what's up|UÁTS âp|e aí|Verbos frasais
+no way|NÔU UÊI|sem chance|Verbos frasais
+for sure|fôr CHUR|com certeza|Verbos frasais
+by the way|bái dha UÊI|a propósito|Verbos frasais
+at least|ét LÍST|pelo menos|Verbos frasais
+in fact|in FÉCT|na verdade|Verbos frasais
+on purpose|on PÊR-pâs|de propósito|Verbos frasais
+for instance|fôr ÍNS-tâns|por exemplo|Verbos frasais
+on the other hand|on dhi Â-dhâr RÉND|por outro lado|Verbos frasais
+in other words|in Â-dhâr UÊRDZ|em outras palavras|Verbos frasais
+more or less|MÔR ôr LÉS|mais ou menos|Verbos frasais
+from now on|frâm NÁU on|daqui em diante|Verbos frasais
+so far|SÔU FÁR|até agora|Verbos frasais
+all of a sudden|ól âv a SÂ-dân|de repente|Verbos frasais
+on time|on TÁIM|na hora|Verbos frasais
+in advance|in âd-VÉNS|com antecedência|Verbos frasais
+just in case|DJÂST in KÊIS|só para garantir|Verbos frasais
+for now|fôr NÁU|por enquanto|Verbos frasais
+at the same time|ét dha SÊIM TÁIM|ao mesmo tempo|Verbos frasais
+how come|RÁU KÂM|como assim|Verbos frasais
+how about|RÁU a-BÁUT|que tal|Verbos frasais
+what about|UÁT a-BÁUT|e quanto a|Verbos frasais
+how long|RÁU LÓNG|quanto tempo|Verbos frasais
+what if|UÁT IF|e se|Verbos frasais
+sort of|SÓRT âv|meio que|Verbos frasais
+kind of|KÁIND âv|meio que|Verbos frasais
+these days|DHÍZ DÊIZ|hoje em dia|Verbos frasais
+from time to time|frâm TÁIM tu TÁIM|de vez em quando|Verbos frasais
+no wonder|NÔU UÂN-dâr|não é à toa|Verbos frasais
+follow up|FÓ-lou âp|dar continuidade|Verbos frasais
+bring up|BRIN âp|mencionar|Verbos frasais
+go over|GOU ou-vâr|revisar|Verbos frasais
+sort out|SÓRT áut|resolver|Verbos frasais
+sign off|SÁIN óf|aprovar formalmente|Verbos frasais
+roll out|RÓUL áut|lançar|Verbos frasais
+push back|PUCH béc|resistir a algo|Verbos frasais
+circle back|SÊR-câu béc|retomar depois|Verbos frasais
+loop in|LUP in|incluir alguém|Verbos frasais
+dial in|DÁI-âu in|entrar numa chamada|Verbos frasais
+wrap up|RÉP âp|finalizar|Verbos frasais
+iron out|ÁI-ârn áut|resolver detalhes|Verbos frasais
+hammer out|RÉ-mâr áut|definir após debate|Verbos frasais
+narrow down|NÉ-rou dáun|reduzir opções|Verbos frasais
+step up|esTÉP âp|assumir responsabilidade|Verbos frasais
+step down|esTÉP dáun|renunciar ao cargo|Verbos frasais
+step in|esTÉP in|intervir|Verbos frasais
+take over|TÉIK ou-vâr|assumir o controle|Verbos frasais
+take on|TÉIK on|assumir uma tarefa|Verbos frasais
+hand over|RÉND ou-vâr|repassar algo|Verbos frasais
+lay out|LÉI áut|apresentar um plano|Verbos frasais
+spell out|esPÉL áut|explicar em detalhes|Verbos frasais
+draw up|DRÓ âp|elaborar um documento|Verbos frasais
+line up|LÁIN âp|organizar/alinhar|Verbos frasais
+head up|RÉD âp|liderar|Verbos frasais
+turn in|TÊRN in|entregar um trabalho|Verbos frasais
+turn down|TÊRN dáun|recusar|Verbos frasais
+turn around|TÊRN a-ráund|reverter a situação|Verbos frasais
+sum up|SÂM âp|resumir|Verbos frasais
+tie up|TÁI âp|finalizar pendências|Verbos frasais
+wind up|UÁIND âp|encerrar|Verbos frasais
+ramp up|RÉMP âp|aumentar rapidamente|Verbos frasais
+scale back|esKÉIL béc|reduzir|Verbos frasais
+set aside|SÉT a-sáid|reservar tempo|Verbos frasais
+free up|FRÍ âp|liberar recursos|Verbos frasais
+reach out|RÍTCH áut|entrar em contato|Verbos frasais
+push through|PUCH fru|conseguir aprovar|Verbos frasais
+chime in|TCHÁIM in|comentar de repente|Verbos frasais
+jump in|DJÂMP in|interromper para falar|Verbos frasais
+cut in|KÂT in|interromper alguém|Verbos frasais
+talk over|TÓK ou-vâr|discutir algo|Verbos frasais
+talk back|TÓK béc|retrucar|Verbos frasais
+think through|FINK fru|pensar bem sobre algo|Verbos frasais
+think over|FINK ou-vâr|refletir sobre algo|Verbos frasais
+run by|RÂN bái|consultar alguém|Verbos frasais
+get ahead|GUÉT a-réd|progredir na carreira|Verbos frasais
+get by|GUÉT bái|se virar financeiramente|Verbos frasais
+fall behind|FÓL bi-ráind|ficar atrasado|Verbos frasais
+fall through|FÓL fru|não se concretizar|Verbos frasais
+fall apart|FÓL a-párt|desmoronar|Verbos frasais
+break out|BRÉIK áut|eclodir de repente|Verbos frasais
+break off|BRÉIK óf|terminar um relacionamento|Verbos frasais
+burn out|BÊRN áut|esgotar-se|Verbos frasais
+stress out|esTRÉS áut|estressar-se|Verbos frasais
+calm down|KÁM dáun|acalmar-se|Verbos frasais
+cool off|KÚL óf|esfriar a cabeça|Verbos frasais
+ease up|ÍZ âp|suavizar/aliviar|Verbos frasais
+hold off|RÓULD óf|adiar|Verbos frasais
+hold back|RÓULD béc|se conter|Verbos frasais
+hold up|RÓULD âp|atrasar algo|Verbos frasais
+slow down|esLÓU dáun|diminuir o ritmo|Verbos frasais
+speed up|esPÍD âp|acelerar|Verbos frasais
+drop off|DRÁP óf|deixar alguém em algum lugar|Verbos frasais
+drop by|DRÁP bái|passar rapidamente|Verbos frasais
+stop by|esTÁP bái|dar uma passada|Verbos frasais
+swing by|suÍNG bái|passar rapidamente|Verbos frasais
+head out|RÉD áut|partir|Verbos frasais
+move in|MÚV in|mudar-se para um lugar|Verbos frasais
+move out|MÚV áut|mudar-se de um lugar|Verbos frasais
+settle in|SÉ-tâu in|se ambientar|Verbos frasais
+get together|GUÉT tu-ge-dâr|se reunir|Verbos frasais
+hang around|RÉNG a-ráund|ficar por perto|Verbos frasais
+split up|esPLÍT âp|terminar um relacionamento|Verbos frasais
+patch up|PÉTCH âp|reconciliar-se|Verbos frasais
+back off|BÉC óf|recuar/parar de incomodar|Verbos frasais
+count out|KÁUNT áut|excluir alguém dos planos|Verbos frasais
+leave out|LÍV áut|excluir/omitir|Verbos frasais
+miss out|MÍS áut|perder uma oportunidade|Verbos frasais
+cut back|KÂT béc|reduzir gastos|Verbos frasais
+pay back|PÉI béc|pagar de volta|Verbos frasais

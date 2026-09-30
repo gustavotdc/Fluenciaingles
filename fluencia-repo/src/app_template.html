@@ -1,0 +1,3821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fluência — Level 1</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
+
+/* ===================================================================
+   FLUÊNCIA — sistema visual
+   Fundo: azul-carvão profundo, frio, para a sala ficar escura e o
+   conteúdo acender. Acento: âmbar, o mesmo tom da notação fonética e
+   do título Dominada — a cor que já significa "isto é seu".
+   Tipos: Archivo para tudo que se lê; IBM Plex Mono para a fonética,
+   os contadores e os rótulos técnicos, porque a notação é um
+   instrumento, não um texto.
+   Escada de títulos: frio → morno conforme a palavra amadurece.
+=================================================================== */
+:root{
+  color-scheme: dark;
+
+  --ground:#090A0E;
+  --panel:#111420;
+  --panel-2:#171B29;
+  --panel-3:#1F2433;
+  --line:#242939;
+  --line-2:#333A4D;
+
+  --ink:#EDEFF5;
+  --ink-2:#98A1B6;
+  --ink-3:#5F6880;
+
+  --amber:#E9B44C;
+  --amber-2:#C9942F;
+  --amber-soft:#E9B44C1f;
+
+  --nova:#6E7891;
+  --aprend:#5E8ACF;
+  --rev:#8E7BD4;
+  --solida:#4FB286;
+  --dom:#E9B44C;
+  --ref:#DD6B62;
+
+  --r:16px; --r2:11px; --r3:8px;
+  --mx:1120px;
+  --sans:"Archivo",ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sombra:0 1px 2px #0006, 0 8px 28px -14px #000a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased; font-variant-numeric:tabular-nums;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+::selection{background:#E9B44C33}
+.hide{display:none!important}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ---------------- casca ---------------- */
+#app{min-height:100%;display:flex;flex-direction:column}
+header.top{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:#090A0Ee8;backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);
+}
+.top-in{max-width:var(--mx);margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.14em;font-size:12.5px;text-transform:uppercase;white-space:nowrap;flex:none}
+.brand .dot{width:8px;height:8px;border-radius:2px;background:var(--amber);box-shadow:0 0 14px #E9B44Caa;flex:none}
+.brand .dim{font-family:var(--mono);font-weight:400;letter-spacing:.02em;text-transform:none;font-size:12px;color:var(--ink-3)}
+.sync{display:flex;align-items:center;gap:7px;font-size:11px;font-family:var(--mono);color:var(--ink-3);white-space:nowrap;flex:none}
+.sync i{width:6px;height:6px;border-radius:50%;background:var(--ink-3);flex:none;transition:background .3s}
+.sync.on i{background:var(--solida);box-shadow:0 0 8px #4FB28688}
+.sync.wait i{background:var(--amber)}
+.sync.off i{background:var(--line-2)}
+nav.tabs{display:flex;gap:3px;margin-left:auto;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{
+  padding:8px 14px;border-radius:99px;color:var(--ink-3);font-size:13.5px;font-weight:500;
+  white-space:nowrap;transition:color .15s,background .15s
+}
+nav.tabs button:hover{color:var(--ink-2)}
+nav.tabs button.on{color:var(--ground);background:var(--ink)}
+main{flex:1;max-width:var(--mx);width:100%;margin:0 auto;padding-inline:22px;padding-block:30px 100px}
+@media(max-width:640px){
+  .top-in{gap:12px;padding:0 16px;height:56px}
+  .brand .dim{display:none}
+  main{padding-inline:16px;padding-block:22px 84px}
+}
+@media(max-width:860px){.sync span{display:none}}
+
+/* ---------------- base ---------------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.card.tight{padding:16px 18px}
+h1{font-size:28px;font-weight:700;letter-spacing:-.03em;line-height:1.15;text-wrap:balance}
+h2{font-size:15px;font-weight:650;letter-spacing:-.01em;margin-bottom:14px}
+.lbl{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.muted{color:var(--ink-2)}
+.dim{color:var(--ink-3)}
+.mini{font-size:12.5px;line-height:1.45;color:var(--ink-3)}
+.big{font-size:34px;font-weight:700;letter-spacing:-.035em;line-height:1}
+.grid{display:grid;gap:14px}
+.row{display:flex;align-items:center;gap:10px}
+.spread{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.sep{height:1px;background:var(--line);margin:18px 0}
+
+.btn{
+  background:var(--panel-3);border:1px solid var(--line-2);border-radius:var(--r2);
+  padding:10px 17px;font-size:14px;font-weight:550;letter-spacing:-.005em;
+  transition:background .15s,border-color .15s,transform .08s
+}
+.btn:hover{background:#262C3D}
+.btn:active{transform:translateY(1px)}
+.btn.pri{background:var(--amber);border-color:var(--amber);color:#1A1204;font-weight:650}
+.btn.pri:hover{background:#F0BE60}
+.btn.ok{background:#12301F;border-color:#245C3E;color:#8FE3B8}
+.btn.ok:hover{background:#173D28}
+.btn.bad{background:#341615;border-color:#6A2E2A;color:#F0AFA9}
+.btn.bad:hover{background:#421C1A}
+.btn.ghost{background:transparent;border-color:var(--line)}
+.btn.ghost:hover{background:var(--panel-2)}
+.btn.sm{padding:7px 12px;font-size:12.5px;border-radius:var(--r3)}
+.btn.lg{padding:15px 28px;font-size:15.5px;border-radius:13px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn:disabled:hover{background:var(--panel-3)}
+.btn.sug{box-shadow:0 0 0 2px var(--amber)}
+.edt{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);border:1px solid var(--line);border-radius:var(--r3);padding:5px 10px;transition:.15s}
+.edt:hover{color:var(--ink-2);border-color:var(--line-2);background:var(--panel-2)}
+
+.bar{height:5px;border-radius:99px;background:var(--panel-3);overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:99px;background:var(--amber);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.02em;padding:4px 10px;border-radius:99px;border:1px solid}
+.dotc{width:6px;height:6px;border-radius:50%;flex:none}
+.s-nova{color:var(--nova);border-color:#6E789133;background:#6E78911a}.s-nova .dotc{background:var(--nova)}
+.s-aprend{color:var(--aprend);border-color:#5E8ACF33;background:#5E8ACF1a}.s-aprend .dotc{background:var(--aprend)}
+.s-rev{color:var(--rev);border-color:#8E7BD433;background:#8E7BD41a}.s-rev .dotc{background:var(--rev)}
+.s-solida{color:var(--solida);border-color:#4FB28633;background:#4FB2861a}.s-solida .dotc{background:var(--solida)}
+.s-dom{color:var(--dom);border-color:#E9B44C33;background:#E9B44C1a}.s-dom .dotc{background:var(--dom)}
+.s-ref{color:var(--ref);border-color:#DD6B6233;background:#DD6B621a}.s-ref .dotc{background:var(--ref)}
+
+/* ---------------- painel ---------------- */
+.cab{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.streak{display:flex;align-items:center;gap:12px;padding:10px 16px;border:1px solid var(--line);border-radius:var(--r2);background:var(--panel)}
+.streak b{font-family:var(--mono);font-size:30px;font-weight:600;letter-spacing:-.04em;line-height:1;color:var(--amber)}
+
+.next{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 140% at 88% 0%, #2A2110 0%, transparent 58%),
+    linear-gradient(170deg,#161B2B 0%,#111420 70%);
+  border:1px solid #2C3348;border-radius:var(--r);padding:28px;
+  display:flex;flex-direction:column;gap:20px;margin-bottom:14px;box-shadow:var(--sombra)
+}
+.next::after{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,#E9B44C55,transparent)}
+.next .what{font-size:27px;font-weight:700;letter-spacing:-.035em;line-height:1.15;text-wrap:balance}
+@media(max-width:560px){.next{padding:22px 20px}.next .what{font-size:22px}}
+
+.hoje{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
+/* 6 trilhas: 3 colunas no meio-termo, 2 no telefone. Nenhuma sobra sozinha. */
+@media(max-width:1000px){ .hoje{grid-template-columns:repeat(3,1fr)} }
+@media(max-width:700px){ .hoje{grid-template-columns:repeat(2,1fr)} }
+.trilha{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);
+  padding:15px 14px;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;
+  transition:border-color .15s,background .15s
+}
+.trilha.ativa{border-color:#3B3320;background:linear-gradient(180deg,#1A1710,var(--panel))}
+.trilha .tt{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.trilha .ts{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.02em}
+.anel{position:relative;width:62px;height:62px;flex:none}
+.anel svg{transform:rotate(-90deg);display:block}
+.anel-bg{fill:none;stroke:var(--panel-3);stroke-width:5}
+.anel-fg{fill:none;stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.2,.8,.2,1)}
+.anel b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:-.03em}
+
+.faixa{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;margin-bottom:14px}
+@media(max-width:820px){.faixa{grid-template-columns:1fr}}
+.marco{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:17px 19px;display:flex;flex-direction:column;gap:11px}
+.marco .n{font-family:var(--mono);font-size:26px;font-weight:600;letter-spacing:-.04em;color:var(--dom)}
+.treinos{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:17px 19px;display:flex;flex-direction:column;gap:12px}
+.chk{
+  width:100%;border-radius:var(--r3);border:1px solid var(--line-2);background:var(--panel-2);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 11px;
+  font-size:12.5px;font-weight:550;color:var(--ink-2);transition:.15s
+}
+.chk:hover{border-color:#3E4761}
+.chk.on{background:#12301F;border-color:#245C3E;color:#8FE3B8}
+.chk i{font-style:normal;font-family:var(--mono);font-size:12px;opacity:.8}
+
+.stats{display:flex;flex-wrap:wrap;gap:8px}
+.st{
+  background:var(--panel);border:1px solid var(--line);border-radius:99px;
+  padding:7px 14px 7px 11px;display:flex;align-items:center;gap:9px
+}
+.st .n{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:-.03em}
+
+/* ---------------- sessão ---------------- */
+.sess{max-width:680px;margin:0 auto}
+.sbar{display:flex;align-items:center;gap:14px;margin-bottom:24px}
+.sbar .bar{flex:1}
+.sbar .mini{font-family:var(--mono);white-space:nowrap}
+.stage{
+  min-height:400px;background:var(--panel);border:1px solid var(--line);border-radius:20px;
+  padding:40px 34px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;gap:20px;box-shadow:var(--sombra)
+}
+.stage>*{max-width:100%}
+@media(max-width:560px){.stage{padding:28px 18px;min-height:340px;gap:17px;border-radius:16px}}
+.step{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--amber)}
+.word-pt{font-size:38px;font-weight:700;letter-spacing:-.04em;line-height:1.1;text-wrap:balance}
+.word-en{font-size:38px;font-weight:800;letter-spacing:-.01em;text-transform:uppercase;line-height:1.05}
+@media(max-width:560px){.word-pt,.word-en{font-size:30px}}
+.pron{font-family:var(--mono);font-size:26px;font-weight:500;color:var(--amber);letter-spacing:-.01em;line-height:1.3}
+@media(max-width:560px){.pron{font-size:20px}}
+.pav{font-size:19px;line-height:1.6;color:var(--ink);max-width:520px;text-wrap:pretty}
+.hintbox{background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;font-size:15px;line-height:1.55;color:var(--ink-2);max-width:520px}
+.acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.kbd{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:14px;text-align:center}
+.kbd span{display:inline-block;border:1px solid var(--line-2);border-radius:5px;padding:2px 7px;margin:0 3px}
+.redo{font-family:var(--mono);background:#341615;border:1px solid #6A2E2A;color:#F0AFA9;border-radius:99px;padding:3px 11px;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
+.ring{width:96px;height:96px;margin:0 auto;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:26px;font-weight:600}
+.celebrate{text-align:center;padding:26px 0}
+.celebrate .ic{font-size:46px;margin-bottom:14px;line-height:1}
+
+.chute{
+  width:100%;max-width:400px;background:var(--ground);border:1px solid var(--line-2);border-radius:var(--r2);
+  padding:13px 16px;font-size:18px;text-align:center;outline:none;transition:border-color .15s
+}
+.chute::placeholder{color:var(--ink-3);font-size:15px}
+.chute:focus{border-color:var(--amber)}
+.chuteres{font-family:var(--mono);font-size:13.5px;font-weight:500}
+.chuteres b{font-family:var(--sans);font-weight:650}
+.ok-tx{color:var(--solida)}
+.no-tx{color:var(--ref)}
+.curio{font-family:var(--mono);font-size:11.5px;letter-spacing:.01em;color:var(--ink-3);border:1px dashed var(--line-2);border-radius:99px;padding:6px 14px;display:inline-block}
+
+.fam{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.fam span{font-size:12.5px;border:1px solid var(--line);border-radius:var(--r3);padding:4px 9px;color:var(--ink-2);background:var(--panel-2)}
+.fam span b{color:var(--ink);font-weight:650}
+.fam .rot{font-family:var(--mono);color:var(--ink-3);font-size:10px;letter-spacing:.04em}
+
+/* ---------------- imagem do PAV ---------------- */
+.pavimg{margin:0 auto;max-width:430px;width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:var(--panel-2);line-height:0}
+.pavimg img{display:block;width:100%;height:auto}
+.pavimg.sm{max-width:230px}
+.pavimg.borrada img{filter:blur(14px) saturate(.6);transform:scale(1.06)}
+.imgvazio{margin:0 auto;max-width:430px;width:100%;border:1px dashed var(--line-2);border-radius:14px;padding:20px;text-align:center;color:var(--ink-3);font-size:13px;line-height:1.5}
+
+/* ---------------- leitura ---------------- */
+.leitura{display:flex;flex-direction:column;gap:14px;text-align:left;max-width:60ch}
+.lt-fon{font-family:var(--mono);font-size:19px;line-height:1.5;color:var(--amber);font-weight:500}
+.lt-en{font-size:19px;line-height:1.5}
+.lt-pt{font-size:14px;line-height:1.5;color:var(--ink-3);margin-top:3px}
+@media(max-width:560px){.lt-fon,.lt-en{font-size:17px}}
+.lt-card{cursor:pointer;transition:border-color .15s,background .15s,transform .12s}
+.lt-card:hover{border-color:var(--line-2);background:var(--panel-2);transform:translateY(-1px)}
+.girando{width:19px;height:19px;border-radius:50%;border:2px solid var(--line-2);border-top-color:var(--amber);animation:gira .8s linear infinite;flex:none}
+@keyframes gira{to{transform:rotate(360deg)}}
+
+/* ---------------- listas ---------------- */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.filters input,.filters select{
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r3);
+  padding:9px 12px;font-size:13.5px;outline:none;transition:border-color .15s
+}
+.filters input:focus,.filters select:focus{border-color:var(--amber)}
+.wlist{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.wrow{
+  background:var(--panel);padding:13px 16px;display:grid;
+  grid-template-columns:42px 1fr 1fr 132px 92px;gap:12px;align-items:center;font-size:13.5px;
+  cursor:pointer;transition:background .12s
+}
+.wrow:hover{background:var(--panel-2)}
+.wrow .idx{font-family:var(--mono);color:var(--ink-3);font-size:11.5px}
+.wrow .en{font-weight:600}
+.wrow .en .mini{font-family:var(--mono);font-size:11.5px}
+.wrow .pt{color:var(--ink-2)}
+@media(max-width:780px){.wrow{grid-template-columns:34px 1fr 1fr}.wrow .c4,.wrow .c5{display:none}}
+.more{text-align:center;padding:16px}
+.empty{text-align:center;padding:56px 20px;color:var(--ink-3)}
+.empty .ic{font-size:32px;margin-bottom:12px;opacity:.4}
+
+.tl{display:flex;flex-direction:column}
+.tli{display:grid;grid-template-columns:140px 1fr;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px;align-items:start}
+.tli:last-child{border-bottom:none}
+@media(max-width:520px){.tli{grid-template-columns:1fr;gap:3px}}
+
+/* ---------------- calendário ---------------- */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal .hd{text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.08em;padding-bottom:6px}
+.cd{
+  aspect-ratio:1;border-radius:var(--r3);background:var(--panel-2);border:1px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);cursor:pointer;transition:.12s
+}
+.cd:hover{border-color:var(--line-2)}
+.cd.full{background:#12301F;border-color:#245C3E;color:#8FE3B8}
+.cd.min{background:#2E2410;border-color:#5E4A1E;color:#E4C176}
+.cd.esc{background:#191D28;border-color:#333A4D;color:#8E97AC}
+.cd.today{outline:2px solid var(--amber);outline-offset:1px}
+.cd.void{background:transparent;border-color:transparent;cursor:default}
+.cd b{font-size:12px;font-weight:600}
+
+/* ---------------- avisos e diálogos ---------------- */
+.banner{
+  border:1px solid #5E4A1E;background:linear-gradient(180deg,#221B0C,#1A1710);border-radius:var(--r2);
+  padding:14px 17px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:13.5px
+}
+.banner.ok{border-color:#245C3E;background:linear-gradient(180deg,#10261A,#0F1D16)}
+.banner b{font-weight:650}
+.toast{
+  position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%) translateY(18px);
+  background:var(--panel-3);border:1px solid var(--line-2);border-radius:99px;
+  padding:11px 22px;font-size:13.5px;opacity:0;pointer-events:none;transition:.28s;z-index:99;
+  box-shadow:var(--sombra);max-width:calc(100% - 32px);text-align:center
+}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal{position:fixed;inset:0;z-index:80;background:#050609d9;backdrop-filter:blur(3px);display:grid;place-items:center;padding:20px;overflow:auto}
+textarea{
+  width:100%;background:var(--ground);border:1px solid var(--line-2);border-radius:var(--r2);
+  padding:13px 15px;font-size:15px;line-height:1.6;resize:vertical;outline:none;font-family:inherit
+}
+textarea:focus{border-color:var(--amber)}
+/* ---------------- Relâmpago ---------------- */
+.rel-ic{font-size:34px;line-height:1}
+.rel-recs{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px
+}
+.rel-recs>div{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r3);
+  padding:9px 13px;display:flex;flex-direction:column;gap:2px;align-items:center
+}
+.rel-recs span{font-size:10.5px;color:var(--ink-3);letter-spacing:.04em;text-transform:uppercase}
+.rel-recs b{font-family:var(--mono);font-size:19px;font-weight:600;color:var(--amber);letter-spacing:-.03em}
+
+.rel-conta{
+  font-family:var(--mono);font-size:96px;font-weight:600;color:var(--amber);letter-spacing:-.06em;
+  animation:relConta .6s ease-out
+}
+@keyframes relConta{from{opacity:0;transform:scale(1.5)}to{opacity:1;transform:scale(1)}}
+
+.rel-sess{gap:12px;display:flex;flex-direction:column;min-height:calc(100dvh - 150px)}
+.rel-topo{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rel-placar{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:17px;font-weight:600}
+.rel-placar b.ok{color:var(--solida)}
+.rel-placar b.bad{color:var(--ref)}
+.rel-placar i{color:var(--ink-3);font-style:normal}
+.rel-fogo{
+  font-family:var(--sans);font-size:11px;font-weight:600;color:#1A1508;background:var(--amber);
+  border-radius:99px;padding:3px 9px;letter-spacing:.01em;animation:relPop .25s ease-out
+}
+@keyframes relPop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+.rel-seg{font-family:var(--mono);font-size:13px;color:var(--ink-3)}
+.rel-seg b{font-size:21px;font-weight:600;color:var(--ink);letter-spacing:-.04em}
+
+.rel-trilho{height:5px;background:var(--panel-3);border-radius:99px;overflow:hidden}
+.rel-trilho i{
+  display:block;height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--amber-2),var(--amber))
+}
+
+.rel-arena{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  border:1px solid var(--line);border-radius:var(--r);background:var(--panel);
+  padding:26px 20px;min-height:min(52vh,380px)
+}
+.rel-q{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.rel-arena.pulso-ok{animation:relOk .3s ease-out}
+.rel-arena.pulso-bad{animation:relBad .3s ease-out}
+@keyframes relOk{0%{border-color:var(--solida);background:#12301F}100%{border-color:var(--line);background:var(--panel)}}
+@keyframes relBad{0%{border-color:var(--ref);background:#2E1513}100%{border-color:var(--line);background:var(--panel)}}
+
+.rel-dir{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.rel-alvo{
+  font-size:clamp(34px,7vw,54px);font-weight:700;letter-spacing:-.04em;line-height:1.1;
+  text-align:center;text-wrap:balance
+}
+.rel-alvo.en{font-family:var(--mono);font-weight:600;color:var(--amber)}
+.rel-ops{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:640px;flex:none}
+.rel-op{
+  position:relative;min-height:88px;padding:16px 14px;border-radius:var(--r2);
+  border:1px solid var(--line-2);background:var(--panel-2);color:var(--ink);
+  font-size:clamp(17px,3.4vw,22px);font-weight:600;letter-spacing:-.02em;line-height:1.25;
+  display:grid;place-items:center;text-align:center;transition:transform .08s,border-color .12s,background .12s;
+  -webkit-tap-highlight-color:transparent
+}
+.rel-op:hover{border-color:var(--amber-2);background:var(--panel-3)}
+.rel-op:active{transform:scale(.97)}
+.rel-n{
+  position:absolute;top:7px;left:9px;font-family:var(--mono);font-size:10.5px;
+  color:var(--ink-3);font-weight:500
+}
+@media(max-width:560px){
+  .rel-op{min-height:104px}
+  .rel-n{display:none}
+}
+
+.rel-fim{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
+.rel-placarF{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%;margin-top:2px}
+.rel-placarF>div{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:var(--r2);
+  padding:13px 8px;display:flex;flex-direction:column;gap:3px;align-items:center
+}
+.rel-placarF b{font-family:var(--mono);font-size:25px;font-weight:600;letter-spacing:-.04em}
+.rel-placarF b.ok{color:var(--solida)}
+.rel-placarF b.bad{color:var(--ref)}
+.rel-placarF span{font-size:10.5px;color:var(--ink-3);letter-spacing:.03em;text-align:center}
+@media(max-width:560px){.rel-placarF{grid-template-columns:repeat(2,1fr)}}
+.rel-med{
+  font-size:13px;font-weight:600;color:#1A1508;background:var(--amber);
+  border-radius:99px;padding:6px 14px
+}
+
+.rel-bloco{
+  display:flex;flex-direction:column;gap:7px;width:100%;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:15px 16px
+}
+.rel-bloco .btn{align-self:flex-start;margin-top:4px}
+.rel-l{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:8px 11px;border-radius:var(--r3);background:var(--panel-2);border-left:2px solid var(--line-2)
+}
+.rel-l.ok{border-left-color:var(--solida)}
+.rel-l.bad{border-left-color:var(--ref)}
+.rel-par{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;min-width:0}
+.rel-par b{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink)}
+.rel-par i{font-family:var(--mono);font-size:11px;font-style:normal;color:var(--amber-2)}
+.rel-par span{font-size:14px;color:var(--ink-2)}
+.rel-meta{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);white-space:nowrap}
+.rel-meta em{font-style:normal;color:var(--ref)}
+
+
+/* ---------------- Antecipar ---------------- */
+.ant-ctx{
+  font-size:15px;line-height:1.55;color:var(--ink-2);font-style:italic;
+  border-left:2px solid var(--rev);padding-left:13px
+}
+.ant-frase{font-size:clamp(20px,3.6vw,26px);font-weight:600;letter-spacing:-.02em;line-height:1.45}
+.ant-buraco{
+  display:inline-block;min-width:68px;text-align:center;color:var(--rev);
+  font-family:var(--mono);letter-spacing:.14em;
+  border-bottom:2px solid var(--rev);padding:0 8px
+}
+.ant-rev{color:var(--solida);font-weight:700}
+.ant-dica{
+  font-family:var(--mono);font-size:22px;letter-spacing:.22em;color:var(--amber);
+  background:var(--panel-2);border:1px dashed var(--line-2);border-radius:var(--r3);
+  padding:9px 14px;align-self:flex-start
+}
+.ant-res{font-size:15px;line-height:1.5}
+.ant-res.ok{color:var(--solida)}
+.ant-res.no{color:var(--ink-2)}
+.ant-res em{font-style:normal;color:var(--ref)}
+.ant-pt{font-size:13.5px;color:var(--ink-3);line-height:1.5}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <div class="top-in">
+      <div class="brand"><span class="dot"></span> FLUÊNCIA <span class="dim" style="font-weight:500">· Level 1</span></div>
+      <div class="sync" id="sync" title="Sincronização"></div>
+      <nav class="tabs" id="tabs"></nav>
+    </div>
+  </header>
+  <main id="view"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ============================ DADOS ============================ */
+// [pt, comoFala, en, pav, classe, dia]
+const W = /*__WORDS__*/[];
+// reduções: [completa, reduzida, comoFala, pt, regra]
+const R = /*__RED__*/[];
+// blocos: [en, comoFala, pt, grupo]
+const C = /*__CHK__*/[];
+// famílias: id -> [[rótulo, forma], ...]
+const FAM = /*__FAM__*/{};
+// banco pronto de textos de leitura: {titulo, ctx, linhas:[[en,fon,pt],...]}
+const TXT_BANCO = /*__TXTBANCO__*/[];
+// banco pronto de itens do antecipar: {ctx, en, alvo, pt}
+const ANT_BANCO = /*__ANTBANCO__*/[];
+
+/* ============================ CONSTANTES ============================ */
+const HOUR = 3600000, DAY = 86400000;
+const GOAL_NEW = 25;       // palavras novas por dia
+const GOAL_MIN = 10;       // mínimo para manter o streak
+const BATCH = 5;           // palavras por lote
+const GOAL_RED = 3;        // reduções novas por dia
+const GOAL_CHK = 5;        // blocos novos por dia
+const LEVEL_TOTAL = W.length;
+const RED_TOTAL = R.length;
+const CHK_TOTAL = C.length;
+const STORE = "fluencia_v1";
+
+const STATUS = {
+  nova:    {label:"Nova",        cls:"s-nova"},
+  aprend:  {label:"Aprendendo",  cls:"s-aprend"},
+  rev:     {label:"Em revisão",  cls:"s-rev"},
+  solida:  {label:"Sólida",      cls:"s-solida"},
+  dom:     {label:"Dominada",    cls:"s-dom"},
+  ref:     {label:"Reforço",     cls:"s-ref"}
+};
+
+const SCHED = [
+  {n:1, nome:"1 hora depois"},
+  {n:2, nome:"Fim do dia"},
+  {n:3, nome:"Dia seguinte"},
+  {n:4, nome:"2 dias depois"},
+  {n:5, nome:"3 dias depois"},
+  {n:6, nome:"1 semana depois"},
+  {n:7, nome:"1 mês depois"},
+  {n:8, nome:"3 meses depois"}
+];
+
+/* ============================ ESTADO ============================ */
+let S = null;
+let fileHandle = null;
+let saveTimer = null;
+
+function freshState(){
+  return {
+    v:1,
+    criado: Date.now(),
+    w:{},              // id -> {s:stage, n:next, l:learnedAt, e:errors, a:attempts, m:mastered, r:reforco}
+    r:{},              // reduções  -> {s, n, l, e, a}
+    c:{},              // blocos    -> {s, n, l, e, a}
+    dias:{},           // 'YYYY-MM-DD' -> {novas, revs, dom, red, chk, li, sp, gr, limpo}
+    pav:{},            // id -> PAV editado à mão (substitui o original)
+    img:{},            // id -> id da imagem do PAV (a imagem fica no armazenamento do sistema)
+    txt:[],            // textos de leitura gerados (os mais recentes)
+    frasesDesde: null, // dia em que Frases entrou na meta diária
+    rel:{seq:0, acertos:0, tempo:null, rodadas:[], recentes:[]}, // relâmpago: recordes e histórico
+    ant:{feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0}, // antecipar: ilha separada
+    ultimo: null
+  };
+}
+/* ============================ IMAGEM DO PAV ============================ */
+/* As imagens ficam no armazenamento do próprio sistema, então sobem no PC
+   e aparecem no celular. O estado guarda só o id; a imagem em si fica fora. */
+let assetsRef = null;
+async function initAssets(){
+  try{ assetsRef = (window.claude && window.claude.use) ? await window.claude.use("assets") : null; }
+  catch(e){ assetsRef = null; }
+}
+function imgOf(id){ return (S.img && S.img[id]) ? S.img[id] : null; }
+function imgSrc(a){ return "/_blob/" + a; }
+function temImagens(){ return !!assetsRef; }
+function contaImagens(){ return Object.keys(S.img || {}).length; }
+
+/* reduz antes de subir: o que importa é a cena, não a resolução */
+function reduzirImagem(file, maxLado, qualidade){
+  return new Promise((res, rej) => {
+    const url = URL.createObjectURL(file);
+    const im = new Image();
+    im.onload = () => {
+      URL.revokeObjectURL(url);
+      let w = im.naturalWidth, h = im.naturalHeight;
+      if(!w || !h){ rej(new Error("vazia")); return; }
+      const k = Math.min(1, maxLado / Math.max(w, h));
+      w = Math.max(1, Math.round(w * k)); h = Math.max(1, Math.round(h * k));
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#14171D"; ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(im, 0, 0, w, h);
+      c.toBlob(b => b ? res(b) : rej(new Error("canvas")), "image/jpeg", qualidade);
+    };
+    im.onerror = () => { URL.revokeObjectURL(url); rej(new Error("invalida")); };
+    im.src = url;
+  });
+}
+async function subirImagem(id, file){
+  if(!assetsRef){ toast("Aqui não dá para guardar imagens. Use o link do sistema."); return false; }
+  if(!/^image\//.test(file.type || "")){ toast("Escolha um arquivo de imagem."); return false; }
+  let blob;
+  try{ blob = await reduzirImagem(file, 1100, 0.82); }
+  catch(e){ toast("Não consegui ler essa imagem."); return false; }
+  try{
+    const r = await assetsRef.upload(blob, {type:"image/jpeg"});
+    const antigo = imgOf(id);
+    if(!S.img) S.img = {};
+    if(!Array.isArray(S.txt)) S.txt = [];
+    S.img[id] = r.id;
+    save();
+    if(antigo && antigo !== r.id){ try{ await assetsRef.delete(antigo); }catch(e){} }
+    return true;
+  }catch(e){
+    const c = e && e.code;
+    toast(c === "too_large" ? "Imagem grande demais." :
+          c === "quota_or_state" ? "O espaço de imagens acabou." :
+          c === "rate_limited" ? "Muitos envios seguidos. Espere um pouco." :
+          c === "unsupported_type" ? "Formato de imagem não aceito." :
+          "Não deu para guardar a imagem agora.");
+    return false;
+  }
+}
+async function removerImagem(id){
+  const a = imgOf(id); if(!a) return;
+  delete S.img[id]; save();
+  try{ if(assetsRef) await assetsRef.delete(a); }catch(e){}
+}
+function escolherImagem(id, depois){
+  const inp = document.createElement("input");
+  inp.type = "file"; inp.accept = "image/*";
+  inp.onchange = async () => {
+    const f = inp.files && inp.files[0]; if(!f) return;
+    toast("Enviando imagem…");
+    const ok = await subirImagem(id, f);
+    if(ok) toast("Imagem salva.");
+    if(depois) depois();
+  };
+  inp.click();
+}
+function blocoImagem(id, cls){
+  const a = imgOf(id);
+  return a ? `<div class="pavimg ${cls||""}"><img src="${imgSrc(a)}" alt=""></div>` : "";
+}
+function botaoImagem(id){
+  if(!temImagens()) return "";
+  return `<button class="edt" data-img="${id}">${imgOf(id) ? "trocar imagem" : "+ imagem"}</button>`;
+}
+
+/* ============================ RETORNO IMEDIATO ============================ */
+/* Sem som, mas o celular ainda tem um canal de retorno instantâneo. */
+const VIB_KEY = "fluencia_vib";
+let vibLigada = (function(){ try{ return localStorage.getItem(VIB_KEY) !== "0"; }catch(e){ return true; } })();
+function vibrar(ok){
+  if(!vibLigada) return;
+  try{ if(navigator.vibrate) navigator.vibrate(ok ? 18 : [26, 60, 26]); }catch(e){}
+}
+
+/* ============================ FAMÍLIA DA PALAVRA ============================ */
+function blocoFamilia(id){
+  const f = FAM[id];
+  if(!f || !f.length) return "";
+  return `<div class="fam">${f.map(x => `<span><span class="rot">${esc(x[0])}</span> <b>${esc(x[1])}</b></span>`).join("")}</div>`;
+}
+
+/* ============================ LACUNA DE CURIOSIDADE ============================ */
+/* Curiosidade antes da resposta ativa o circuito de recompensa e melhora a
+   fixação — inclusive do que vem junto. Fato pequeno, nunca uma dica. */
+function curiosidade(id){
+  const x = S.w[id] || {}, op = [];
+  if(x.e > 0) op.push("você já errou esta " + x.e + (x.e === 1 ? " vez" : " vezes"));
+  if(x.a > 2) op.push("já passou por ela " + x.a + " vezes");
+  if(x.l){
+    const dd = Math.round((Date.now() - x.l) / DAY);
+    if(dd > 0) op.push("aprendida há " + dd + (dd === 1 ? " dia" : " dias"));
+  }
+  if(imgOf(id)) op.push("tem imagem — ela aparece quando você revelar");
+  op.push("é a nº " + (id + 1) + " das " + LEVEL_TOTAL);
+  if(W[id][5]) op.push("entrou no seu dia " + W[id][5]);
+  return op[(id * 7 + (x.a || 0)) % op.length];
+}
+
+/* ============================ CHUTE ANTES DE REVELAR ============================ */
+/* Tentar antes de ver a resposta melhora a retenção mesmo quando o chute
+   está errado. O campo existe para você não conseguir se enganar. */
+function campoChute(dica){
+  return `<input id="chute" class="chute" placeholder="${esc(dica)}" autocomplete="off"
+            autocapitalize="off" autocorrect="off" spellcheck="false">`;
+}
+function ligaChute(aoEnviar){
+  const el = $("#chute"); if(!el) return;
+  try{ el.focus(); }catch(e){}
+  el.onkeydown = e => {
+    e.stopPropagation();
+    if(e.key === "Enter"){ e.preventDefault(); aoEnviar(el.value); }
+  };
+}
+/* destaca o botão coerente com o que foi digitado, sem decidir por você */
+function sugereBotao(dig, esperado){
+  const v = avaliaChute(dig, esperado);
+  if(v === null) return;
+  const alvo = v ? $("#ok") : $("#err");
+  if(alvo) alvo.classList.add("sug");
+}
+function valorChute(){ const el = $("#chute"); return el ? el.value : ""; }
+function normResp(t){
+  return String(t == null ? "" : t).toLowerCase().trim()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9' ]+/g, " ").replace(/\s+/g, " ").trim();
+}
+/* true acertou, false errou, null não escreveu nada */
+function avaliaChute(dig, esperado){
+  const a = normResp(dig);
+  if(!a) return null;
+  const alvos = String(esperado).split(/[\/;,]| ou /).map(normResp).filter(Boolean);
+  const solta = t => t.replace(/^(to|a|an|the|o|os|as|um|uma|uns|umas)\s+/, "");
+  for(const b of alvos){ if(a === b || solta(a) === solta(b)) return true; }
+  return false;
+}
+function linhaChute(dig, esperado){
+  const v = avaliaChute(dig, esperado);
+  if(v === null) return "";
+  return `<div class="chuteres ${v ? "ok-tx" : "no-tx"}">${v ? "✓" : "✗"} você escreveu: <b>${esc(dig.trim())}</b></div>`;
+}
+
+/* PAV em uso: o editado à mão, se existir; senão o original */
+function pavOf(id){
+  return (S.pav && S.pav[id]) ? S.pav[id] : W[id][3];
+}
+
+document.addEventListener("click", e => {
+  const b = e.target.closest && e.target.closest("[data-img]");
+  if(!b) return;
+  e.preventDefault(); e.stopPropagation();
+  escolherImagem(+b.dataset.img, () => render());
+});
+function dayKey(d){
+  d = d || new Date();
+  const z = new Date(d.getTime() - d.getTimezoneOffset()*60000);
+  return z.toISOString().slice(0,10);
+}
+function addDays(d,n){ const x = new Date(d); x.setDate(x.getDate()+n); return x; }
+function atHour(d,h){ const x = new Date(d); x.setHours(h,0,0,0); return x.getTime(); }
+function today(){ return dia(dayKey()); }
+function dia(k){
+  if(!S.dias[k]) S.dias[k] = {novas:0, revs:0, dom:0, red:0, chk:0, li:false, sp:false, gr:false, limpo:false};
+  const d = S.dias[k];
+  if(d.red === undefined) d.red = 0;
+  if(d.chk === undefined) d.chk = 0;
+  if(d.txt === undefined) d.txt = 0;
+  if(d.rel === undefined) d.rel = 0;
+  if(d.ant === undefined) d.ant = 0;
+  if(d.wr === undefined) d.wr = false;
+  return d;
+}
+function wd(id){
+  if(!S.w[id]) S.w[id] = {s:0, n:null, l:null, e:0, a:0, m:false, r:false};
+  return S.w[id];
+}
+function isLearned(id){ return !!(S.w[id] && S.w[id].l); }
+
+function statusOf(id){
+  const w = S.w[id];
+  if(!w || !w.l) return "nova";
+  if(w.r) return "ref";
+  if(w.m) return "dom";
+  if(w.s <= 2) return "aprend";
+  if(w.s <= 6) return "rev";
+  return "solida";
+}
+
+/* ============================ FRASES: REDUÇÕES E BLOCOS ============================ */
+/* Os dois usam a mesma agenda de 8 revisões das palavras. */
+const DECK = {
+  red: {dados:()=>R, meta:GOAL_RED, campo:"red", nome:"Reduções",  rot:"redução"},
+  chk: {dados:()=>C, meta:GOAL_CHK, campo:"chk", nome:"Blocos",    rot:"bloco"}
+};
+function fStore(k){ if(k === "red"){ if(!S.r) S.r = {}; return S.r; } if(!S.c) S.c = {}; return S.c; }
+function fd(k, id){
+  const st = fStore(k);
+  if(!st[id]) st[id] = {s:0, n:null, l:null, e:0, a:0};
+  return st[id];
+}
+function fLearned(k, id){ const st = fStore(k); return !!(st[id] && st[id].l); }
+function fStatus(k, id){
+  const x = fStore(k)[id];
+  if(!x || !x.l) return "nova";
+  if(x.s <= 2) return "aprend";
+  if(x.s <= 6) return "rev";
+  if(x.s >= 8) return "dom";
+  return "solida";
+}
+function fDue(k){
+  const now = Date.now(), st = fStore(k), out = [];
+  for(const id in st){
+    const x = st[id];
+    if(x.l && x.n && x.n <= now && x.s < 8) out.push(+id);
+  }
+  out.sort((a,b)=> st[a].n - st[b].n);
+  return out;
+}
+function fNovas(k, n){
+  const tot = DECK[k].dados().length, out = [];
+  for(let i=0;i<tot && out.length<n;i++) if(!fLearned(k,i)) out.push(i);
+  return out;
+}
+function fCounts(k){
+  const tot = DECK[k].dados().length;
+  let learned = 0, dom = 0;
+  for(let i=0;i<tot;i++){
+    const s = fStatus(k,i);
+    if(s === "nova") continue;
+    learned++;
+    if(s === "dom") dom++;
+  }
+  return {total:tot, learned, dom, nova:tot-learned};
+}
+function fFaltaHoje(k){
+  const d = today(), feito = d[DECK[k].campo] || 0;
+  const disp = fCounts(k).nova;
+  return Math.max(0, Math.min(DECK[k].meta - feito, disp));
+}
+function fApply(k, id, ok){
+  const x = fd(k, id);
+  x.a++;
+  if(ok){
+    x.s = Math.min(8, x.s + 1);
+    scheduleNext(x);
+  } else {
+    x.e++;
+    x.n = atHour(addDays(new Date(),1), 9);
+  }
+  S.ultimo = Date.now();
+  save();
+}
+/* modo da pergunta conforme a revisão */
+function fModo(k, target){
+  if(k === "red") return target <= 4 ? "ouvir" : "produzir";
+  if(target <= 3) return "pt2en";
+  if(target === 4) return "en2pt";
+  return "pt2en_seco";
+}
+
+/* ============================ AGENDA ============================ */
+function scheduleNext(w){
+  const now = new Date();
+  let t = null;
+  switch(w.s){
+    case 0: t = Date.now() + HOUR; break;
+    case 1: { const e = atHour(now,21); t = (e > Date.now() + 30*60000) ? e : Date.now() + 2*HOUR; break; }
+    case 2: t = atHour(addDays(now,1),9); break;
+    case 3: t = atHour(addDays(now,2),9); break;
+    case 4: t = atHour(addDays(now,3),9); break;
+    case 5: t = atHour(addDays(now,7),9); break;
+    case 6: t = atHour(addDays(now,30),9); break;
+    case 7: t = atHour(addDays(now,90),9); break;
+    default: t = null;
+  }
+  w.n = t;
+}
+function dueList(){
+  const now = Date.now(), out = [];
+  for(const id in S.w){
+    const w = S.w[id];
+    if(w.l && w.n && w.n <= now && w.s < 8) out.push(+id);
+  }
+  out.sort((a,b)=> S.w[a].n - S.w[b].n);
+  return out;
+}
+/* Pauta pro treino de fora (listening/speaking): pega o que está pra
+   revisar hoje e, se faltar, completa com o que ele estudou por último.
+   Isso vira o material de verdade — antes era só marcar o checkbox
+   sem nenhum conteúdo apontado. */
+function pautaHoje(n){
+  const ids = dueList().slice(0, n);
+  if(ids.length < n){
+    const vistos = [];
+    for(const id in S.w) if(S.w[id].l) vistos.push(+id);
+    vistos.sort((a,b)=> (S.w[b].l||0) - (S.w[a].l||0));
+    for(const id of vistos){ if(ids.length >= n) break; if(ids.indexOf(id) < 0) ids.push(id); }
+  }
+  return ids;
+}
+function soonList(){
+  const now = Date.now(), out = [];
+  for(const id in S.w){
+    const w = S.w[id];
+    if(w.l && w.n && w.n > now && w.n <= now + 12*HOUR && w.s < 8) out.push(+id);
+  }
+  return out;
+}
+function modeFor(target){
+  if(target <= 3) return {mostra:"pt+pav", pede:"en"};
+  if(target === 4) return {mostra:"en+pav", pede:"pt"};
+  if(target <= 6) return {mostra:"pav", pede:"en"};
+  return {mostra:"pt", pede:"en"};
+}
+
+/* ============================ CONTADORES ============================ */
+function counts(){
+  let nova=0, aprend=0, rev=0, solida=0, dom=0, ref=0, learned=0;
+  for(let i=0;i<W.length;i++){
+    const st = statusOf(i);
+    if(st==="nova"){ nova++; continue; }
+    learned++;
+    if(st==="aprend") aprend++;
+    else if(st==="rev") rev++;
+    else if(st==="solida") solida++;
+    else if(st==="dom") dom++;
+    else if(st==="ref") ref++;
+  }
+  return {nova, aprend, rev, solida, dom, ref, learned};
+}
+/* pedido dele em 25/09: não repetir sempre a mesma sequência de palavras
+   novas (fica óbvio depois de zerar o sistema). Sorteia dentro de uma janela
+   perto de onde ele está — mantém fácil→difícil por frequência, só varia a
+   ordem exata. Reduções e blocos (fNovas) continuam sequenciais, de propósito. */
+const JANELA_NOVAS = 150;
+function nextNewIds(n){
+  const pool = [];
+  for(let i=0;i<W.length && pool.length<JANELA_NOVAS;i++) if(!isLearned(i)) pool.push(i);
+  const embaralhado = pool.slice().sort(() => Math.random() - .5);
+  return embaralhado.slice(0, n);
+}
+function dominioPool(){
+  const sol = [], dm = [];
+  for(let i=0;i<W.length;i++){
+    const w = S.w[i];
+    if(!w || !w.l || w.r) continue;
+    if(w.m) dm.push(i);
+    else if(w.s >= 7) sol.push(i);
+  }
+  return {sol, dm};
+}
+function totalRevs(){ let t=0; for(const k in S.dias) t += S.dias[k].revs; return t; }
+
+/* ---- streak ---- */
+function dayMin(k){ const d = S.dias[k]; return !!d && d.novas >= GOAL_MIN && d.limpo; }
+function dayFull(k){
+  const d = S.dias[k];
+  if(!(d && d.novas >= GOAL_NEW && d.limpo && d.li && d.sp && d.gr)) return false;
+  // Frases só entram na conta a partir do dia em que o módulo foi ligado
+  if(S.frasesDesde && k >= S.frasesDesde) return (d.red||0) >= GOAL_RED && (d.chk||0) >= GOAL_CHK;
+  return true;
+}
+/* Perder uma sequência longa é o que faz gente abandonar. Duas folgas por
+   mês seguram o tranco sem tirar a pressão. */
+const ESCUDOS_MES = 2;
+function streak(){
+  // a contagem não passa do primeiro dia com registro: buraco antes disso
+  // é "ainda não usava o sistema", não falta, e não deve gastar folga
+  const dias = Object.keys(S.dias);
+  if(!dias.length) return {cur:0, best:0, protegidos:[], escudosUsados:0, escudosSobrando:ESCUDOS_MES};
+  const inicio = dias.sort()[0];
+  const gastos = {}, protegidos = [];
+  let cur = 0, k = dayKey();
+  if(!dayMin(k)) k = dayKey(addDays(new Date(), -1));   // o dia de hoje ainda dá tempo
+  while(k >= inicio){
+    if(dayMin(k)){
+      cur++;
+    } else {
+      if(cur === 0) break;                              // não começa a contagem com folga
+      const mes = k.slice(0, 7), g = gastos[mes] || 0;
+      if(g >= ESCUDOS_MES) break;
+      gastos[mes] = g + 1;
+      protegidos.push(k);
+    }
+    k = dayKey(addDays(new Date(k + "T12:00:00"), -1));
+  }
+  const keys = Object.keys(S.dias).filter(dayMin).sort();
+  let best = 0, run = 0, prev = null;
+  for(const kk of keys){
+    if(prev && (new Date(kk+"T12:00:00") - new Date(prev+"T12:00:00")) === DAY) run++;
+    else run = 1;
+    best = Math.max(best, run); prev = kk;
+  }
+  const mesAtual = dayKey().slice(0, 7);
+  return {cur, best:Math.max(best,cur), protegidos,
+          escudosUsados: gastos[mesAtual] || 0,
+          escudosSobrando: Math.max(0, ESCUDOS_MES - (gastos[mesAtual] || 0))};
+}
+/* metas curtas: a barra de 1.200 quase não anda e desmotiva */
+function proximoMarco(n){
+  const passos = [10,25,50,75,100,150,200,300,400,500,600,700,800,900,1000,1100,1200];
+  for(const p of passos) if(n < p) return p;
+  return LEVEL_TOTAL;
+}
+function diasEstudados(){ return Object.keys(S.dias).filter(k=>S.dias[k].novas>0 || S.dias[k].revs>0).length; }
+
+function markClean(){
+  if(dueList().length === 0){
+    const d = today();
+    if(!d.limpo){ d.limpo = true; save(); }
+  }
+}
+
+/* ============================ PERSISTÊNCIA ============================ */
+function save(){
+  S.ultimo = Date.now();
+  try{ localStorage.setItem(STORE, JSON.stringify(pack())); }catch(e){}
+  if(fileHandle){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(writeFile, 1200);
+  }
+  schedulePush();
+}
+
+/* ---- sincronização entre aparelhos (banco do artifact) ---- */
+let dbRef = null, dbUnsub = null;
+let pushTimer = null, pushing = false, pushAgain = false;
+let syncEstado = "off";   // off | wait | on
+
+function setSync(e){
+  syncEstado = e;
+  const n = $("#sync"); if(!n) return;
+  const txt = e === "on" ? "salvo" : e === "wait" ? "salvando…" : "só neste aparelho";
+  n.className = "sync " + e;
+  n.innerHTML = `<i></i><span>${txt}</span>`;
+  n.title = e === "off" ? "Este aparelho guarda o progresso só aqui." : "Salvo automaticamente e compartilhado entre seus aparelhos.";
+}
+
+/* -------------------------------------------------------------------
+   CHAVES ESTÁVEIS
+   O progresso é guardado pela PALAVRA, não pela posição dela na lista.
+   Foi assim que eu deixei o sistema à prova de atualização: dá para
+   acrescentar palavras novas sem que o seu histórico escorregue de
+   lugar. Dentro do programa tudo continua funcionando por índice;
+   a tradução acontece só na hora de gravar e de ler.
+-------------------------------------------------------------------- */
+const CONTEUDO = W.length + "/" + R.length + "/" + C.length;
+const idW = i => String((W[i] && W[i][2]) || "").toLowerCase();
+const idR = i => String((R[i] && R[i][1]) || "").toLowerCase();
+const idC = i => String((C[i] && C[i][0]) || "").toLowerCase();
+const ixW = {}, ixR = {}, ixC = {};
+for(let i = 0; i < W.length; i++) ixW[idW(i)] = i;
+for(let i = 0; i < R.length; i++) ixR[idR(i)] = i;
+for(let i = 0; i < C.length; i++) ixC[idC(i)] = i;
+let orfas = 0;   // chaves guardadas que não existem mais na lista atual
+
+function porId(obj, id){
+  const o = {};
+  for(const i in (obj || {})){ const k = id(+i); if(k) o[k] = obj[i]; }
+  return o;
+}
+function porIndice(obj, ix){
+  const o = {};
+  for(const k in (obj || {})){
+    const i = ix[String(k).toLowerCase()];
+    if(i === undefined){ orfas++; continue; }
+    o[i] = obj[k];
+  }
+  return o;
+}
+/* estado antigo vinha com a posição como chave: ainda casa, porque a
+   lista não mudou desde então. Na primeira gravação já sai convertido. */
+function porIndiceOuNumero(obj, ix){
+  const chaves = Object.keys(obj || {});
+  const numerico = chaves.length && chaves.every(k => /^\d+$/.test(k));
+  if(numerico){ const o = {}; for(const k in obj) o[+k] = obj[k]; return o; }
+  return porIndice(obj, ix);
+}
+
+/* formato compacto para caber com folga no limite do documento */
+function packF(src){
+  const o = {};
+  for(const id in (src||{})){
+    const x = src[id];
+    o[id] = [x.s|0, x.n?Math.round(x.n/1000):0, x.l?Math.round(x.l/1000):0, x.e|0, x.a|0];
+  }
+  return o;
+}
+function unpackF(src){
+  const o = {};
+  for(const id in (src||{})){
+    const a = src[id];
+    o[id] = {s:a[0]|0, n:a[1]?a[1]*1000:null, l:a[2]?a[2]*1000:null, e:a[3]|0, a:a[4]|0};
+  }
+  return o;
+}
+/* O relâmpago guarda recordes (números puros, sempre válidos) e uma lista
+   curta de palavras recém-sorteadas — essa vai por texto, como o resto. */
+function packRel(r){
+  if(!r) return null;
+  return {seq:r.seq|0, acertos:r.acertos|0, tempo:r.tempo||null,
+          rodadas:(r.rodadas||[]).slice(-REL_HIST),
+          recentes:(r.recentes||[]).map(i => idW(+i)).filter(Boolean)};
+}
+function unpackRel(r, antigo){
+  const o = {seq:0, acertos:0, tempo:null, rodadas:[], recentes:[]};
+  if(!r) return o;
+  o.seq = r.seq|0; o.acertos = r.acertos|0; o.tempo = r.tempo||null;
+  o.rodadas = Array.isArray(r.rodadas) ? r.rodadas : [];
+  const rec = Array.isArray(r.recentes) ? r.recentes : [];
+  o.recentes = antigo ? rec.map(x => +x).filter(x => x === x)
+                      : rec.map(k => ixW[String(k).toLowerCase()]).filter(i => i !== undefined);
+  return o;
+}
+/* O antecipar guarda só números e o histórico de rodadas — nada preso a
+   índice de palavra, então nenhuma atualização de conteúdo o afeta. */
+function packAnt(a){
+  if(!a) return null;
+  return {f:a.feitas|0, c:a.cheios|0, r:(a.rodadas||[]).slice(-ANT_HIST)};
+}
+function unpackAnt(a){
+  const o = {feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0};
+  if(!a) return o;
+  o.feitas = a.f|0; o.cheios = a.c|0;
+  o.rodadas = Array.isArray(a.r) ? a.r : [];
+  return o;
+}
+function pack(){
+  const w = {}, d = {};
+  for(const id in S.w){
+    const x = S.w[id], k = idW(+id);
+    if(!k) continue;
+    w[k] = [x.s|0, x.n?Math.round(x.n/1000):0, x.l?Math.round(x.l/1000):0, x.e|0, x.a|0, x.m?1:0, x.r?1:0];
+  }
+  for(const k in S.dias){
+    const y = S.dias[k];
+    d[k] = [y.novas|0, y.revs|0, y.dom|0, y.li?1:0, y.sp?1:0, y.gr?1:0, y.limpo?1:0, y.red|0, y.chk|0, y.txt|0, y.rel|0, y.ant|0, y.wr?1:0];
+  }
+  return {f:4, cv:CONTEUDO, criado:S.criado||Date.now(), ultimo:S.ultimo||0,
+          w, dias:d,
+          pav:porId(S.pav, idW), img:porId(S.img, idW),
+          r:porId(packF(S.r), idR), c:porId(packF(S.c), idC),
+          fd:S.frasesDesde||null, txt:(S.txt||[]).slice(0,MAX_TXT_GUARDADOS),
+          rel:packRel(S.rel), ant:packAnt(S.ant)};
+}
+function unpack(p){
+  if(!p) return null;
+  if(p.f !== 2 && p.f !== 3 && p.f !== 4) return (p.w && p.dias) ? p : null;
+  orfas = 0;
+  const antigo = p.f !== 4;
+  const o = {v:1, criado:p.criado||Date.now(), ultimo:p.ultimo||0, w:{}, dias:{},
+             pav: antigo ? (p.pav||{}) : porIndiceOuNumero(p.pav, ixW),
+             img: antigo ? (p.img||{}) : porIndiceOuNumero(p.img, ixW),
+             r: unpackF(antigo ? p.r : porIndiceOuNumero(p.r, ixR)),
+             c: unpackF(antigo ? p.c : porIndiceOuNumero(p.c, ixC)),
+             frasesDesde:p.fd||null, txt:Array.isArray(p.txt)?p.txt:[],
+             rel:unpackRel(p.rel, antigo), ant:unpackAnt(p.ant)};
+  for(const id in p.w){
+    const a = p.w[id];
+    let i = id;
+    if(!antigo){
+      i = ixW[String(id).toLowerCase()];
+      if(i === undefined){ orfas++; continue; }
+    }
+    o.w[i] = {s:a[0]|0, n:a[1]?a[1]*1000:null, l:a[2]?a[2]*1000:null, e:a[3]|0, a:a[4]|0, m:!!a[5], r:!!a[6]};
+  }
+  for(const k in p.dias){
+    const a = p.dias[k];
+    o.dias[k] = {novas:a[0]|0, revs:a[1]|0, dom:a[2]|0, li:!!a[3], sp:!!a[4], gr:!!a[5], limpo:!!a[6], red:a[7]|0, chk:a[8]|0, txt:a[9]|0, rel:a[10]|0, ant:a[11]|0, wr:!!a[12]};
+  }
+  return o;
+}
+function schedulePush(){
+  if(!dbRef) return;
+  setSync("wait");
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(pushRemote, 1200);
+}
+/* grava na hora quando a aba sai da frente ou fecha: nada fica pendente */
+function flushPush(){
+  if(!dbRef || !pushTimer) return;
+  clearTimeout(pushTimer); pushTimer = null;
+  pushRemote();
+}
+document.addEventListener("visibilitychange", () => { if(document.hidden) flushPush(); });
+window.addEventListener("pagehide", flushPush);
+window.addEventListener("blur", flushPush);
+async function pushRemote(){
+  if(!dbRef) return;
+  if(pushing){ pushAgain = true; return; }
+  pushing = true;
+  try{ await dbRef.set(pack()); setSync("on"); }
+  catch(e){ setSync("wait"); }
+  finally{
+    pushing = false;
+    if(pushAgain){ pushAgain = false; setTimeout(pushRemote, 500); }
+  }
+}
+function normaliza(o){
+  if(!o) return o;
+  if(!o.pav) o.pav = {};
+  if(!o.r) o.r = {};
+  if(!o.img) o.img = {};
+  if(!Array.isArray(o.txt)) o.txt = [];
+  if(!o.c) o.c = {};
+  if(!o.frasesDesde) o.frasesDesde = dayKey();
+  if(!o.rel) o.rel = {seq:0, acertos:0, tempo:null, rodadas:[], recentes:[]};
+  if(!Array.isArray(o.rel.rodadas)) o.rel.rodadas = [];
+  if(!Array.isArray(o.rel.recentes)) o.rel.recentes = [];
+  if(!o.ant) o.ant = {feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0};
+  if(!Array.isArray(o.ant.rodadas)) o.ant.rodadas = [];
+  return o;
+}
+function adota(remoto, msg){
+  S = normaliza(remoto);
+  try{ localStorage.setItem(STORE, JSON.stringify(pack())); }catch(e){}
+  render();
+  if(msg) toast(msg);
+}
+async function initSync(){
+  let db = null;
+  try{ db = (window.claude && window.claude.use) ? await window.claude.use("db") : null; }catch(e){ db = null; }
+  if(!db){ setSync("off"); return; }
+  dbRef = db.doc("estado/principal");
+  try{
+    const snap = await dbRef.get();
+    const remoto = snap.exists ? unpack(snap.data()) : null;
+    if(remoto && (remoto.ultimo||0) > (S.ultimo||0)) adota(remoto, null);
+    else if(!remoto || (S.ultimo||0) > (remoto.ultimo||0)) await pushRemote();
+    setSync("on");
+  }catch(e){ setSync("wait"); }
+  dbUnsub = dbRef.onSnapshot(snap => {
+    if(!snap.exists || snap.metadata.hasPendingWrites) return;
+    const r = unpack(snap.data());
+    if(!r || (r.ultimo||0) <= (S.ultimo||0)) return;
+    if(SESSION) return;                       // não troca o estado no meio de uma sessão
+    adota(r, "Progresso atualizado do outro aparelho.");
+    setSync("on");
+  }, () => { dbRef = null; dbUnsub = null; setSync("off"); });
+}
+async function writeFile(){
+  if(!fileHandle) return;
+  try{
+    const w = await fileHandle.createWritable();
+    await w.write(JSON.stringify(S));
+    await w.close();
+  }catch(e){ console.warn("arquivo", e); }
+}
+/* handle do arquivo guardado no IndexedDB */
+function idb(){
+  return new Promise((res,rej)=>{
+    const r = indexedDB.open("fluencia_fs",1);
+    r.onupgradeneeded = ()=> r.result.createObjectStore("kv");
+    r.onsuccess = ()=> res(r.result);
+    r.onerror = ()=> rej(r.error);
+  });
+}
+async function idbSet(k,v){ const db = await idb(); return new Promise(r=>{ const t=db.transaction("kv","readwrite"); t.objectStore("kv").put(v,k); t.oncomplete=r; }); }
+async function idbGet(k){ const db = await idb(); return new Promise(r=>{ const t=db.transaction("kv","readonly"); const q=t.objectStore("kv").get(k); q.onsuccess=()=>r(q.result); q.onerror=()=>r(null); }); }
+
+async function connectFile(){
+  if(!window.showSaveFilePicker){ toast("Aqui não dá para conectar arquivo. Use Exportar, na aba Dados, para guardar uma cópia."); return; }
+  try{
+    const h = await window.showSaveFilePicker({
+      suggestedName: "dados-ingles.json",
+      types:[{description:"Dados do sistema", accept:{"application/json":[".json"]}}]
+    });
+    fileHandle = h; await idbSet("fh", h); await writeFile();
+    toast("Arquivo conectado. Seu progresso é salvo nele a cada ação.");
+    render();
+  }catch(e){}
+}
+async function restoreFile(){
+  if(!window.showSaveFilePicker) return;
+  try{
+    const h = await idbGet("fh");
+    if(!h) return;
+    const p = await h.queryPermission({mode:"readwrite"});
+    if(p === "granted"){ fileHandle = h; }
+    else { window.__pendingHandle = h; }
+  }catch(e){}
+}
+async function reauthFile(){
+  const h = window.__pendingHandle; if(!h) return connectFile();
+  const p = await h.requestPermission({mode:"readwrite"});
+  if(p === "granted"){ fileHandle = h; window.__pendingHandle = null; await writeFile(); toast("Arquivo reconectado."); render(); }
+}
+async function exportJSON(){
+  const nome = "dados-ingles-" + dayKey() + ".json";
+  const txt = JSON.stringify(S, null, 1);
+  try{
+    const dl = (window.claude && window.claude.use) ? await window.claude.use("downloads") : null;
+    if(dl){ await dl.save({filename:nome, data:txt}); toast("Cópia salva."); return; }
+  }catch(e){
+    if(e && e.code === "declined") return;
+    if(e && e.code) { toast("Não deu para salvar a cópia agora."); return; }
+  }
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([txt], {type:"application/json"}));
+  a.download = nome;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+  toast("Cópia baixada.");
+}
+function importJSON(){
+  const inp = document.createElement("input");
+  inp.type = "file"; inp.accept = ".json,application/json";
+  inp.onchange = async () => {
+    const f = inp.files[0]; if(!f) return;
+    try{
+      const j = JSON.parse(await f.text());
+      if(!j || !j.w || !j.dias) throw 0;
+      if(!(await confirmar("Isso substitui o progresso atual pelo do arquivo. Continuar?"))) return;
+      S = normaliza(j); save(); toast("Progresso restaurado."); render();
+    }catch(e){ toast("Arquivo inválido."); }
+  };
+  inp.click();
+}
+
+/* ============================ UI HELPERS ============================ */
+const $ = s => document.querySelector(s);
+const el = (h) => { const d = document.createElement("div"); d.innerHTML = h.trim(); return d.firstElementChild; };
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function toast(m){ const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(t._t); t._t = setTimeout(()=>t.classList.remove("on"), 2600); }
+/* modal próprio pra confirmação: o Artifact publicado roda num iframe sandboxed
+   que bloqueia silenciosamente confirm() nativo (sem erro, sem aviso — só
+   retorna false na hora). Todo "tem certeza?" do sistema passa por aqui. */
+function confirmar(msg, msg2){
+  return new Promise(res => {
+    const box = el(`<div class="modal">
+      <div class="card" style="max-width:420px;width:100%;background:var(--panel-2)">
+        <div style="font-size:15px;color:var(--ink);line-height:1.5;margin-bottom:${msg2?"8px":"18px"}">${esc(msg)}</div>
+        ${msg2 ? `<div class="mini" style="margin-bottom:18px">${esc(msg2)}</div>` : ""}
+        <div class="acts" style="justify-content:flex-end">
+          <button class="btn ghost" id="cfN">Cancelar</button>
+          <button class="btn bad" id="cfS">Confirmar</button>
+        </div>
+      </div></div>`);
+    document.body.appendChild(box);
+    const fim = v => { box.remove(); res(v); };
+    box.onclick = e => { if(e.target === box) fim(false); };
+    box.querySelector("#cfN").onclick = () => fim(false);
+    box.querySelector("#cfS").onclick = () => fim(true);
+  });
+}
+function pill(st){ const s = STATUS[st]; return `<span class="pill ${s.cls}"><span class="dotc"></span>${s.label}</span>`; }
+function pct(a,b){ return b ? Math.round(a/b*100) : 0; }
+function saudacao(){ const h = new Date().getHours(); return h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite"; }
+function plural(n,a,b){ return n === 1 ? a : b; }
+function cap(t){ return t.charAt(0).toUpperCase() + t.slice(1); }
+
+/* ============================ NAVEGAÇÃO ============================ */
+let TAB = "home";
+let SESSION = null;
+const TABS = [
+  ["home","Início"], ["bank","Palavras"], ["frases","Frases"], ["ler","Leitura"], ["ant","Antecipar"], ["cal","Calendário"], ["prog","Progresso"], ["cfg","Dados"]
+];
+function go(t){ TAB = t; SESSION = null; render(); }
+
+function render(){
+  const nav = $("#tabs");
+  nav.innerHTML = TABS.map(([k,l]) => `<button data-t="${k}" class="${TAB===k&&!SESSION?"on":""}">${l}</button>`).join("");
+  nav.querySelectorAll("button").forEach(b => b.onclick = () => go(b.dataset.t));
+  const v = $("#view");
+  v.innerHTML = "";
+  if(SESSION) return SESSION.render(v);
+  if(TAB === "home") return viewHome(v);
+  if(TAB === "bank") return viewBank(v);
+  if(TAB === "frases") return viewFrases(v);
+  if(TAB === "ler") return viewLer(v);
+  if(TAB === "ant") return viewAnt(v);
+  if(TAB === "cal") return viewCal(v);
+  if(TAB === "prog") return viewProg(v);
+  if(TAB === "cfg") return viewCfg(v);
+}
+
+/* ============================ PRÓXIMA AÇÃO ============================ */
+function nextAction(){
+  const d = today(), c = counts(), due = dueList();
+  if(due.length) return {t:"rev", txt:`Revisar ${due.length} ${plural(due.length,"palavra","palavras")}`, sub:`${Math.ceil(due.length*10/60)} min estimados`, run:()=>startReview(due)};
+  if(d.novas < GOAL_NEW && c.nova > 0){
+    const falta = GOAL_NEW - d.novas, n = Math.min(BATCH, falta);
+    return {t:"new", txt:`Aprender ${n} ${plural(n,"palavra nova","palavras novas")}`, sub:`Lote de ${BATCH} · faltam ${falta} hoje`, run:()=>startLearn()};
+  }
+  const redDue = fDue("red"), redNov = fFaltaHoje("red");
+  if(redDue.length || redNov){
+    const n = redDue.length || redNov;
+    return {t:"red",
+      txt: redDue.length ? `Revisar ${n} ${plural(n,"redução","reduções")}` : `Treinar ${n} ${plural(n,"redução nova","reduções novas")}`,
+      sub: "Fala conectada: gonna, lemme, gaddit. O ouvido vem antes da regra.",
+      run:()=>startFrases("red")};
+  }
+  const chkDue = fDue("chk"), chkNov = fFaltaHoje("chk");
+  if(chkDue.length || chkNov){
+    const n = chkDue.length || chkNov;
+    return {t:"chk",
+      txt: chkDue.length ? `Revisar ${n} ${plural(n,"bloco","blocos")}` : `Aprender ${n} ${plural(n,"bloco novo","blocos novos")}`,
+      sub: "Frases prontas que saem inteiras na conversa.",
+      run:()=>startFrases("chk")};
+  }
+  const faltaTxt = Math.max(0, GOAL_TXT - textosHoje().length);
+  const naoLidos = textosHoje().filter(t => !t.lido).length;
+  if(temLeitura() && (faltaTxt || naoLidos)){
+    return {t:"txt",
+      txt: naoLidos ? `Ler ${naoLidos} ${plural(naoLidos,"texto","textos")} do dia` : `Escrever ${faltaTxt} ${plural(faltaTxt,"texto","textos")} do dia`,
+      sub: "História nova com as palavras que você já domina. Som, inglês, tradução.",
+      run:()=>go("ler")};
+  }
+  if(!d.rel){
+    const rr = relEstado();
+    return {t:"rel", txt:`Relâmpago — ${REL_SEG} segundos`,
+      sub: rr.seq ? `Velocidade de reconhecimento. Seu recorde: ${rr.seq} seguidas.`
+                  : "Velocidade de reconhecimento. Palavra na tela, duas opções, sem pensar muito.",
+      run:()=>startRelampago()};
+  }
+  if(!d.li) return {t:"li", txt:"Listening — 20 minutos", sub:"Música ou série. Marque quando terminar.", run:()=>{ d.li = true; save(); toast("Listening concluído."); render(); }};
+  if(!d.sp) return {t:"sp", txt:"Speaking — 20 minutos", sub:"Shadowing ou cantar. Marque quando terminar.", run:()=>{ d.sp = true; save(); toast("Speaking concluído."); render(); }};
+  if(!d.gr) return {t:"gr", txt:"Grammar — 20 minutos", sub:"To be e have. Marque quando terminar.", run:()=>{ d.gr = true; save(); toast("Grammar concluído."); render(); }};
+  const pool = dominioPool();
+  if(pool.sol.length + pool.dm.length > 0 && d.dom < 10)
+    return {t:"dom", txt:"Treino de domínio", sub:`${pool.sol.length} ${plural(pool.sol.length,"palavra sólida","palavras sólidas")} esperando o teste final`, run:()=>startDominio()};
+  return {t:"done", txt:"Dia completo", sub:"Missão cumprida. Volte amanhã.", run:null};
+}
+
+/* ============================ VIEW: INÍCIO ============================ */
+function anel(frac, pronto, dentro){
+  const r = 26, c = 2 * Math.PI * r;
+  const cor = pronto ? "var(--solida)" : "var(--amber)";
+  const off = c * (1 - Math.max(0, Math.min(1, frac)));
+  return `<div class="anel">
+    <svg viewBox="0 0 62 62" width="62" height="62" aria-hidden="true">
+      <circle class="anel-bg" cx="31" cy="31" r="${r}"></circle>
+      <circle class="anel-fg" cx="31" cy="31" r="${r}" style="stroke:${cor};stroke-dasharray:${c.toFixed(1)};stroke-dashoffset:${off.toFixed(1)}"></circle>
+    </svg><b style="color:${pronto ? "var(--solida)" : "var(--ink)"}">${dentro}</b></div>`;
+}
+function trilha(nome, feito, meta, sub, ativa){
+  const pronto = feito >= meta;
+  return `<div class="trilha ${ativa ? "ativa" : ""}">
+    ${anel(meta ? feito / meta : 0, pronto, feito)}
+    <div>
+      <div class="tt">${nome}</div>
+      <div class="ts">${esc(sub)}</div>
+    </div>
+  </div>`;
+}
+
+function viewHome(v){
+  markClean();
+  const d = today(), c = counts(), st = streak(), na = nextAction(), due = dueList().length;
+  const redDue = fDue("red").length, chkDue = fDue("chk").length;
+  const naoLidos = textosHoje().filter(t => !t.lido).length;
+  const marco = proximoMarco(c.dom);
+  const pauta = pautaHoje(6);
+
+  const aviso = (!fileHandle && !dbRef) ? `
+    <div class="banner" style="margin-bottom:16px">
+      <div style="flex:1">
+        <b>Sem sincronização: o progresso está só neste navegador.</b>
+        <div class="mini" style="margin-top:3px">${window.showSaveFilePicker ? "Conecte um arquivo na sua pasta para não depender dele." : "Exporte uma cópia de vez em quando, na aba Dados."}</div>
+      </div>
+      ${window.showSaveFilePicker
+        ? `<button class="btn sm pri" id="bConn">${window.__pendingHandle ? "Reconectar arquivo" : "Conectar arquivo"}</button>`
+        : `<button class="btn sm ghost" id="bExp">Exportar cópia</button>`}
+    </div>` : "";
+
+  v.innerHTML = `
+    ${aviso}
+    <div class="cab">
+      <div>
+        <h1>${saudacao()}, Gustavo</h1>
+        <div class="muted" style="margin-top:4px;font-size:14px">Dia ${diasEstudados() || 1} · ${dayFull(dayKey()) ? "dia completo" : dayMin(dayKey()) ? "dia mínimo garantido" : "dia em aberto"}</div>
+      </div>
+      <div class="streak">
+        <b>${st.cur}</b>
+        <div>
+          <div style="font-size:13px;font-weight:600">${plural(st.cur,"dia seguido","dias seguidos")}</div>
+          <div class="mini">recorde ${st.best} · ${st.escudosSobrando} ${plural(st.escudosSobrando,"folga","folgas")} este mês</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="next">
+      <div class="lbl" style="color:var(--amber-2)">Próxima ação</div>
+      <div>
+        <div class="what">${na.txt}</div>
+        <div class="muted" style="font-size:14px;margin-top:7px;max-width:52ch">${na.sub}</div>
+      </div>
+      ${na.run ? `<div><button class="btn pri lg" id="bGo">Começar agora</button></div>` : `<div class="mini">Nada pendente. Volte amanhã.</div>`}
+    </div>
+
+    <div class="hoje">
+      ${trilha("Palavras", d.novas, GOAL_NEW, `de ${GOAL_NEW} novas`, na.t === "new")}
+      ${trilha("Revisões", d.revs, Math.max(1, d.revs + due), due ? due + " pendentes" : "em dia", na.t === "rev")}
+      ${trilha("Reduções", d.red || 0, GOAL_RED, redDue ? redDue + " a revisar" : `de ${GOAL_RED} novas`, na.t === "red")}
+      ${trilha("Blocos", d.chk || 0, GOAL_CHK, chkDue ? chkDue + " a revisar" : `de ${GOAL_CHK} novos`, na.t === "chk")}
+      ${trilha("Leitura", d.txt || 0, GOAL_TXT, naoLidos ? naoLidos + " esperando" : `de ${GOAL_TXT} textos`, na.t === "txt")}
+      ${trilha("Relâmpago", d.rel || 0, 1, relEstado().seq ? `recorde ${relEstado().seq} seguidas` : `${REL_SEG}s de velocidade`, na.t === "rel")}
+    </div>
+
+    <div class="faixa">
+      <div class="marco">
+        <div class="spread">
+          <span class="lbl">Próximo marco</span>
+          <span class="mini">${Math.max(0, marco - c.dom)} para chegar</span>
+        </div>
+        <div class="n">${c.dom} <span class="dim" style="font-size:15px;font-weight:400">/ ${marco} dominadas</span></div>
+        <div class="bar"><i style="width:${pct(c.dom, marco)}%;background:var(--dom)"></i></div>
+        <div class="mini">${c.dom} de ${LEVEL_TOTAL} no Level 1 inteiro</div>
+      </div>
+      <div class="treinos">
+        <span class="lbl">Treinos de fora · 20 min cada</span>
+        ${[["li","Listening"],["sp","Speaking"],["gr","Grammar"]].map(([k,n]) =>
+          `<button class="chk ${d[k]?"on":""}" data-chk="${k}">${n}<i>${d[k]?"feito":"marcar"}</i></button>`).join("")}
+        <button class="chk ${d.wr?"on":""}" id="bEsc">Escrita<i>${d.wr?"feito":"frase curta"}</i></button>
+        ${pauta.length ? `
+        <div class="mini" style="margin-top:2px">Pauta pro Listening/Speaking — clique pra ouvir gente de verdade falando, no YouGlish:</div>
+        <div class="row" style="flex-wrap:wrap;gap:6px">
+          ${pauta.map(id => `<a class="edt" href="https://youglish.com/pronounce/${encodeURIComponent(W[id][2])}/english" target="_blank" rel="noopener">${esc(W[id][2])}</a>`).join("")}
+        </div>` : ""}
+      </div>
+    </div>
+
+    <div class="stats">
+      ${[["nova","Novas",c.nova],["aprend","Aprendendo",c.aprend],["rev","Em revisão",c.rev],["solida","Sólidas",c.solida],["dom","Dominadas",c.dom],["ref","Reforço",c.ref]]
+        .map(([k,l,n])=>`<div class="st">${pill(k)}<div class="n">${n}</div></div>`).join("")}
+    </div>
+
+    <div class="card tight" style="margin-top:14px">
+      <div class="spread" style="flex-wrap:wrap;gap:10px">
+        <span class="lbl">Ir direto para</span>
+        <div class="row" style="flex-wrap:wrap;gap:8px">
+          <button class="btn sm" id="aRev" ${due?"":"disabled"}>Revisar ${due||""}</button>
+          <button class="btn sm" id="aNew" ${c.nova?"":"disabled"}>Palavras novas</button>
+          <button class="btn sm" id="aRed" ${(redDue||fFaltaHoje("red"))?"":"disabled"}>Reduções</button>
+          <button class="btn sm" id="aChk" ${(chkDue||fFaltaHoje("chk"))?"":"disabled"}>Blocos</button>
+          <button class="btn sm" id="aLer">Leitura</button>
+          <button class="btn sm" id="aRel">Relâmpago</button>
+          <button class="btn sm" id="aDom" ${(dominioPool().sol.length+dominioPool().dm.length)?"":"disabled"}>Treino de domínio</button>
+        </div>
+      </div>
+    </div>
+  `;
+  if($("#bConn")) $("#bConn").onclick = () => window.__pendingHandle ? reauthFile() : connectFile();
+  if($("#bExp")) $("#bExp").onclick = exportJSON;
+  if($("#bGo")) $("#bGo").onclick = na.run;
+  v.querySelectorAll("[data-chk]").forEach(b => b.onclick = () => {
+    const k = b.dataset.chk, dd = today();
+    dd[k] = !dd[k]; vibrar(dd[k]); save(); render();
+  });
+  if($("#bEsc")) $("#bEsc").onclick = () => abrirEscrita();
+  if($("#aRev")) $("#aRev").onclick = () => startReview(dueList());
+  if($("#aNew")) $("#aNew").onclick = () => startLearn();
+  if($("#aRed")) $("#aRed").onclick = () => startFrases("red");
+  if($("#aChk")) $("#aChk").onclick = () => startFrases("chk");
+  if($("#aLer")) $("#aLer").onclick = () => go("ler");
+  if($("#aRel")) $("#aRel").onclick = () => startRelampago();
+  if($("#aDom")) $("#aDom").onclick = () => startDominio();
+}
+
+/* ============================ SESSÃO: APRENDER ============================ */
+function startLearn(){
+  const d = today();
+  const falta = Math.max(0, GOAL_NEW - d.novas);
+  const n = Math.min(BATCH, falta || BATCH);
+  const ids = nextNewIds(n);
+  if(!ids.length){ toast("Não há mais palavras novas no Level 1."); return; }
+  SESSION = new LearnSession(ids);
+  render();
+}
+class LearnSession{
+  constructor(ids){
+    this.ids = ids; this.i = 0; this.step = 0; this.done = 0;
+    this.revealed = false; this.timer = null; this.left = 12;
+    this.chute = "";
+    this.extra = null;   // revisão do lote
+    this.fase = "learn";
+  }
+  get id(){ return this.ids[this.i]; }
+  render(v){
+    if(this.fase === "extra") return this.renderExtra(v);
+    if(this.fase === "end") return this.renderEnd(v);
+    const w = W[this.id];
+    const steps = [
+      {n:"01 — Significado", body:`<div class="word-pt">${esc(cap(w[0]))}</div>`},
+      {n:"02 — Como fala",   body:`<div class="word-pt" style="font-size:24px;color:var(--tx2)">${esc(cap(w[0]))}</div>
+                                   <div class="pron">${esc(w[1])}</div>
+                                   <div class="mini">Leia em voz alta 3 vezes.</div>`},
+      {n:"03 — PAV",         body:`${blocoImagem(this.id)}<div class="pav">${esc(pavOf(this.id))}</div>${this.linkEdit()}`},
+      {n:"04 — Visualização",body:`<div class="muted" style="font-size:15px">Feche os olhos e veja a cena acontecendo.<br>No fim, diga a palavra em voz alta.</div>${this.ring()}`},
+      {n:"05 — Como escreve",body:`<div class="word-en">${esc(w[2])}</div>${blocoFamilia(this.id)}<div class="mini">Grave a forma escrita.</div>`},
+      {n:"06 — Recall",      body:this.revealed
+          ? `<div class="pron">${esc(w[1])}</div><div class="word-en">${esc(w[2])}</div>${linhaChute(this.chute, w[2])}`
+          : `<div class="muted" style="font-size:15px">Como se escreve em inglês?</div><div class="word-pt">${esc(cap(w[0]))}</div>${campoChute("escreva sua resposta")}`}
+    ];
+    const st = steps[this.step];
+    const tot = this.ids.length;
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${pct(this.i*6+this.step, tot*6)}%"></i></div>
+          <div class="mini">${this.i+1} / ${tot}</div>
+        </div>
+        <div class="stage">
+          <div class="step">${st.n}</div>
+          ${st.body}
+          <div class="acts" id="acts"></div>
+        </div>
+        <div class="kbd">${this.step===5 && !this.revealed ? `<span>espaço</span> revelar` : this.step===5 ? `<span>1</span> errei &nbsp; <span>2</span> acertei` : `<span>espaço</span> continuar`}</div>
+      </div>`;
+    $("#sair").onclick = async () => { if(await confirmar("Sair da sessão? O que já foi feito está salvo.")) go("home"); };
+    const a = $("#acts");
+    if(this.step === 3){
+      a.innerHTML = `<button class="btn" id="pular">Pular espera</button>`;
+      $("#pular").onclick = () => this.next();
+      this.startRing();
+    } else if(this.step === 5){
+      if(!this.revealed){
+        a.innerHTML = `<button class="btn pri lg" id="rev">Ver resposta</button>`;
+        const revelar = () => { this.chute = valorChute(); this.revealed = true; this.render($("#view")); };
+        $("#rev").onclick = revelar;
+        ligaChute(revelar);
+      } else {
+        a.innerHTML = `<button class="btn bad" id="err">Errei</button><button class="btn ok" id="ok">Acertei</button>`;
+        $("#err").onclick = () => this.answer(false);
+        $("#ok").onclick = () => this.answer(true);
+        sugereBotao(this.chute, w[2]);
+      }
+    } else {
+      a.innerHTML = `<button class="btn pri" id="nx">Continuar</button>`;
+      $("#nx").onclick = () => this.next();
+    }
+    const ed = $("#edPav"); if(ed) ed.onclick = () => editarPav(this.id, () => this.render($("#view")));
+  }
+  linkEdit(){ return `<div class="row" style="justify-content:center;gap:8px"><button class="edt" id="edPav">editar PAV</button>${botaoImagem(this.id)}</div>`; }
+  ring(){
+    return `<div class="ring"><svg width="96" height="96"><circle cx="48" cy="48" r="42" stroke="#272B33" stroke-width="5" fill="none"/>
+      <circle id="rc" cx="48" cy="48" r="42" stroke="#5B8DEF" stroke-width="5" fill="none" stroke-linecap="round"
+      stroke-dasharray="264" stroke-dashoffset="0"/></svg><b id="rt">12</b></div>`;
+  }
+  startRing(){
+    clearInterval(this.timer); this.left = 12;
+    this.timer = setInterval(()=>{
+      this.left--;
+      const rt = $("#rt"), rc = $("#rc");
+      if(!rt){ clearInterval(this.timer); return; }
+      rt.textContent = Math.max(0,this.left);
+      if(rc) rc.setAttribute("stroke-dashoffset", String(264 * (1 - this.left/12)));
+      if(this.left <= 0){ clearInterval(this.timer); this.next(); }
+    }, 1000);
+  }
+  next(){
+    clearInterval(this.timer);
+    if(this.step < 5){ this.step++; this.revealed = false; this.render($("#view")); return; }
+  }
+  answer(ok){
+    vibrar(ok);
+    const id = this.id, w = wd(id);
+    w.l = w.l || Date.now(); w.s = 0; w.a++; if(!ok){ w.e++; }
+    scheduleNext(w);
+    today().novas++;
+    S.ultimo = Date.now();
+    save();
+    if(!ok) toast("Sem problema. Ela volta em 1 hora.");
+    this.done++;
+    clearInterval(this.timer);
+    this.chute = "";
+    if(this.i + 1 < this.ids.length){
+      this.i++; this.step = 0; this.revealed = false; this.render($("#view"));
+    } else {
+      // fim do lote: 1 palavra antiga
+      const due = dueList().filter(x => !this.ids.includes(x));
+      if(due.length){ this.extra = due[0]; this.fase = "extra"; this.exRevealed = false; this.render($("#view")); }
+      else { this.fase = "end"; this.render($("#view")); }
+    }
+  }
+  renderExtra(v){
+    const id = this.extra, w = W[id], st = S.w[id], target = st.s + 1, m = modeFor(target);
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <span class="pill s-rev"><span class="dotc"></span>Revisão do lote</span>
+          <div class="bar"><i style="width:100%"></i></div>
+          <div class="mini">extra</div>
+        </div>
+        <div class="stage">
+          <div class="step">Revisão ${target} de 8 · ${SCHED[target-1].nome}</div>
+          ${cardFront(w, m, this.exRevealed, id)}
+          ${!this.exRevealed ? campoChute(m.pede === "en" ? "escreva em inglês" : "escreva em português") : ""}
+          ${this.exRevealed ? cardBack(w, m, id) : ""}
+          ${this.exRevealed ? linhaChute(this.exChute || "", m.pede === "en" ? w[2] : w[0]) : ""}
+          <div class="acts" id="acts"></div>
+        </div>
+      </div>`;
+    const a = $("#acts");
+    if(!this.exRevealed){
+      a.innerHTML = `<button class="btn pri lg" id="rev">Ver resposta</button>`;
+      const revelar = () => { this.exChute = valorChute(); this.exRevealed = true; this.render($("#view")); };
+      $("#rev").onclick = revelar;
+      ligaChute(revelar);
+    } else {
+      a.innerHTML = `<button class="btn bad" id="err">Errei</button><button class="btn ok" id="ok">Acertei</button>`;
+      $("#err").onclick = () => { applyReview(id,false); markClean(); this.fase="end"; this.render($("#view")); };
+      $("#ok").onclick  = () => { applyReview(id,true);  markClean(); this.fase="end"; this.render($("#view")); };
+      sugereBotao(this.exChute || "", m.pede === "en" ? w[2] : w[0]);
+    }
+  }
+  renderEnd(v){
+    const d = today();
+    const full = d.novas >= GOAL_NEW;
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage">
+          <div class="celebrate">
+            <div class="ic">${full ? "🔥" : "✓"}</div>
+            <div style="font-size:22px;font-weight:650;letter-spacing:-.02em">${full ? "Vocabulário do dia completo" : "Lote concluído"}</div>
+            <div class="muted" style="margin-top:6px">${d.novas} de ${GOAL_NEW} palavras novas hoje${this.extra?" · 1 revisão do lote":""}</div>
+          </div>
+          <div class="acts">
+            ${!full && counts().nova ? `<button class="btn pri" id="mais">Próximo lote</button>` : ""}
+            <button class="btn ghost" id="home">Voltar ao início</button>
+          </div>
+        </div>
+      </div>`;
+    if($("#mais")) $("#mais").onclick = () => startLearn();
+    $("#home").onclick = () => go("home");
+  }
+  key(e){
+    if(this.fase !== "learn") {
+      if(e.key === " " && this.fase === "extra" && !this.exRevealed){ e.preventDefault(); this.exRevealed = true; this.render($("#view")); }
+      return;
+    }
+    if(e.key === " "){
+      e.preventDefault();
+      if(this.step === 5 && !this.revealed){ this.revealed = true; this.render($("#view")); }
+      else if(this.step < 5) this.next();
+    }
+    if(this.step === 5 && this.revealed){
+      if(e.key === "1") this.answer(false);
+      if(e.key === "2") this.answer(true);
+    }
+  }
+}
+
+/* ============================ CARTÃO DE REVISÃO ============================ */
+function cardFront(w, m, revealed, id){
+  if(revealed) return "";
+  const pav = esc(pavOf(id)), img = blocoImagem(id);
+  if(m.mostra === "pt+pav")  return `<div class="word-pt">${esc(cap(w[0]))}</div>${img}<div class="pav">${pav}</div>`;
+  if(m.mostra === "en+pav")  return `<div class="word-en">${esc(w[2])}</div>${img}<div class="pav">${pav}</div>`;
+  if(m.mostra === "pav")     return `${img}<div class="pav" style="font-size:21px">${pav}</div>`;
+  // revisões 7 e 8: só o português. A imagem entra borrada, como isca —
+  // a lacuna de curiosidade fecha quando você revela.
+  return `<div class="word-pt">${esc(cap(w[0]))}</div>
+          ${img ? `<div class="pavimg sm borrada"><img src="${imgSrc(imgOf(id))}" alt=""></div>` : ""}
+          <div><span class="curio">${esc(curiosidade(id))}</span></div>`;
+}
+function cardBack(w, m, id){
+  return `<div class="word-pt" style="font-size:22px;color:var(--tx2)">${esc(cap(w[0]))}</div>
+          <div class="pron">${esc(w[1])}</div>
+          <div class="word-en" style="font-size:30px">${esc(w[2])}</div>
+          ${blocoFamilia(id)}
+          ${blocoImagem(id, "sm")}`;
+}
+function applyReview(id, ok){
+  const w = wd(id);
+  w.a++;
+  today().revs++;
+  if(ok){
+    w.s = Math.min(8, w.s + 1);
+    w.r = false;
+    if(w.s >= 8) w.m = true;
+    scheduleNext(w);
+  } else {
+    w.e++; w.r = true;
+    if(w.m) w.m = false;
+    w.n = atHour(addDays(new Date(),1), 9);
+  }
+  S.ultimo = Date.now();
+  save();
+}
+
+/* ============================ SESSÃO: REVISÃO ============================ */
+function startReview(ids){
+  if(!ids || !ids.length){ toast("Nenhuma revisão pendente."); return; }
+  SESSION = new ReviewSession(ids.slice());
+  render();
+}
+class ReviewSession{
+  constructor(q){
+    this.q = q.map(id => ({id, redo:false}));
+    this.total = q.length; this.feitas = 0; this.acertos = 0;
+    this.revealed = false; this.hinted = false; this.chute = "";
+    this.seq = 0; this.melhor = 0; this.ultimoErrado = false;
+    this.fecho = null; this.fechoFeito = false; this.fechoVisto = false;
+  }
+  render(v){
+    if(!this.q.length) return this.renderFim(v);
+    const {id, redo} = this.q[0];
+    const w = W[id], st = S.w[id], target = Math.min(8, st.s + 1), m = modeFor(target);
+    const hintable = target >= 5;
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${pct(this.feitas, this.total)}%"></i></div>
+          <div class="mini">${this.feitas} / ${this.total}</div>
+        </div>
+        <div class="stage">
+          <div class="row" style="justify-content:center;gap:8px">
+            <div class="step">Revisão ${target} de 8 · ${SCHED[target-1].nome}</div>
+            ${redo ? `<span class="redo">reteste</span>` : ""}
+          </div>
+          ${cardFront(w, m, this.revealed, id)}
+          ${this.hinted && !this.revealed ? `<div class="hintbox">${target>=7 ? esc(pavOf(id)) : esc(cap(w[0]))}</div>${target>=7 ? blocoImagem(id, "sm") : ""}` : ""}
+          ${!this.revealed ? campoChute(m.pede === "en" ? "escreva em inglês" : "escreva em português") : ""}
+          ${this.revealed ? cardBack(w, m, id) : ""}
+          ${this.revealed ? linhaChute(this.chute, m.pede === "en" ? w[2] : w[0]) : ""}
+          ${this.revealed && this.lastWrong ? `<div class="hintbox" style="border-color:#6B2C28">${esc(pavOf(id))}<div class="mini" style="margin-top:8px;color:var(--ref)">Fale a palavra em voz alta 3 vezes. Ela volta daqui a pouco.</div></div>` : ""}
+          <div class="acts" id="acts"></div>
+          ${this.revealed ? `<div class="row" style="justify-content:center;gap:8px"><button class="edt" id="edPav">editar PAV</button>${botaoImagem(id)}</div>` : ""}
+        </div>
+        <div class="kbd">${this.revealed ? `<span>1</span> errei &nbsp; <span>2</span> acertei` : `<span>espaço</span> ver resposta`}</div>
+      </div>`;
+    $("#sair").onclick = async () => { if(await confirmar("Sair da revisão? O que já foi feito está salvo.")) go("home"); };
+    const a = $("#acts");
+    if(!this.revealed){
+      a.innerHTML = `${hintable && !this.hinted ? `<button class="btn ghost" id="dica">Dica</button>` : ""}<button class="btn pri lg" id="rev">Ver resposta</button>`;
+      if($("#dica")) $("#dica").onclick = () => { this.chute = valorChute(); this.hinted = true; this.render($("#view")); };
+      $("#rev").onclick = () => this.reveal();
+      ligaChute(() => this.reveal());
+    } else {
+      a.innerHTML = `<button class="btn bad" id="err">Errei</button><button class="btn ok" id="ok">Acertei</button>`;
+      $("#err").onclick = () => this.answer(false);
+      $("#ok").onclick = () => this.answer(true);
+      $("#edPav").onclick = () => editarPav(id, () => this.render($("#view")));
+      sugereBotao(this.chute, m.pede === "en" ? w[2] : w[0]);
+    }
+  }
+  reveal(){ this.chute = valorChute() || this.chute; this.revealed = true; this.lastWrong = false; this.render($("#view")); }
+  answer(ok){
+    const item = this.q.shift();
+    const realOk = ok && !this.hinted;
+    vibrar(realOk);
+    this.seq = realOk ? (this.seq || 0) + 1 : 0;
+    this.melhor = Math.max(this.melhor || 0, this.seq);
+    this.ultimoErrado = !realOk;
+    if(!item.redo){
+      applyReview(item.id, realOk);
+      this.feitas++;
+      if(realOk) this.acertos++;
+    } else if(realOk){
+      const w = wd(item.id); w.r = false; save();
+    }
+    if(!realOk){
+      if(this.hinted && ok) toast("Usou a dica: conta como erro.");
+      const vezes = (item.vezes || 0) + 1;
+      if(vezes <= 2){
+        const pos = Math.min(this.q.length, 3);
+        this.q.splice(pos, 0, {id:item.id, redo:true, vezes});
+      }
+    }
+    this.revealed = false; this.hinted = false; this.lastWrong = false; this.chute = "";
+    markClean();
+    this.render($("#view"));
+  }
+  /* A gente julga a sessão pelo pico e pelo fim. Terminar num erro deixa
+     lembrança ruim, então entra uma carta fácil para fechar em alta. */
+  renderFim(v){
+    // sessão com tropeço termina numa carta fácil: o que fica na lembrança
+    // é o pico e o fim, não a média
+    if(this.acertos < this.feitas && !this.fechoFeito && this.feitas >= 3){
+      const pool = [];
+      for(let i = 0; i < W.length && pool.length < 40; i++){
+        const x = S.w[i];
+        if(x && x.l && !x.r && (x.m || x.s >= 5)) pool.push(i);
+      }
+      if(pool.length){
+        this.fechoFeito = true;
+        this.fecho = pool[Math.floor(Math.random() * pool.length)];
+      }
+    }
+    if(this.fecho !== null && this.fecho !== undefined) return this.renderFecho(v);
+    return this.renderEnd(v);
+  }
+  renderFecho(v){
+    const id = this.fecho, w = W[id];
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage">
+          <div class="step" style="color:var(--solida)">Fechando em alta · não vale nota</div>
+          <div class="word-pt">${esc(cap(w[0]))}</div>
+          ${this.fechoVisto ? `<div class="word-en" style="font-size:30px;color:var(--solida)">${esc(w[2])}</div>` : `<div class="mini">Uma que você já domina. Diga em inglês.</div>`}
+          <div class="acts" id="acts"></div>
+        </div>
+      </div>`;
+    const a = $("#acts");
+    if(!this.fechoVisto){
+      a.innerHTML = `<button class="btn pri lg" id="rev">Ver</button>`;
+      $("#rev").onclick = () => { this.fechoVisto = true; vibrar(true); this.render($("#view")); };
+    } else {
+      a.innerHTML = `<button class="btn ok" id="fim">Encerrar</button>`;
+      $("#fim").onclick = () => { this.fecho = null; this.render($("#view")); };
+    }
+  }
+  renderEnd(v){
+    const rest = dueList().length;
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage">
+          <div class="celebrate">
+            <div class="ic">✓</div>
+            <div style="font-size:22px;font-weight:650;letter-spacing:-.02em">Revisões em dia</div>
+            <div class="muted" style="margin-top:6px">${this.feitas} ${plural(this.feitas,"revisão","revisões")} · ${pct(this.acertos,this.total)}% de acerto</div>
+            ${(this.melhor||0) >= 3 ? `<div class="mini" style="margin-top:8px;color:var(--solida)">melhor sequência da sessão: ${this.melhor} seguidas</div>` : ""}
+          </div>
+          <div class="acts">
+            ${rest ? `<button class="btn pri" id="mais">Revisar mais ${rest}</button>` : ""}
+            <button class="btn ghost" id="home">Voltar ao início</button>
+          </div>
+        </div>
+      </div>`;
+    if($("#mais")) $("#mais").onclick = () => startReview(dueList());
+    $("#home").onclick = () => go("home");
+  }
+  key(e){
+    if(!this.q.length) return;
+    if(e.key === " " && !this.revealed){ e.preventDefault(); this.reveal(); }
+    if(this.revealed){
+      if(e.key === "1") this.answer(false);
+      if(e.key === "2") this.answer(true);
+    }
+  }
+}
+
+/* ============================ SESSÃO: TREINO DE DOMÍNIO ============================ */
+function startDominio(){
+  const p = dominioPool();
+  let pool = p.sol.slice();
+  if(pool.length < 10) pool = pool.concat(p.dm.sort(()=>Math.random()-.5).slice(0, 10 - pool.length));
+  if(!pool.length){ toast("Nenhuma palavra sólida ainda. Elas aparecem depois da revisão de 1 mês."); return; }
+  pool = pool.sort(()=>Math.random()-.5).slice(0, 10);
+  SESSION = new DominioSession(pool);
+  render();
+}
+class DominioSession{
+  constructor(q){ this.q = q; this.i = 0; this.revealed = false; this.novas = 0; this.perdidas = 0; this.chute = ""; }
+  render(v){
+    if(this.i >= this.q.length) return this.renderEnd(v);
+    const id = this.q[this.i], w = W[id], era = S.w[id].m;
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${pct(this.i,this.q.length)}%;background:var(--dom)"></i></div>
+          <div class="mini">${this.i+1} / ${this.q.length}</div>
+        </div>
+        <div class="stage">
+          <div class="step" style="color:var(--dom)">Treino de domínio · sem PAV, sem dica</div>
+          ${era ? `<div><span class="pill s-dom"><span class="dotc"></span>Dominada</span></div>` : `<div><span class="pill s-solida"><span class="dotc"></span>Sólida</span></div>`}
+          <div class="word-en">${esc(w[2])}</div>
+          ${this.revealed
+            ? `<div class="word-pt" style="font-size:28px;color:var(--solida)">${esc(cap(w[0]))}</div>${linhaChute(this.chute, w[0])}`
+            : `<div class="mini">O que significa em português?</div>${campoChute("escreva em português")}`}
+          <div class="acts" id="acts"></div>
+        </div>
+        <div class="kbd">${this.revealed ? `<span>1</span> errei &nbsp; <span>2</span> acertei` : `<span>espaço</span> ver resposta`}</div>
+      </div>`;
+    $("#sair").onclick = async () => { if(await confirmar("Sair do treino?")) go("home"); };
+    const a = $("#acts");
+    if(!this.revealed){
+      a.innerHTML = `<button class="btn pri lg" id="rev">Ver resposta</button>`;
+      const revelar = () => { this.chute = valorChute(); this.revealed = true; this.render($("#view")); };
+      $("#rev").onclick = revelar;
+      ligaChute(revelar);
+    } else {
+      a.innerHTML = `<button class="btn bad" id="err">Errei</button><button class="btn ok" id="ok">Acertei</button>`;
+      $("#err").onclick = () => this.answer(false);
+      $("#ok").onclick = () => this.answer(true);
+      sugereBotao(this.chute, w[0]);
+    }
+  }
+  answer(ok){
+    vibrar(ok);
+    const id = this.q[this.i], w = wd(id);
+    w.a++;
+    if(ok){ if(!w.m){ w.m = true; this.novas++; } }
+    else { if(w.m){ w.m = false; this.perdidas++; } w.e++; }
+    today().dom++;
+    save();
+    this.i++; this.revealed = false; this.chute = "";
+    this.render($("#view"));
+  }
+  renderEnd(v){
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage">
+          <div class="celebrate">
+            <div class="ic">🏆</div>
+            <div style="font-size:22px;font-weight:650;letter-spacing:-.02em">Treino concluído</div>
+            <div class="muted" style="margin-top:6px">
+              ${this.novas} ${plural(this.novas,"nova palavra dominada","novas palavras dominadas")}
+              ${this.perdidas ? ` · ${this.perdidas} ${plural(this.perdidas,"perdeu o título","perderam o título")}` : ""}
+            </div>
+            <div class="mini" style="margin-top:8px">Total: ${counts().dom} / ${LEVEL_TOTAL}</div>
+          </div>
+          <div class="acts"><button class="btn ghost" id="home">Voltar ao início</button></div>
+        </div>
+      </div>`;
+    $("#home").onclick = () => go("home");
+  }
+  key(e){
+    if(this.i >= this.q.length) return;
+    if(e.key === " " && !this.revealed){ e.preventDefault(); this.revealed = true; this.render($("#view")); }
+    if(this.revealed){
+      if(e.key === "1") this.answer(false);
+      if(e.key === "2") this.answer(true);
+    }
+  }
+}
+
+/* ============================ RELÂMPAGO ============================ */
+/* 30 segundos, uma palavra por vez, duas opções. O que este treino mede é
+   TEMPO DE REAÇÃO, não memória — por isso ele não avança estágio nenhum e
+   não mexe na agenda de revisão. Fala real chega a 150 palavras por minuto:
+   saber a palavra em 2 segundos é o mesmo que não saber. */
+const REL_SEG = 30;          // duração da rodada
+const REL_RECENTES = 80;     // palavras que não repetem na rodada seguinte
+const REL_HIST = 60;         // rodadas guardadas para a linha do tempo
+const REL_MIN_TEMPO = 8;     // acertos mínimos para o tempo médio valer recorde
+
+function relEstado(){
+  if(!S.rel) S.rel = {seq:0, acertos:0, tempo:null, rodadas:[], recentes:[]};
+  const r = S.rel;
+  if(!Array.isArray(r.rodadas)) r.rodadas = [];
+  if(!Array.isArray(r.recentes)) r.recentes = [];
+  return r;
+}
+
+/* ---- sorteio ---- */
+/* Aleatório de verdade no banco inteiro (pedido dele em 25/09: com 3000
+   palavras, não faz sentido travar sempre nas mesmas ~240 primeiras).
+   Não toca na agenda de revisão nem exige palavra já estudada — zero risco,
+   já que o relâmpago não mexe em SRS; errar uma que ele nunca viu não custa
+   nada e ainda é exposição a mais. */
+function relPool(){
+  const evita = new Set(relEstado().recentes);
+  const mistura = a => a.slice().sort(() => Math.random() - .5);
+  const todas = []; for(let i = 0; i < W.length; i++) todas.push(i);
+  let pool = mistura(todas.filter(i => !evita.has(i)));
+  if(pool.length < 30) pool = pool.concat(mistura(todas.filter(i => evita.has(i))));
+  return pool;
+}
+
+/* ---- distrator ---- */
+/* Mesma classe gramatical e frequência parecida: obriga a reconhecer a
+   palavra em vez de eliminar a opção absurda. */
+const relTok = t => String(t || "").toLowerCase().split(/[\/,;()\s]+/).filter(x => x.length > 2);
+function relColide(a, b){
+  if(W[a][2].toLowerCase() === W[b][2].toLowerCase()) return true;
+  const x = relTok(W[a][0]), y = relTok(W[b][0]);
+  return x.some(t => y.indexOf(t) >= 0);
+}
+function relDistrator(id, usados){
+  const classe = W[id][4], bloco = W[id][5];
+  const acha = f => {
+    const c = [];
+    for(let i = 0; i < W.length; i++){
+      if(i === id || usados.has(i)) continue;
+      if(!f(i) || relColide(id, i)) continue;
+      c.push(i);
+    }
+    return c.length ? c[Math.floor(Math.random() * c.length)] : null;
+  };
+  return acha(i => W[i][4] === classe && Math.abs(W[i][5] - bloco) <= 8)
+      || acha(i => W[i][4] === classe)
+      || acha(() => true);
+}
+
+function relMedia(itens){
+  const bons = itens.filter(x => x.ok);
+  if(!bons.length) return null;
+  return Math.round(bons.reduce((s, x) => s + x.ms, 0) / bons.length);
+}
+const relSeg = ms => ms == null ? "—" : (ms / 1000).toFixed(2) + "s";
+
+function startRelampago(){
+  const pool = relPool();
+  if(pool.length < 4){ toast("Sem palavras suficientes para o relâmpago."); return; }
+  SESSION = new RelampagoSession(pool);
+  render();
+}
+
+class RelampagoSession{
+  constructor(pool){
+    this.pool = pool; this.p = 0;
+    this.fase = "pronto";          // pronto | contando | jogando | fim
+    this.conta = 3;
+    this.itens = []; this.atual = null;
+    this.acertos = 0; this.erros = 0;
+    this.seq = 0; this.melhorSeq = 0;
+    this.usados = new Set();
+    this.ultimo = null;
+    this.fimEm = 0; this.timer = null; this.t0 = 0;
+    this.recordes = null;
+  }
+
+  /* ---- ciclo ---- */
+  comecar(){
+    this.fase = "contando"; this.conta = 3;
+    this.render($("#view"));
+    const passo = () => {
+      if(SESSION !== this) return;
+      this.conta--;
+      if(this.conta > 0){ this.render($("#view")); setTimeout(passo, 620); return; }
+      this.jogar();
+    };
+    setTimeout(passo, 620);
+  }
+  jogar(){
+    this.fase = "jogando";
+    this.fimEm = performance.now() + REL_SEG * 1000;
+    this.proxima();
+    this.timer = setInterval(() => {
+      if(SESSION !== this){ clearInterval(this.timer); return; }
+      const resta = this.fimEm - performance.now();
+      if(resta <= 0){ this.encerrar(); return; }
+      const b = $("#relBar"), s = $("#relSeg");
+      if(b) b.style.width = (resta / (REL_SEG * 1000) * 100).toFixed(1) + "%";
+      if(s) s.textContent = (resta / 1000).toFixed(1);
+    }, 80);
+    this.render($("#view"));
+  }
+  proxima(){
+    if(this.p >= this.pool.length) this.p = 0;
+    const id = this.pool[this.p++];
+    this.usados.add(id);
+    const dist = relDistrator(id, this.usados);
+    if(dist == null){ this.encerrar(); return; }
+    this.usados.add(dist);
+    const dir = Math.random() < .5 ? "en" : "pt";       // en: mostra inglês · pt: mostra português
+    this.atual = {id, dist, dir, esq: Math.random() < .5};
+    this.t0 = performance.now();
+  }
+  responder(certo){
+    if(this.fase !== "jogando" || !this.atual) return;
+    const a = this.atual, ms = Math.round(performance.now() - this.t0);
+    vibrar(certo);
+    if(certo){
+      this.acertos++; this.seq++;
+      if(this.seq > this.melhorSeq) this.melhorSeq = this.seq;
+    } else { this.erros++; this.seq = 0; }
+    this.itens.push({id:a.id, dist:a.dist, dir:a.dir, ok:certo, ms});
+    this.ultimo = certo;          // pinta a arena da próxima carta por um instante
+    this.proxima();
+    if(this.fase === "jogando") this.render($("#view"));
+  }
+  encerrar(){
+    clearInterval(this.timer); this.timer = null;
+    this.fase = "fim";
+    const rel = relEstado(), media = relMedia(this.itens);
+    this.recordes = {
+      seq: this.melhorSeq > (rel.seq || 0),
+      acertos: this.acertos > (rel.acertos || 0),
+      tempo: media != null && this.acertos >= REL_MIN_TEMPO && (rel.tempo == null || media < rel.tempo),
+      antes: {seq: rel.seq || 0, acertos: rel.acertos || 0, tempo: rel.tempo}
+    };
+    if(this.recordes.seq) rel.seq = this.melhorSeq;
+    if(this.recordes.acertos) rel.acertos = this.acertos;
+    if(this.recordes.tempo) rel.tempo = media;
+    if(this.itens.length){
+      rel.rodadas.push([Date.now(), this.acertos, this.erros, this.melhorSeq, media || 0]);
+      if(rel.rodadas.length > REL_HIST) rel.rodadas = rel.rodadas.slice(-REL_HIST);
+      const novas = this.itens.map(x => x.id);
+      rel.recentes = novas.concat(rel.recentes.filter(i => novas.indexOf(i) < 0)).slice(0, REL_RECENTES);
+      today().rel = (today().rel || 0) + 1;
+      save();
+    }
+    this.render($("#view"));
+  }
+
+  /* ---- telas ---- */
+  render(v){
+    if(this.fase === "fim") return this.renderFim(v);
+    if(this.fase === "pronto") return this.renderPronto(v);
+    if(this.fase === "contando") return this.renderConta(v);
+    return this.renderJogo(v);
+  }
+  renderPronto(v){
+    const rel = relEstado();
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="mini">Relâmpago · ${REL_SEG} segundos</div>
+        </div>
+        <div class="stage">
+          <div class="rel-ic">⚡</div>
+          <div style="font-size:26px;font-weight:700;letter-spacing:-.03em">Quantas você faz em ${REL_SEG} segundos?</div>
+          <div class="muted" style="max-width:46ch;font-size:14.5px;line-height:1.55">
+            Aparece uma palavra e duas opções. Toque na certa. Erro não para nada —
+            no fim você vê tudo o que passou.
+          </div>
+          ${(rel.seq || rel.acertos) ? `<div class="rel-recs">
+            <div><span>Recorde de sequência</span><b>${rel.seq || 0}</b></div>
+            <div><span>Recorde de acertos</span><b>${rel.acertos || 0}</b></div>
+            <div><span>Melhor tempo médio</span><b>${relSeg(rel.tempo)}</b></div>
+          </div>` : ""}
+          <div class="acts"><button class="btn pri lg" id="vai">Começar</button></div>
+        </div>
+        <div class="kbd"><span>1</span> opção da esquerda &nbsp; <span>2</span> opção da direita</div>
+      </div>`;
+    $("#sair").onclick = () => go("home");
+    $("#vai").onclick = () => this.comecar();
+  }
+  renderConta(v){
+    v.innerHTML = `<div class="sess"><div class="stage"><div class="rel-conta">${this.conta}</div></div></div>`;
+  }
+  renderJogo(v){
+    const a = this.atual, w = W[a.id], d = W[a.dist];
+    /* a carta é redesenhada a cada toque: o relógio tem que ser lido do tempo
+       real, senão a barra volta para o começo toda vez que ele responde */
+    const resta = Math.max(0, this.fimEm - performance.now());
+    const pergunta = a.dir === "en" ? w[2] : cap(w[0]);
+    const certa = a.dir === "en" ? cap(w[0]) : w[2];
+    const errada = a.dir === "en" ? cap(d[0]) : d[2];
+    const ops = a.esq ? [[certa, true], [errada, false]] : [[errada, false], [certa, true]];
+    v.innerHTML = `
+      <div class="sess rel-sess">
+        <div class="rel-topo">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="rel-placar">
+            <b class="ok">${this.acertos}</b><i>·</i><b class="bad">${this.erros}</b>
+            ${this.seq >= 3 ? `<span class="rel-fogo">${this.seq} seguidas</span>` : ""}
+          </div>
+          <div class="rel-seg"><b id="relSeg">${(resta / 1000).toFixed(1)}</b>s</div>
+        </div>
+        <div class="rel-trilho"><i id="relBar" style="width:${(resta / (REL_SEG * 1000) * 100).toFixed(1)}%"></i></div>
+        <div class="rel-arena ${this.ultimo === true ? "pulso-ok" : this.ultimo === false ? "pulso-bad" : ""}">
+          <div class="rel-q">
+            <div class="rel-dir">escolha ${a.dir === "en" ? "em português" : "em inglês"}</div>
+            <div class="rel-alvo ${a.dir === "en" ? "en" : ""}">${esc(pergunta)}</div>
+          </div>
+          <div class="rel-ops">
+            ${ops.map(([t, ok], i) => `<button class="rel-op" data-ok="${ok ? 1 : 0}"><span class="rel-n">${i + 1}</span>${esc(t)}</button>`).join("")}
+          </div>
+        </div>
+      </div>`;
+    $("#sair").onclick = () => { clearInterval(this.timer); go("home"); };
+    v.querySelectorAll(".rel-op").forEach(b => b.onclick = () => this.responder(b.dataset.ok === "1"));
+  }
+  renderFim(v){
+    const total = this.itens.length, media = relMedia(this.itens), rec = this.recordes || {};
+    const errados = this.itens.filter(x => !x.ok), certos = this.itens.filter(x => x.ok);
+    const linha = x => {
+      const w = W[x.id], d = W[x.dist];
+      const marcou = x.dir === "en" ? cap(d[0]) : d[2];
+      return `<div class="rel-l ${x.ok ? "ok" : "bad"}">
+        <div class="rel-par"><b>${esc(w[2])}</b><i>${esc(w[1])}</i><span>${esc(cap(w[0]))}</span></div>
+        <div class="rel-meta">${x.ok ? relSeg(x.ms) : `marcou <em>${esc(marcou)}</em>`}</div>
+      </div>`;
+    };
+    const medalha = (cond, txt) => cond ? `<div class="rel-med">🏅 ${txt}</div>` : "";
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage" style="align-items:stretch;text-align:left">
+          <div class="rel-fim">
+            <div class="rel-ic">⚡</div>
+            <div class="rel-placarF">
+              <div><b class="ok">${this.acertos}</b><span>acertos</span></div>
+              <div><b class="bad">${this.erros}</b><span>erros</span></div>
+              <div><b>${this.melhorSeq}</b><span>maior sequência</span></div>
+              <div><b>${relSeg(media)}</b><span>tempo médio</span></div>
+            </div>
+            ${medalha(rec.seq, `Novo recorde de sequência: ${this.melhorSeq} (antes ${rec.antes ? rec.antes.seq : 0})`)}
+            ${medalha(rec.acertos, `Novo recorde de acertos: ${this.acertos} (antes ${rec.antes ? rec.antes.acertos : 0})`)}
+            ${medalha(rec.tempo, `Novo melhor tempo médio: ${relSeg(media)} (antes ${relSeg(rec.antes ? rec.antes.tempo : null)})`)}
+            ${total ? `<div class="mini" style="margin-top:2px">${total} ${plural(total, "palavra passou", "palavras passaram")} em ${REL_SEG} segundos · ${pct(this.acertos, total)}% de acerto</div>` : ""}
+          </div>
+
+          ${errados.length ? `<div class="rel-bloco">
+            <div class="lbl" style="color:var(--ref)">Errou · ${errados.length}</div>
+            ${errados.map(linha).join("")}
+            <button class="btn sm" id="relRef">Mandar as que errei para reforço</button>
+          </div>` : (total ? `<div class="rel-bloco"><div class="lbl" style="color:var(--solida)">Nenhum erro.</div></div>` : "")}
+
+          ${certos.length ? `<div class="rel-bloco">
+            <div class="lbl" style="color:var(--solida)">Acertou · ${certos.length}</div>
+            ${certos.map(linha).join("")}
+          </div>` : ""}
+
+          <div class="acts">
+            <button class="btn ghost" id="home">Voltar ao início</button>
+            <button class="btn pri" id="dnv">Jogar de novo</button>
+          </div>
+        </div>
+      </div>`;
+    $("#home").onclick = () => go("home");
+    $("#dnv").onclick = () => startRelampago();
+    if($("#relRef")) $("#relRef").onclick = () => {
+      let n = 0;
+      errados.forEach(x => { if(isLearned(x.id) && !S.w[x.id].r){ S.w[x.id].r = true; n++; } });
+      save();
+      toast(n ? `${n} ${plural(n, "palavra marcada", "palavras marcadas")} para reforço.`
+              : "Essas ainda não entraram no estudo — elas vêm na ordem normal.");
+      $("#relRef").disabled = true;
+    };
+  }
+  key(e){
+    if(this.fase === "pronto" && (e.key === " " || e.key === "Enter")){ e.preventDefault(); this.comecar(); return; }
+    if(this.fase !== "jogando") return;
+    const b = document.querySelectorAll(".rel-op");
+    if(e.key === "1" && b[0]) b[0].click();
+    if(e.key === "2" && b[1]) b[1].click();
+  }
+}
+
+/* ============================ SESSÃO: FRASES ============================ */
+function startFrases(k){
+  const due = fDue(k);
+  const novas = fNovas(k, fFaltaHoje(k));
+  const fila = due.map(id=>({id, novo:false})).concat(novas.map(id=>({id, novo:true})));
+  if(!fila.length){
+    toast(fCounts(k).nova ? `Meta de ${DECK[k].nome.toLowerCase()} já cumprida hoje.` : `Você já viu todos os ${DECK[k].nome.toLowerCase()}.`);
+    return;
+  }
+  SESSION = new FrasesSession(k, fila);
+  render();
+}
+class FrasesSession{
+  constructor(k, fila){
+    this.k = k; this.fila = fila;
+    this.total = fila.length; this.feitas = 0; this.acertos = 0;
+    this.step = 0; this.revealed = false; this.chute = "";
+  }
+  get it(){ return this.fila[0]; }
+  modoAtual(){
+    const it = this.it; if(!it) return "pt2en";
+    const x = fd(this.k, it.id);
+    const target = it.novo ? 1 : Math.min(8, x.s + 1);
+    return it.novo ? (this.k === "red" ? "ouvir" : "pt2en") : fModo(this.k, target);
+  }
+  esperado(){
+    const it = this.it; if(!it) return "";
+    const m = this.modoAtual();
+    if(this.k === "red") return m === "ouvir" ? R[it.id][0] : R[it.id][1];
+    return m === "en2pt" ? C[it.id][2] : C[it.id][0];
+  }
+  dicaChute(){
+    const m = this.modoAtual();
+    if(this.k === "red") return m === "ouvir" ? "escreva a frase completa" : "escreva a forma natural";
+    return m === "en2pt" ? "escreva em português" : "escreva em inglês";
+  }
+  render(v){
+    if(!this.fila.length) return this.renderEnd(v);
+    const it = this.it;
+    const ensinando = it.novo && this.step < 2;
+    const body = ensinando ? this.ensino() : this.teste();
+    const passo = this.feitas + (this.fila.length ? 0 : 0);
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${pct(this.feitas,this.total)}%;background:${this.k==="red"?"var(--rev)":"var(--solida)"}"></i></div>
+          <div class="mini">${Math.min(this.feitas+1,this.total)} / ${this.total}</div>
+        </div>
+        <div class="stage">
+          ${body}
+          ${!ensinando && !this.revealed ? campoChute(this.dicaChute()) : ""}
+          ${!ensinando && this.revealed ? linhaChute(this.chute, this.esperado()) : ""}
+          <div class="acts" id="acts"></div>
+        </div>
+        <div class="kbd">${(it.novo && this.step<2) || !this.revealed ? `<span>espaço</span> continuar` : `<span>1</span> errei &nbsp; <span>2</span> acertei`}</div>
+      </div>`;
+    $("#sair").onclick = async () => { if(await confirmar("Sair do treino? O que já foi feito está salvo.")) go("home"); };
+    const a = $("#acts");
+    if(it.novo && this.step < 2){
+      a.innerHTML = `<button class="btn pri" id="nx">Continuar</button>`;
+      $("#nx").onclick = () => { this.step++; this.render($("#view")); };
+    } else if(!this.revealed){
+      a.innerHTML = `<button class="btn pri lg" id="rev">Ver resposta</button>`;
+      const revelar = () => { this.chute = valorChute(); this.revealed = true; this.render($("#view")); };
+      $("#rev").onclick = revelar;
+      ligaChute(revelar);
+    } else {
+      a.innerHTML = `<button class="btn bad" id="err">Errei</button><button class="btn ok" id="ok">Acertei</button>`;
+      $("#err").onclick = () => this.answer(false);
+      $("#ok").onclick = () => this.answer(true);
+      sugereBotao(this.chute, this.esperado());
+    }
+  }
+  /* ---- ensino de um item novo ---- */
+  ensino(){
+    const it = this.it;
+    if(this.k === "red"){
+      const r = R[it.id];
+      if(this.step === 0) return `
+        <div class="step">01 — Como está escrito</div>
+        <div class="word-pt" style="font-size:27px">${esc(r[0])}</div>
+        <div class="muted" style="font-size:15px">${esc(r[3])}</div>
+                <div class="mini">Essa é a frase completa. Ninguém fala assim na velocidade normal.</div>`;
+      return `
+        <div class="step" style="color:var(--rev)">02 — Como sai na boca</div>
+        <div class="word-en" style="font-size:31px;text-transform:none;color:var(--rev)">${esc(r[1])}</div>
+        <div class="pron">${esc(r[2])}</div>
+                <div class="hintbox">${esc(r[4])}</div>
+        <div class="mini">Ouça as duas e repita a versão natural 3 vezes.</div>`;
+    }
+    const c = C[it.id];
+    if(this.step === 0) return `
+      <div class="step">01 — O que você quer dizer</div>
+      <div class="word-pt" style="font-size:28px">${esc(c[2])}</div>
+      <div class="mini">${esc(c[3])}</div>`;
+    return `
+      <div class="step" style="color:var(--solida)">02 — O bloco em inglês</div>
+      <div class="word-en" style="font-size:29px;text-transform:none">${esc(c[0])}</div>
+      <div class="pron" style="font-size:24px">${esc(c[1])}</div>
+      <div class="muted" style="font-size:15px">${esc(c[2])}</div>
+            <div class="mini">Repita 3 vezes em voz alta, no mesmo ritmo do áudio.</div>`;
+  }
+  /* ---- teste ---- */
+  teste(){
+    const it = this.it, k = this.k;
+    const x = fd(k, it.id);
+    const target = it.novo ? 1 : Math.min(8, x.s + 1);
+    const modo = it.novo ? (k==="red" ? "ouvir" : "pt2en") : fModo(k, target);
+    const topo = `<div class="row" style="justify-content:center;gap:8px">
+        <div class="step" style="color:${k==="red"?"var(--rev)":"var(--solida)"}">${it.novo ? "03 — Recall" : `Revisão ${target} de 8 · ${SCHED[target-1].nome}`}</div>
+        ${it.redo ? `<span class="redo">reteste</span>` : ""}
+      </div>`;
+    if(k === "red"){
+      const r = R[it.id];
+      if(modo === "ouvir"){
+        if(!this.revealed) return `${topo}
+          <div class="word-en" style="font-size:30px;text-transform:none;color:var(--rev)">${esc(r[1])}</div>
+                    <div class="mini">Qual é a frase completa e o que ela significa?</div>`;
+        return `${topo}
+          <div class="word-en" style="font-size:24px;text-transform:none;color:var(--rev)">${esc(r[1])}</div>
+          <div class="pron" style="font-size:21px">${esc(r[2])}</div>
+          <div class="word-pt" style="font-size:24px">${esc(r[0])}</div>
+          <div class="muted" style="font-size:15px">${esc(r[3])}</div>
+                    <div class="hintbox">${esc(r[4])}</div>`;
+      }
+      if(!this.revealed) return `${topo}
+        <div class="word-pt" style="font-size:26px">${esc(r[3])}</div>
+        <div class="mini">Fale em inglês, do jeito natural, em voz alta.</div>`;
+      return `${topo}
+        <div class="word-en" style="font-size:29px;text-transform:none;color:var(--rev)">${esc(r[1])}</div>
+        <div class="pron">${esc(r[2])}</div>
+        <div class="muted" style="font-size:14px">completa: ${esc(r[0])}</div>`;
+    }
+    const c = C[it.id];
+    if(modo === "en2pt"){
+      if(!this.revealed) return `${topo}
+        <div class="word-en" style="font-size:27px;text-transform:none">${esc(c[0])}</div>
+        <div class="mini">O que isso quer dizer em português?</div>`;
+      return `${topo}
+        <div class="word-en" style="font-size:23px;text-transform:none;color:var(--tx2)">${esc(c[0])}</div>
+        <div class="word-pt" style="font-size:27px">${esc(c[2])}</div>`;
+    }
+    if(!this.revealed) return `${topo}
+      <div class="word-pt" style="font-size:27px">${esc(c[2])}</div>
+      <div class="mini">Diga o bloco em inglês, em voz alta.</div>`;
+    return `${topo}
+      <div class="word-en" style="font-size:28px;text-transform:none">${esc(c[0])}</div>
+      ${modo === "pt2en" ? `<div class="pron" style="font-size:23px">${esc(c[1])}</div>` : ""}
+      <div class="muted" style="font-size:15px">${esc(c[2])}</div>`;
+  }
+  answer(ok){
+    vibrar(ok);
+    const it = this.fila.shift(), k = this.k;
+    if(it.redo){
+      // reteste do erro: não mexe na agenda, só reforça
+    } else if(it.novo){
+      const x = fd(k, it.id);
+      x.l = x.l || Date.now(); x.s = 0; x.a++; if(!ok) x.e++;
+      scheduleNext(x);
+      today()[DECK[k].campo]++;
+      S.ultimo = Date.now(); save();
+      this.feitas++; if(ok) this.acertos++;
+    } else {
+      fApply(k, it.id, ok);
+      this.feitas++; if(ok) this.acertos++;
+    }
+    if(!ok && (it.vezes||0) < 2){
+      const pos = Math.min(this.fila.length, 3);
+      this.fila.splice(pos, 0, {id:it.id, novo:false, redo:true, vezes:(it.vezes||0)+1});
+      toast("Sem problema. Ela volta daqui a pouco.");
+    }
+    this.step = 0; this.revealed = false; this.chute = "";
+    this.render($("#view"));
+  }
+  renderEnd(v){
+    const k = this.k, d = today(), meta = DECK[k].meta, feito = d[DECK[k].campo] || 0;
+    const completo = feito >= meta;
+    const resto = fDue(k).length + fFaltaHoje(k);
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage">
+          <div class="celebrate">
+            <div class="ic">${completo ? "🔥" : "✓"}</div>
+            <div style="font-size:22px;font-weight:650;letter-spacing:-.02em">${completo ? DECK[k].nome + " do dia completos" : "Rodada concluída"}</div>
+            <div class="muted" style="margin-top:6px">${this.feitas} ${plural(this.feitas,"item","itens")} · ${pct(this.acertos,Math.max(1,this.total))}% de acerto</div>
+            <div class="mini" style="margin-top:8px">${feito} de ${meta} novos hoje</div>
+          </div>
+          <div class="acts">
+            ${resto ? `<button class="btn pri" id="mais">Continuar</button>` : ""}
+            <button class="btn ghost" id="home">Voltar ao início</button>
+          </div>
+        </div>
+      </div>`;
+    if($("#mais")) $("#mais").onclick = () => startFrases(k);
+    $("#home").onclick = () => go("home");
+  }
+  key(e){
+    if(!this.fila.length) return;
+    const it = this.it;
+    if(e.key === " "){
+      e.preventDefault();
+      if(it.novo && this.step < 2){ this.step++; this.render($("#view")); }
+      else if(!this.revealed){ this.revealed = true; this.render($("#view")); }
+      return;
+    }
+    if(!(it.novo && this.step < 2) && this.revealed){
+      if(e.key === "1") this.answer(false);
+      if(e.key === "2") this.answer(true);
+    }
+  }
+}
+
+/* ============================ VIEW: FRASES ============================ */
+let frasesTab = "red";
+let frasesF = {q:"", g:"", n:60};
+function viewFrases(v){
+  const cr = fCounts("red"), cc = fCounts("chk"), d = today();
+  const cartao = (k, c) => {
+    const due = fDue(k).length, falta = fFaltaHoje(k), feito = d[DECK[k].campo] || 0;
+    return `<div class="card">
+      <div class="spread" style="margin-bottom:10px">
+        <h2 style="margin:0">${DECK[k].nome}</h2>
+        <span class="mini">${c.learned} / ${c.total}</span>
+      </div>
+      <div class="bar" style="margin-bottom:12px"><i style="width:${pct(c.learned,c.total)}%;background:${k==="red"?"var(--rev)":"var(--solida)"}"></i></div>
+      <p class="muted" style="font-size:13.5px;margin-bottom:14px">${k==="red"
+        ? "A fala real gruda e corta as palavras. Aqui você treina o ouvido para reconhecer o que já sabe escrito."
+        : "Nativo não monta frase palavra por palavra: ele puxa blocos prontos. Estes são os mais usados."}</p>
+      <div class="row" style="gap:18px;margin-bottom:14px;flex-wrap:wrap">
+        <div><div class="lbl">Hoje</div><div style="font-weight:640">${feito} / ${DECK[k].meta}</div></div>
+        <div><div class="lbl">Para revisar</div><div style="font-weight:640;${due?"color:var(--nova)":""}">${due}</div></div>
+        <div><div class="lbl">Firmes</div><div style="font-weight:640">${c.dom}</div></div>
+      </div>
+      <button class="btn ${due||falta?"pri":"ghost"}" data-go="${k}" ${due||falta?"":"disabled"}>
+        ${due ? `Revisar ${due}` : falta ? `Treinar ${falta} ${plural(falta,"novo","novos")}` : "Meta cumprida hoje"}
+      </button>
+    </div>`;
+  };
+  v.innerHTML = `
+    <div style="margin-bottom:16px">
+      <h1>Frases</h1>
+      <div class="muted" style="margin-top:3px">Som conectado e blocos prontos — a ponte entre saber a palavra e falar.</div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:18px">
+      ${cartao("red", cr)}
+      ${cartao("chk", cc)}
+    </div>
+    <div class="filters">
+      <div class="row" style="gap:2px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:3px">
+        ${[["red","Reduções"],["chk","Blocos"]].map(([k,l])=>
+          `<button class="btn sm ${frasesTab===k?"pri":"ghost"}" data-tab="${k}" style="border:none">${l}</button>`).join("")}
+      </div>
+      <input id="ffq" placeholder="Buscar…" value="${esc(frasesF.q)}" style="min-width:190px">
+      <span id="ffg"></span>
+      <span class="mini" id="ffc"></span>
+    </div>
+    <div id="flist"></div>`;
+  v.querySelectorAll("[data-go]").forEach(b => b.onclick = () => startFrases(b.dataset.go));
+  v.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => {
+    frasesTab = b.dataset.tab; frasesF = {q:"", g:"", n:60}; render();
+  });
+  const k = frasesTab;
+  if(k === "chk"){
+    const grupos = [...new Set(C.map(c=>c[3]))];
+    $("#ffg").innerHTML = `<select id="ffgs"><option value="">Todos os grupos</option>${
+      grupos.map(g=>`<option value="${esc(g)}" ${frasesF.g===g?"selected":""}>${esc(g)}</option>`).join("")}</select>`;
+  } else {
+    $("#ffg").innerHTML = "";
+  }
+  const draw = () => {
+    const dados = DECK[k].dados(), q = frasesF.q.toLowerCase(), res = [];
+    for(let i=0;i<dados.length;i++){
+      const it = dados[i];
+      if(k === "chk" && frasesF.g && it[3] !== frasesF.g) continue;
+      if(q && !it.some(t => String(t).toLowerCase().includes(q))) continue;
+      res.push(i);
+    }
+    $("#ffc").textContent = res.length + " " + plural(res.length,"resultado","resultados");
+    const show = res.slice(0, frasesF.n);
+    $("#flist").innerHTML = show.length ? `
+      <div class="wlist">
+        ${show.map(i=>{
+          const it = dados[i], s = fStatus(k,i);
+          const a = k==="red" ? it[1] : it[0];
+          const b = k==="red" ? it[3] : it[2];
+          const c3 = k==="red" ? it[4] : it[3];
+          return `<div class="wrow" data-i="${i}" style="grid-template-columns:38px 1fr 1fr 130px 92px">
+            <div class="idx">${i+1}</div>
+            <div class="en">${esc(a)}<div class="mini">${esc(k==="red"?it[2]:it[1])}</div></div>
+            <div class="pt">${esc(b)}</div>
+            <div class="c4">${pill(s)}</div>
+            <div class="c5 mini">${esc(c3)}</div>
+          </div>`;
+        }).join("")}
+      </div>
+      ${res.length > frasesF.n ? `<div class="more"><button class="btn sm ghost" id="fmais">Mostrar mais</button></div>` : ""}`
+    : `<div class="empty"><div class="ic">∅</div>Nada com esse filtro.</div>`;
+    if($("#fmais")) $("#fmais").onclick = () => { frasesF.n += 60; draw(); };
+    document.querySelectorAll("#flist .wrow").forEach(r => r.onclick = () => openFrase(k, +r.dataset.i));
+  };
+  $("#ffq").oninput = e => { frasesF.q = e.target.value; frasesF.n = 60; draw(); };
+  if($("#ffgs")) $("#ffgs").onchange = e => { frasesF.g = e.target.value; frasesF.n = 60; draw(); };
+  draw();
+}
+function openFrase(k, i){
+  const it = DECK[k].dados()[i], x = fStore(k)[i];
+  const corpo = k === "red" ? `
+      <div class="lbl">Como sai na boca</div>
+      <div style="font-size:24px;font-weight:660;color:var(--rev);margin:3px 0">${esc(it[1])}</div>
+      <div class="pron" style="font-size:20px">${esc(it[2])}</div>
+      <div class="sep"></div>
+      <div class="lbl">Escrito por extenso</div>
+      <div style="font-size:18px;margin:3px 0">${esc(it[0])}</div>
+      <div style="font-size:16px;color:var(--tx2)">${esc(it[3])}</div>
+      <div class="sep"></div>
+      <div class="lbl">A regra</div>
+      <div style="font-size:15px;margin-top:3px">${esc(it[4])}</div>
+      <div class="acts" style="justify-content:flex-start;margin-top:14px"></div>`
+    : `<div class="row" style="gap:14px"><div style="font-size:24px;font-weight:660">${esc(it[0])}</div></div>
+      <div class="pron" style="font-size:20px;margin:4px 0 2px">${esc(it[1])}</div>
+      <div style="font-size:18px;color:var(--tx2)">${esc(it[2])}</div>
+      <div class="sep"></div>
+      <div class="lbl">Grupo</div><div style="font-size:15px;margin-top:3px">${esc(it[3])}</div>`;
+  const box = el(`<div class="modal">
+    <div class="card" style="max-width:540px;width:100%;background:var(--surface2)">
+      <div class="spread" style="margin-bottom:14px">${pill(fStatus(k,i))}<button class="btn sm ghost" id="x">Fechar</button></div>
+      ${corpo}
+      <div class="sep"></div>
+      <div class="row" style="gap:24px;flex-wrap:wrap">
+        <div><div class="lbl">Revisões</div><div style="font-weight:620">${x ? x.s : 0} / 8</div></div>
+        <div><div class="lbl">Acertos</div><div style="font-weight:620">${x ? (x.a - x.e) : 0} / ${x ? x.a : 0}</div></div>
+        <div><div class="lbl">Próxima</div><div style="font-weight:620">${x && x.n ? new Date(x.n).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "—"}</div></div>
+      </div>
+    </div></div>`);
+  document.body.appendChild(box);
+  box.onclick = e => { if(e.target === box || e.target.id === "x") box.remove(); };
+}
+
+/* ============================ LEITURA: TEXTOS DO DIA ============================ */
+/* Um texto com quase só palavras que você já domina é input compreensível
+   sob medida — a única coisa que nenhum app consegue fazer, porque nenhum
+   sabe seu vocabulário com esta precisão. Cada texto tem três passadas:
+   som, inglês escrito, tradução. */
+const GOAL_TXT = 2;
+const MAX_TXT_GUARDADOS = 12;
+let sampleRef = null;
+let gerando = null;   // AbortController da geração em andamento
+
+const CENAS = [
+  "um cliente liga bravo porque o pedido atrasou",
+  "dois irmãos discutem de quem é a vez de lavar o carro",
+  "alguém perde a chave de casa e tenta entrar pela janela",
+  "uma primeira conversa com um vizinho novo no elevador",
+  "um pai tenta convencer o filho pequeno a comer o jantar",
+  "alguém chega atrasado numa reunião importante e inventa uma desculpa",
+  "uma compra que deu errado e a volta à loja para trocar",
+  "dois amigos decidem para onde viajar nas férias",
+  "alguém tenta montar um móvel sem ler o manual",
+  "uma entrevista de emprego que começa mal e termina bem",
+  "um casal decide o que assistir e não concorda em nada",
+  "alguém encontra uma carteira na rua e procura o dono",
+  "o primeiro dia de alguém numa academia",
+  "uma ligação de vendas que é interrompida três vezes",
+  "alguém tenta cozinhar uma receita nova e queima tudo",
+  "dois colegas combinam de dividir a conta do almoço",
+  "uma mudança de casa no dia mais quente do ano",
+  "alguém se perde numa cidade estrangeira e pede ajuda",
+  "o cachorro da família foge e a rua inteira ajuda a procurar",
+  "uma reunião de trabalho onde ninguém desliga o microfone",
+  "alguém tenta devolver um presente que não gostou",
+  "uma noite em que a energia cai e a família acende velas",
+  "dois estranhos presos no mesmo elevador por vinte minutos",
+  "alguém aprende a dirigir e o professor perde a paciência",
+  "uma festa surpresa que quase foi descoberta",
+  "alguém tenta acordar cedo por uma semana inteira",
+  "um pedido de comida que chega completamente trocado",
+  "dois vizinhos discutem por causa de barulho de madrugada",
+  "alguém vai ao médico e não consegue explicar o que sente",
+  "uma criança faz vinte perguntas seguidas num passeio",
+  "alguém tenta vender o carro velho e o comprador acha defeitos",
+  "um voo cancelado e a corrida atrás de outro",
+  "alguém esquece o aniversário de casamento e tenta consertar",
+  "dois colegas trocam de mesa no escritório e se arrependem",
+  "uma conversa difícil em que alguém pede aumento",
+  "alguém tenta usar um aplicativo novo e não entende nada",
+  "um churrasco de família em que chove no meio",
+  "alguém adota um gato e a casa vira de cabeça para baixo",
+  "uma corrida de táxi em que o motorista conta a vida inteira",
+  "alguém tenta parar de olhar o celular por um dia"
+];
+
+const LEGENDA_FON = [
+  "A sílaba forte vai em MAIÚSCULA e as fracas em minúscula, com hífen separando as sílabas.",
+  "Palavra terminada em consoante termina em consoante, sem vogal extra: HEAD = RÉD.",
+  "H inicial soa como R brasileiro: HAND = RÉND.",
+  "TH sem voz escreve TH; com voz escreve DH.",
+  "DJ é o dj de Djalma; TCH é o tch de tchau; CH é o ch de chá.",
+  "Vogais: É aberto (bed), Â de cama (cup), Á (hot), ÔU (go), ÊI (day), ÁI (my), ÁU (now), Í longo (see), Ú longo (too).",
+  "T entre vogais vira um R suave no inglês americano: WATER = UÓ-rer."
+].join(" ");
+
+async function initSample(){
+  try{ sampleRef = (window.claude && window.claude.use) ? await window.claude.use("sample") : null; }
+  catch(e){ sampleRef = null; }
+}
+function temLeitura(){ return !!sampleRef; }
+function textosDe(k){ return (S.txt || []).filter(t => t.d === k); }
+function textosHoje(){ return textosDe(dayKey()); }
+
+/* vocabulário liberado: o que já está dominado mais o que está em estudo */
+function vocabDisponivel(limite){
+  const dom = [], estudo = [];
+  for(let i = 0; i < W.length; i++){
+    const x = S.w[i];
+    if(!x || !x.l) continue;
+    (x.m || x.s >= 6 ? dom : estudo).push(W[i][2]);
+  }
+  const fon = {};
+  for(let i = 0; i < W.length && Object.keys(fon).length < 70; i++){
+    const x = S.w[i];
+    if(x && x.l) fon[W[i][2]] = W[i][1];
+  }
+  return {dom: dom.slice(-limite), estudo: estudo.slice(-60), fon};
+}
+
+function montarPrompt(cena){
+  const v = vocabDisponivel(340);
+  const amostraFon = Object.keys(v.fon).map(k => k + " = " + v.fon[k]).join(" | ");
+  return [
+    "Você escreve textos curtos em inglês para um brasileiro estudando vocabulário.",
+    "",
+    "CENA DE HOJE: " + cena + ".",
+    "",
+    "PALAVRAS QUE ELE JÁ DOMINA (use principalmente estas):",
+    v.dom.join(", ") || "(ainda nenhuma — use inglês básico de altíssima frequência)",
+    "",
+    "PALAVRAS QUE ELE ESTÁ ESTUDANDO AGORA (encaixe de 4 a 8 delas, naturalmente):",
+    v.estudo.join(", ") || "(nenhuma)",
+    "",
+    "REGRAS DO TEXTO:",
+    "- 90 a 120 palavras, uma história com começo, meio e fim, na cena acima.",
+    "- No mínimo 95% das palavras têm que sair das duas listas ou ser gramática básica (artigos, preposições, pronomes, verbos auxiliares).",
+    "- Frases curtas e faladas, inglês americano do dia a dia. Nada de vocabulário literário.",
+    "- Quebre em 8 a 14 linhas, cada linha uma frase completa.",
+    "",
+    "PARA CADA LINHA você entrega três versões:",
+    '- "en": a frase em inglês.',
+    '- "fon": como a frase SOA, escrita para um brasileiro ler em voz alta. ' + LEGENDA_FON,
+    '- "pt": a tradução natural em português do Brasil.',
+    "",
+    "Calibre a notação fonética por estes exemplos já usados com ele: " + amostraFon,
+    "",
+    'Responda SÓ com JSON: {"titulo":"...","linhas":[{"en":"...","fon":"...","pt":"..."}]}',
+    'O título tem no máximo 4 palavras, em inglês.'
+  ].join("\n");
+}
+
+/* banco pronto primeiro (pedido dele em 25/09, pra não gastar IA toda vez):
+   evita repetir os textos que ainda estão na lista guardada (os 12 mais
+   recentes); só cai pra geração ao vivo se o banco estiver vazio. */
+function txtBancoEscolher(){
+  if(!TXT_BANCO.length) return null;
+  const recentes = new Set((S.txt||[]).map(x => x.t));
+  let pool = TXT_BANCO.filter(b => !recentes.has(b.titulo));
+  if(!pool.length) pool = TXT_BANCO;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+async function gerarTexto(aoTerminar, aoErro){
+  const doBanco = txtBancoEscolher();
+  if(doBanco){
+    if(!S.txt) S.txt = [];
+    S.txt.unshift({d: dayKey(), ctx: doBanco.ctx || "", t: doBanco.titulo, l: doBanco.linhas, lido: 0});
+    S.txt = S.txt.slice(0, MAX_TXT_GUARDADOS);
+    save();
+    if(aoTerminar) aoTerminar();
+    return;
+  }
+  if(!sampleRef){ if(aoErro) aoErro("sem"); return; }
+  const cena = CENAS[Math.floor(Math.random() * CENAS.length)];
+  gerando = new AbortController();
+  try{
+    const j = await sampleRef.json(montarPrompt(cena), {
+      cache: false, modelTier: "default", signal: gerando.signal
+    });
+    const linhas = (j && Array.isArray(j.linhas) ? j.linhas : [])
+      .map(l => [String(l.en || "").trim(), String(l.fon || "").trim(), String(l.pt || "").trim()])
+      .filter(l => l[0] && l[2]);
+    if(linhas.length < 3) throw {code:"invalid_json"};
+    if(!S.txt) S.txt = [];
+    S.txt.unshift({d: dayKey(), ctx: cena, t: String((j && j.titulo) || "Sem título").slice(0, 60), l: linhas, lido: 0});
+    S.txt = S.txt.slice(0, MAX_TXT_GUARDADOS);
+    save();
+    gerando = null;
+    if(aoTerminar) aoTerminar();
+  }catch(e){
+    gerando = null;
+    if(aoErro) aoErro((e && e.code) || "erro");
+  }
+}
+function msgErroTexto(c){
+  if(c === "cancelled") return null;
+  if(c === "not_granted" || c === "sampling_disabled" || c === "not_declared")
+    return "O sistema não tem permissão para escrever textos aqui.";
+  if(c === "rate_limited") return "Muitos pedidos seguidos. Tente daqui a pouco.";
+  if(c === "invalid_json" || c === "empty_completion") return "O texto saiu quebrado. Tente de novo.";
+  if(c === "sem") return "Os textos só funcionam no link do sistema.";
+  return "Não deu para escrever o texto agora.";
+}
+
+/* ---------------- Escrita curta corrigida pela IA ---------------- */
+/* Pedido aprovado por ele em 24/09: "vou treinar escrita também, nem que
+   sejam frases curtas." Não é módulo separado — é só mais um item nos
+   treinos de fora, do lado de Listening/Speaking/Grammar. Não guarda
+   histórico de frases, só marca o dia como feito quando ele corrige ou
+   marca manualmente. */
+/* pedido dele em 25/09: tirar o custo de IA da correção. Em vez de mandar
+   a frase pra um modelo corrigir, sorteia uma frase já pronta de reduções
+   ou blocos (custo zero, sempre disponível, funciona até na cópia offline)
+   e mostra o português como o que ele tem que traduzir; ele escreve, depois
+   revela a frase certa pra comparar sozinho — "aí eu vou saber se errei". */
+let escUltimo = -1;
+function escSorteio(){
+  const pool = [];
+  for(let i = 0; i < R.length; i++) pool.push({en:R[i][0], pt:R[i][3]});
+  for(let i = 0; i < C.length; i++) pool.push({en:C[i][0], pt:C[i][2]});
+  if(!pool.length) return null;
+  let idx;
+  do{ idx = Math.floor(Math.random() * pool.length); } while(pool.length > 1 && idx === escUltimo);
+  escUltimo = idx;
+  return pool[idx];
+}
+function abrirEscrita(){
+  const item = escSorteio();
+  const dica = item ? `Escreva em inglês: <b>${esc(item.pt)}</b>` : "Escreva 1 a 3 frases curtas em inglês, sobre qualquer coisa.";
+  const box = el(`<div class="modal">
+    <div class="card" style="max-width:520px;width:100%;background:var(--panel-2)">
+      <div class="spread" style="margin-bottom:10px"><span class="lbl">Escrita — traduza pro inglês</span><button class="btn sm ghost" id="x">Fechar</button></div>
+      <div class="mini" style="margin-bottom:10px">${dica}</div>
+      <textarea id="escTxt" rows="3" placeholder="Write here..."></textarea>
+      <div class="acts" style="justify-content:flex-start;margin-top:10px">
+        <button class="btn pri" id="escGo">Ver resposta</button>
+        <button class="btn ghost" id="escOk">Marcar como feito</button>
+      </div>
+      <div id="escRes" style="margin-top:12px"></div>
+    </div></div>`);
+  document.body.appendChild(box);
+  box.onclick = e => { if(e.target === box || e.target.id === "x") box.remove(); };
+  box.querySelector("#escGo").onclick = () => {
+    if(item){
+      box.querySelector("#escRes").innerHTML = `
+        <div class="hintbox" style="text-align:left;max-width:100%">
+          <div style="font-weight:600">${esc(item.en)}</div>
+        </div>`;
+    }
+    const d = today(); if(!d.wr){ d.wr = true; save(); }
+    box.querySelector("#escGo").disabled = true;
+  };
+  box.querySelector("#escOk").onclick = () => { const d = today(); d.wr = true; save(); box.remove(); render(); };
+}
+
+/* ---------------- sessão de leitura: três passadas ---------------- */
+function abrirTexto(idx){
+  const t = (S.txt || [])[idx];
+  if(!t) return;
+  SESSION = new LeituraSession(idx);
+  render();
+}
+class LeituraSession{
+  constructor(idx){ this.idx = idx; this.passo = 0; }
+  get txt(){ return (S.txt || [])[this.idx]; }
+  render(v){
+    const t = this.txt;
+    if(!t) return go("ler");
+    const passos = [
+      {n:"01 — O som", dica:"Leia em voz alta. Não é inglês escrito: é como a frase soa."},
+      {n:"02 — O inglês", dica:"Agora confira o que você estava lendo."},
+      {n:"03 — O significado", dica:"Por último, o que a história dizia."}
+    ];
+    const p = passos[this.passo];
+    const corpo = t.l.map(l => {
+      if(this.passo === 0) return `<div class="lt-fon">${esc(l[1])}</div>`;
+      if(this.passo === 1) return `<div class="lt-en">${esc(l[0])}</div>`;
+      return `<div class="lt-par"><div class="lt-en">${esc(l[0])}</div><div class="lt-pt">${esc(l[2])}</div></div>`;
+    }).join("");
+    v.innerHTML = `
+      <div class="sess" style="max-width:720px">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${(this.passo+1)/3*100}%;background:var(--rev)"></i></div>
+          <div class="mini">${this.passo+1} / 3</div>
+        </div>
+        <div class="card" style="padding:26px 24px">
+          <div class="step" style="color:var(--rev)">${p.n}</div>
+          <h2 style="margin:8px 0 2px;font-size:20px">${esc(t.t)}</h2>
+          <div class="mini" style="margin-bottom:16px">${esc(cap(t.ctx))}</div>
+          <div class="leitura">${corpo}</div>
+          <div class="mini" style="margin-top:18px">${p.dica}</div>
+          <div class="acts" style="justify-content:flex-start;margin-top:18px" id="acts"></div>
+        </div>
+      </div>`;
+    $("#sair").onclick = () => go("ler");
+    const a = $("#acts");
+    if(this.passo < 2){
+      a.innerHTML = `<button class="btn pri lg" id="nx">${this.passo === 0 ? "Ver em inglês" : "Ver a tradução"}</button>`;
+      $("#nx").onclick = () => { this.passo++; this.render($("#view")); };
+    } else {
+      a.innerHTML = `<button class="btn ok" id="fim">Terminei</button><button class="btn ghost" id="volta">Ler de novo</button>`;
+      $("#fim").onclick = () => {
+        if(!this.txt.lido){ this.txt.lido = 1; today().txt = (today().txt || 0) + 1; save(); flushPush(); }
+        vibrar(true);
+        go("ler");
+      };
+      $("#volta").onclick = () => { this.passo = 0; this.render($("#view")); };
+    }
+  }
+  key(e){
+    if(e.key === " "){ e.preventDefault(); if(this.passo < 2){ this.passo++; this.render($("#view")); } }
+  }
+}
+
+/* ---------------- aba Leitura ---------------- */
+function viewLer(v){
+  const hoje = textosHoje(), d = today();
+  const antigos = (S.txt || []).map((t, i) => [t, i]).filter(x => x[0].d !== dayKey());
+  const cartao = (t, i) => `
+    <div class="card tight lt-card" data-ler="${i}">
+      <div class="spread" style="align-items:flex-start;gap:10px">
+        <div style="flex:1">
+          <div style="font-weight:640;font-size:16px">${esc(t.t)}</div>
+          <div class="mini" style="margin-top:3px">${esc(cap(t.ctx))}</div>
+        </div>
+        ${t.lido ? `<span class="pill s-solida"><span class="dotc"></span>lido</span>` : `<span class="pill s-nova"><span class="dotc"></span>novo</span>`}
+      </div>
+      <div class="mini" style="margin-top:10px">${t.l.length} frases · três passadas</div>
+    </div>`;
+  v.innerHTML = `
+    <div class="spread" style="margin-bottom:16px;flex-wrap:wrap">
+      <div>
+        <h1>Leitura do dia</h1>
+        <div class="muted" style="margin-top:3px">Histórias escritas com as palavras que você já domina. Som primeiro, inglês depois, tradução no fim.</div>
+      </div>
+      <div class="mini">${(d.txt || 0)} de ${GOAL_TXT} hoje</div>
+    </div>
+    ${!temLeitura() ? `<div class="banner" style="margin-bottom:14px"><div style="flex:1"><b>A leitura só funciona no link do sistema.</b><div class="mini" style="margin-top:2px">Esta cópia não consegue escrever textos novos.</div></div></div>` : ""}
+    <div id="lerAcao" style="margin-bottom:16px"></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr" id="lerHoje">
+      ${hoje.map(t => cartao(t, (S.txt || []).indexOf(t))).join("") || `<div class="empty" style="grid-column:1/-1"><div class="ic">✎</div>Nenhum texto hoje ainda.</div>`}
+    </div>
+    ${antigos.length ? `<h2 style="margin:22px 0 12px">Textos anteriores</h2>
+      <div class="grid" style="grid-template-columns:1fr 1fr">${antigos.map(x => cartao(x[0], x[1])).join("")}</div>` : ""}`;
+
+  const acao = $("#lerAcao");
+  const pintaAcao = () => {
+    if(!temLeitura()){ acao.innerHTML = ""; return; }
+    if(gerando){
+      acao.innerHTML = `<div class="card tight"><div class="row" style="gap:12px"><div class="girando"></div>
+        <div style="flex:1"><b style="font-size:14.5px">Escrevendo uma história nova…</b>
+        <div class="mini" style="margin-top:2px">Leva de 10 a 60 segundos. Pode sair desta tela, ela continua.</div></div>
+        <button class="btn sm ghost" id="parar">Parar</button></div></div>`;
+      $("#parar").onclick = () => { if(gerando) gerando.abort(); };
+      return;
+    }
+    const falta = Math.max(0, GOAL_TXT - hoje.length);
+    acao.innerHTML = `<button class="btn ${falta ? "pri" : "ghost"} lg" id="gerar">
+      ${falta ? `Escrever texto do dia (faltam ${falta})` : "Escrever um texto extra"}</button>`;
+    $("#gerar").onclick = () => {
+      pintaAcao.rodando = true;
+      gerarTexto(() => { toast("Texto pronto."); render(); },
+                 c => { const m = msgErroTexto(c); if(m) toast(m); render(); });
+      render();
+    };
+  };
+  pintaAcao();
+  v.querySelectorAll("[data-ler]").forEach(c => c.onclick = () => abrirTexto(+c.dataset.ler));
+}
+
+/* ============================ ANTECIPAR ============================ */
+/* Priming semântico: o contexto pré-ativa a palavra antes de você precisar dela.
+   É o "_arinha" — o cenário decide se vira varinha ou farinha. Aqui o cenário
+   vem primeiro e a palavra vem furada; você aposta antes de ver.
+
+   Por que isso existe: nativo não decodifica palavra por palavra a 150 por
+   minuto, ele adianta o que vem e só confere. Isso é uma habilidade separada
+   da memória, e nada mais no sistema treina ela.
+
+   Este módulo é uma ilha: estado próprio (S.ant), aba própria, nenhuma
+   palavra, redução ou bloco muda de estágio por causa dele. */
+
+const ANT_ITENS = 8;
+const ANT_HIST = 40;
+
+function antEstado(){
+  if(!S.ant) S.ant = {feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0};
+  const a = S.ant;
+  if(!Array.isArray(a.rodadas)) a.rodadas = [];
+  return a;
+}
+function temAntecipar(){ return !!sampleRef; }
+
+/* ---- o que a IA escreve ---- */
+const ANT_CENAS = [
+  "uma cozinha, alguém cozinhando",
+  "um aeroporto, alguém embarcando",
+  "uma reunião de trabalho por vídeo",
+  "uma loja, alguém comprando",
+  "um hospital, alguém esperando notícia",
+  "uma rua à noite, alguém voltando para casa",
+  "um escritório no fim do expediente",
+  "uma praia, um dia de calor",
+  "um carro no trânsito parado",
+  "uma ligação de venda com um cliente",
+  "uma academia de manhã cedo",
+  "uma oficina, um carro quebrado",
+  "um hotel, o check-in",
+  "uma sala de aula",
+  "um banco, resolvendo um problema de conta",
+  "uma mudança de casa, caixas por todo lado"
+];
+
+function antPalavrasBase(){
+  /* palavras que ele já viu pelo menos uma vez: prever o que você nunca
+     encontrou é adivinhação, não antecipação */
+  const vistas = [];
+  for(const id in S.w) if(S.w[id].l) vistas.push(W[id][2]);
+  if(vistas.length < 30){
+    for(let i = 0; i < W.length && vistas.length < 60; i++)
+      if(!isLearned(i)) vistas.push(W[i][2]);
+  }
+  return vistas.sort(() => Math.random() - .5).slice(0, 45);
+}
+
+function antPrompt(){
+  const cena = ANT_CENAS[Math.floor(Math.random() * ANT_CENAS.length)];
+  const palavras = antPalavrasBase().join(", ");
+  return `Você monta exercícios de ANTECIPAÇÃO para um brasileiro que estuda inglês.
+
+A ideia: o contexto tem que puxar a palavra antes de a pessoa ler a palavra. Como em português, quando a cena é um bolo sendo feito, "_arinha" vira farinha; quando a cena é o Harry Potter, vira varinha. O cenário decide.
+
+Escreva ${ANT_ITENS} itens ambientados em: ${cena}.
+
+Cada item tem:
+- "ctx": UMA frase curta em inglês que monta a cena e empurra fortemente para a palavra-alvo. Ela sozinha já tem que fazer alguém pensar na resposta. Não pode conter a palavra-alvo.
+- "en": a frase seguinte, em inglês, contendo a palavra-alvo. Natural, curta, do dia a dia.
+- "alvo": a palavra-alvo exatamente como aparece em "en". Uma só palavra.
+- "pt": tradução da frase "en" para o português.
+
+REGRAS
+1. Use como alvo, sempre que couber, palavras desta lista: ${palavras}
+2. O alvo tem que ser previsível pelo contexto. Se cinco palavras diferentes cabem igualmente bem na lacuna, o item está ruim — refaça com um contexto que aperte mais.
+3. O alvo nunca é a primeira palavra da frase.
+4. Frases curtas, inglês falado de verdade, nada literário.
+5. Varie o alvo: não repita a mesma palavra em dois itens.
+
+Responda SÓ com JSON neste formato:
+{"itens":[{"ctx":"...","en":"...","alvo":"...","pt":"..."}]}`;
+}
+
+let antGerando = null;
+/* banco pronto primeiro (pedido dele em 25/09, pra não gastar IA toda vez):
+   sorteia sem repetir até esgotar os 150, depois embaralha de novo. Só cai
+   pra geração ao vivo se o banco estiver vazio (build sem ele, ou já visto
+   tudo e ele preferir gerar mais na hora). */
+let antBancoIdx = null;
+function antValida(it){
+  const en = String(it.en||"").trim(), alvo = String(it.alvo||"").trim().replace(/[.,!?;:]$/, "");
+  if(!en || !alvo) return null;
+  const re = new RegExp("(^|[^A-Za-z'])(" + alvo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")([^A-Za-z']|$)", "i");
+  if(!re.test(en)) return null;
+  return {ctx:String(it.ctx||"").trim(), en, alvo, pt:String(it.pt||"").trim()};
+}
+function antBancoRodada(){
+  if(!ANT_BANCO.length) return null;
+  if(!antBancoIdx || !antBancoIdx.length) antBancoIdx = ANT_BANCO.map((_,i)=>i).sort(()=>Math.random()-.5);
+  const itens = antBancoIdx.splice(0, ANT_ITENS).map(i => antValida(ANT_BANCO[i])).filter(Boolean);
+  return itens;
+}
+async function antGerar(ok, erro){
+  const doBanco = antBancoRodada();
+  if(doBanco && doBanco.length >= 3){
+    const a = antEstado();
+    a.itens = doBanco; a.i = 0;
+    if(ok) ok();
+    return;
+  }
+  if(!sampleRef){ if(erro) erro("sem"); return; }
+  antGerando = new AbortController();
+  try{
+    const j = await sampleRef.json(antPrompt(), {cache:false, modelTier:"default", signal:antGerando.signal});
+    const brutos = (j && Array.isArray(j.itens)) ? j.itens : [];
+    const itens = [];
+    for(const it of brutos){
+      const en = String(it.en || "").trim();
+      const alvo = String(it.alvo || "").trim().replace(/[.,!?;:]$/, "");
+      if(!en || !alvo) continue;
+      const re = new RegExp("(^|[^A-Za-z'])(" + alvo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")([^A-Za-z']|$)", "i");
+      if(!re.test(en)) continue;                    // o alvo precisa estar mesmo na frase
+      itens.push({ctx:String(it.ctx||"").trim(), en, alvo, pt:String(it.pt||"").trim()});
+    }
+    if(itens.length < 3) throw {code:"invalid_json"};
+    const a = antEstado();
+    a.itens = itens; a.i = 0;
+    antGerando = null;
+    if(ok) ok();
+  }catch(e){
+    antGerando = null;
+    if(erro) erro((e && e.code) || "erro");
+  }
+}
+
+/* ---- a frase com a lacuna, e a dica que só tira o primeiro pedaço ---- */
+function antLacuna(en, alvo, revelar){
+  const re = new RegExp("(^|[^A-Za-z'])(" + alvo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")([^A-Za-z']|$)", "i");
+  const m = en.match(re);
+  if(!m) return esc(en);
+  const antes = en.slice(0, m.index + m[1].length);
+  const depois = en.slice(m.index + m[1].length + m[2].length);
+  const p = m[2];
+  const buraco = revelar
+    ? `<b class="ant-rev">${esc(p)}</b>`
+    : `<span class="ant-buraco">${"·".repeat(Math.max(3, p.length))}</span>`;
+  return esc(antes) + buraco + esc(depois);
+}
+/* a dica revela do FIM para o começo, como o "_arinha": a primeira letra é
+   justamente a que o contexto tem que entregar */
+function antDica(alvo, nivel){
+  if(nivel <= 0) return "";
+  const n = Math.min(nivel, alvo.length - 1);
+  return "·".repeat(alvo.length - n) + alvo.slice(alvo.length - n);
+}
+const antLimpa = s => String(s || "").toLowerCase().replace(/[^a-z']/g, "");
+
+function startAntecipar(){
+  const a = antEstado();
+  if(!a.itens || !a.itens.length){ toast("Gere a rodada primeiro."); return; }
+  SESSION = new AnteciparSession(a.itens);
+  render();
+}
+
+class AnteciparSession{
+  constructor(itens){
+    this.q = itens; this.i = 0;
+    this.fase = "aposta";       // aposta | revelado
+    this.chute = ""; this.dica = 0; this.pt = false;
+    this.res = [];              // {alvo, chute, acerto, dica}
+  }
+  atual(){ return this.q[this.i]; }
+  apostar(){
+    const it = this.atual();
+    const c = valorChute();
+    this.chute = c;
+    const acerto = antLimpa(c) === antLimpa(it.alvo);
+    this.res.push({alvo:it.alvo, chute:c, acerto, dica:this.dica, en:it.en, pt:it.pt, ctx:it.ctx});
+    vibrar(acerto);
+    this.fase = "revelado";
+    this.render($("#view"));
+  }
+  next(){
+    this.i++; this.fase = "aposta"; this.chute = ""; this.dica = 0; this.pt = false;
+    this.render($("#view"));
+  }
+  render(v){
+    if(this.i >= this.q.length) return this.renderFim(v);
+    const it = this.atual(), rev = this.fase === "revelado";
+    const r = rev ? this.res[this.res.length - 1] : null;
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${pct(this.i, this.q.length)}%;background:var(--rev)"></i></div>
+          <div class="mini">${this.i + 1} / ${this.q.length}</div>
+        </div>
+        <div class="stage" style="align-items:stretch;text-align:left">
+          <div class="step" style="color:var(--rev)">Antecipar · deixe o contexto puxar</div>
+          <div class="ant-ctx">${esc(it.ctx)}</div>
+          <div class="ant-frase">${antLacuna(it.en, it.alvo, rev)}</div>
+          ${rev ? `
+            <div class="ant-res ${r.acerto ? "ok" : "no"}">
+              ${r.acerto
+                ? `Você antecipou.${r.dica ? ` <span class="dim">(com ${r.dica} ${plural(r.dica,"letra","letras")} de dica)</span>` : ""}`
+                : `Era <b>${esc(it.alvo)}</b>${r.chute ? ` — você apostou em <em>${esc(r.chute)}</em>` : " — você passou"}.`}
+            </div>
+            <div class="ant-pt">${esc(it.pt)}</div>`
+          : `
+            <div class="mini">Que palavra cabe aí? Aposte antes de ver — errar aqui não custa nada.</div>
+            ${this.dica ? `<div class="ant-dica">${esc(antDica(it.alvo, this.dica))}</div>` : ""}
+            ${this.pt ? `<div class="ant-pt">${esc(it.pt)}</div>` : ""}
+            ${campoChute("escreva sua aposta")}`}
+          <div class="acts" id="acts"></div>
+        </div>
+        <div class="kbd">${rev ? `<span>espaço</span> continuar` : `<span>enter</span> apostar`}</div>
+      </div>`;
+    $("#sair").onclick = async () => { if(await confirmar("Sair da rodada?")) go("home"); };
+    const a = $("#acts");
+    if(!rev){
+      a.innerHTML = `${this.dica < it.alvo.length - 1 ? `<button class="btn ghost" id="dica">Revelar uma letra</button>` : ""}
+                     ${!this.pt ? `<button class="btn ghost" id="ptOn">Ver tradução</button>` : ""}
+                     <button class="btn pri" id="ap">Apostar</button>`;
+      if($("#dica")) $("#dica").onclick = () => { this.dica++; const c = valorChute(); this.render($("#view")); if($("#chute")) $("#chute").value = c; };
+      if($("#ptOn")) $("#ptOn").onclick = () => { this.pt = true; const c = valorChute(); this.render($("#view")); if($("#chute")) $("#chute").value = c; };
+      $("#ap").onclick = () => this.apostar();
+      ligaChute(() => this.apostar());
+    } else {
+      a.innerHTML = `<button class="btn pri" id="pr">${this.i + 1 >= this.q.length ? "Ver o resultado" : "Próxima"}</button>`;
+      $("#pr").onclick = () => this.next();
+    }
+  }
+  renderFim(v){
+    const n = this.res.length, ac = this.res.filter(r => r.acerto).length;
+    const limpos = this.res.filter(r => r.acerto && !r.dica).length;
+    const a = antEstado();
+    a.feitas += n; a.cheios += limpos;
+    a.rodadas.push([Date.now(), n, ac, limpos]);
+    if(a.rodadas.length > ANT_HIST) a.rodadas = a.rodadas.slice(-ANT_HIST);
+    a.itens = null;
+    const d = today(); d.ant = (d.ant || 0) + 1;
+    save();
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage" style="align-items:stretch;text-align:left">
+          <div class="rel-fim">
+            <div class="rel-ic">🔮</div>
+            <div class="rel-placarF">
+              <div><b class="ok">${ac}</b><span>antecipou</span></div>
+              <div><b>${limpos}</b><span>sem nenhuma dica</span></div>
+              <div><b>${n}</b><span>frases</span></div>
+            </div>
+            <div class="mini" style="margin-top:2px;text-align:center;max-width:44ch">
+              O número que importa aqui é o do meio. Antecipar sem dica é o que acontece
+              na sua cabeça quando alguém fala rápido e você acompanha mesmo assim.
+            </div>
+          </div>
+          <div class="rel-bloco">
+            <div class="lbl">A rodada inteira</div>
+            ${this.res.map(r => `
+              <div class="rel-l ${r.acerto ? "ok" : "bad"}">
+                <div class="rel-par" style="flex-direction:column;align-items:flex-start;gap:2px">
+                  <span style="font-size:14px">${antLacuna(r.en, r.alvo, true)}</span>
+                  <span style="font-size:12.5px;color:var(--ink-3)">${esc(r.pt)}</span>
+                </div>
+                ${!r.acerto && r.chute ? `<div class="rel-meta">apostou <em>${esc(r.chute)}</em></div>` : ""}
+              </div>`).join("")}
+          </div>
+          <div class="acts">
+            <button class="btn ghost" id="home">Voltar ao início</button>
+            <button class="btn pri" id="dnv">Outra rodada</button>
+          </div>
+        </div>
+      </div>`;
+    $("#home").onclick = () => go("home");
+    $("#dnv").onclick = () => { SESSION = null; go("ant"); setTimeout(() => { const b = $("#antGerar"); if(b) b.click(); }, 60); };
+  }
+  key(e){
+    if(this.i >= this.q.length) return;
+    if(this.fase === "revelado" && (e.key === " " || e.key === "Enter")){ e.preventDefault(); this.next(); }
+  }
+}
+
+/* ---- a aba ---- */
+let antErro = null;
+function viewAnt(v){
+  const a = antEstado();
+  const total = a.rodadas.reduce((s, r) => s + r[1], 0);
+  const semDica = a.rodadas.reduce((s, r) => s + r[3], 0);
+  const taxa = total ? Math.round(semDica / total * 100) : null;
+  v.innerHTML = `
+    <h1 style="margin-bottom:4px">Antecipar</h1>
+    <div class="muted" style="margin-bottom:18px;max-width:62ch">
+      O contexto vem primeiro e a palavra vem furada. Você aposta antes de ver.
+      É a mesma coisa que faz "_arinha" virar farinha numa cozinha e varinha num
+      filme de bruxo — e é assim que se acompanha alguém falando rápido.
+    </div>
+
+    ${total ? `
+    <div class="card" style="margin-bottom:14px">
+      <div class="rel-placarF">
+        <div><b>${total}</b><span>frases enfrentadas</span></div>
+        <div><b class="ok">${semDica}</b><span>antecipadas sem dica</span></div>
+        <div><b>${taxa}%</b><span>de antecipação limpa</span></div>
+      </div>
+    </div>` : ""}
+
+    <div class="card">
+      ${!temAntecipar()
+        ? `<div class="mini">Esta parte só funciona no link do sistema, porque as frases são escritas na hora.</div>`
+        : antGerando
+          ? `<div class="row"><div class="girando"></div><div class="muted">Escrevendo as frases…</div></div>`
+          : a.itens && a.itens.length
+            ? `<div class="spread" style="flex-wrap:wrap;gap:10px">
+                 <div><b>${a.itens.length} frases prontas esperando você.</b>
+                 <div class="mini" style="margin-top:3px">Nenhuma palavra muda de estágio aqui. É treino solto.</div></div>
+                 <button class="btn pri lg" id="antIr">Começar</button>
+               </div>`
+            : `<div class="spread" style="flex-wrap:wrap;gap:10px">
+                 <div><b>Monte uma rodada de ${ANT_ITENS} frases.</b>
+                 <div class="mini" style="margin-top:3px">Usa as palavras que você já viu, em cenas do dia a dia.</div></div>
+                 <button class="btn pri lg" id="antGerar">Escrever as frases</button>
+               </div>`}
+      ${antErro ? `<div class="mini" style="color:var(--ref);margin-top:10px">${esc(antErro)}</div>` : ""}
+    </div>`;
+  if($("#antGerar")) $("#antGerar").onclick = () => {
+    antErro = null; render();
+    antGerar(() => { antErro = null; render(); },
+             c => { antErro = msgErroTexto(c) || "Não deu para escrever as frases agora."; render(); });
+    render();
+  };
+  if($("#antIr")) $("#antIr").onclick = () => startAntecipar();
+}
+
+/* ============================ VIEW: BANCO DE PALAVRAS ============================ */
+let bankFilter = {q:"", st:"", dia:"", n:60};
+function viewBank(v){
+  const c = counts();
+  v.innerHTML = `
+    <div class="spread" style="margin-bottom:16px;flex-wrap:wrap">
+      <div><h1>Banco de palavras</h1><div class="muted" style="margin-top:3px">${LEVEL_TOTAL} palavras · ${c.learned} já estudadas · ${contaImagens()} com imagem</div>
+      <div class="mini" style="margin-top:6px">Clique numa palavra para ver o PAV e enviar a imagem da cena.</div></div>
+    </div>
+    <div class="filters">
+      <input id="fq" placeholder="Buscar palavra…" value="${esc(bankFilter.q)}" style="min-width:200px">
+      <select id="fst">
+        <option value="">Todos os títulos</option>
+        ${Object.entries(STATUS).map(([k,s])=>`<option value="${k}" ${bankFilter.st===k?"selected":""}>${s.label}</option>`).join("")}
+        <option value="_ed" ${bankFilter.st==="_ed"?"selected":""}>PAV editado</option>
+        <option value="_img" ${bankFilter.st==="_img"?"selected":""}>Com imagem</option>
+        <option value="_sem" ${bankFilter.st==="_sem"?"selected":""}>Sem imagem</option>
+      </select>
+      <select id="fdia">
+        <option value="">Todos os dias</option>
+        ${Array.from({length:Math.ceil(LEVEL_TOTAL/GOAL_NEW)},(_,i)=>`<option value="${i+1}" ${bankFilter.dia==String(i+1)?"selected":""}>Dia ${i+1}</option>`).join("")}
+      </select>
+      <span class="mini" id="cnt"></span>
+    </div>
+    <div id="list"></div>`;
+  const draw = () => {
+    const q = bankFilter.q.toLowerCase();
+    const res = [];
+    for(let i=0;i<W.length;i++){
+      const w = W[i];
+      if(bankFilter.st === "_ed"){ if(!(S.pav && S.pav[i])) continue; }
+      else if(bankFilter.st === "_img"){ if(!imgOf(i)) continue; }
+      else if(bankFilter.st === "_sem"){ if(imgOf(i)) continue; }
+      else if(bankFilter.st && statusOf(i) !== bankFilter.st) continue;
+      if(bankFilter.dia && String(w[5]) !== bankFilter.dia) continue;
+      if(q && !(w[2].toLowerCase().includes(q) || w[0].toLowerCase().includes(q))) continue;
+      res.push(i);
+    }
+    $("#cnt").textContent = res.length + " " + plural(res.length,"resultado","resultados");
+    const show = res.slice(0, bankFilter.n);
+    $("#list").innerHTML = show.length ? `
+      <div class="wlist">
+        ${show.map(i=>{
+          const w = W[i], st = S.w[i], s = statusOf(i);
+          const prox = st && st.n ? new Date(st.n).toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit"}) : "—";
+          return `<div class="wrow" data-i="${i}">
+            <div class="idx">${i+1}</div>
+            <div class="en">${esc(w[2])}<div class="mini">${esc(w[1])}</div></div>
+            <div class="pt">${esc(w[0])}</div>
+            <div class="c4">${pill(s)}${imgOf(i) ? ` <span class="mini">· imagem</span>` : ""}</div>
+            <div class="c5 mini">${st && st.l ? "rev " + st.s + "/8 · " + prox : "dia " + w[5]}</div>
+          </div>`;
+        }).join("")}
+      </div>
+      ${res.length > bankFilter.n ? `<div class="more"><button class="btn sm ghost" id="mais">Mostrar mais</button></div>` : ""}`
+    : `<div class="empty"><div class="ic">∅</div>Nenhuma palavra com esse filtro.</div>`;
+    if($("#mais")) $("#mais").onclick = () => { bankFilter.n += 60; draw(); };
+    document.querySelectorAll(".wrow").forEach(r => r.onclick = () => openWord(+r.dataset.i));
+  };
+  $("#fq").oninput = e => { bankFilter.q = e.target.value; bankFilter.n = 60; draw(); };
+  $("#fst").onchange = e => { bankFilter.st = e.target.value; bankFilter.n = 60; draw(); };
+  $("#fdia").onchange = e => { bankFilter.dia = e.target.value; bankFilter.n = 60; draw(); };
+  draw();
+}
+function openWord(i){
+  const w = W[i], st = S.w[i];
+  const box = el(`<div style="position:fixed;inset:0;z-index:80;background:#000b;display:grid;place-items:center;padding:20px">
+    <div class="card" style="max-width:540px;width:100%;background:var(--surface2)">
+      <div class="spread" style="margin-bottom:14px">
+        ${pill(statusOf(i))}
+        <button class="btn sm ghost" id="x">Fechar</button>
+      </div>
+      <div class="row" style="gap:14px"><div class="word-en" style="font-size:30px;text-align:left">${esc(w[2])}</div></div>
+      <div class="pron" style="font-size:22px;margin:4px 0 2px">${esc(w[1])}</div>
+      <div style="font-size:19px;color:var(--tx2)">${esc(cap(w[0]))}</div>
+      ${FAM[i] ? `<div style="margin-top:10px">${blocoFamilia(i)}</div>` : ""}
+      <div class="sep"></div>
+      <div class="spread" style="margin-bottom:6px">
+        <span class="lbl">PAV ${(S.pav && S.pav[i]) ? "· editado" : ""}${imgOf(i) ? " · com imagem" : ""}</span>
+        <button class="edt" id="edPav">editar</button>
+      </div>
+      <div style="font-size:15.5px;line-height:1.55" id="pavTxt">${esc(pavOf(i))}</div>
+      <div class="sep"></div>
+      <div class="spread" style="margin-bottom:10px">
+        <span class="lbl">Imagem da cena</span>
+        ${temImagens() ? `<div class="row" style="gap:8px">
+            <button class="edt" id="imgTrocar">${imgOf(i) ? "trocar" : "enviar imagem"}</button>
+            ${imgOf(i) ? `<button class="edt" id="imgTirar">remover</button>` : ""}
+          </div>` : ""}
+      </div>
+      ${imgOf(i)
+        ? blocoImagem(i)
+        : `<div class="imgvazio">${temImagens()
+             ? "Sem imagem. Uma cena desenhada ou fotografada fixa muito mais que só o texto."
+             : "As imagens só funcionam no link do sistema, não nesta cópia."}</div>`}
+      <div class="sep"></div>
+      <div class="row" style="gap:24px;flex-wrap:wrap">
+        <div><div class="lbl">Revisões</div><div style="font-weight:620">${st ? st.s : 0} / 8</div></div>
+        <div><div class="lbl">Acertos</div><div style="font-weight:620">${st ? (st.a - st.e) : 0} / ${st ? st.a : 0}</div></div>
+        <div><div class="lbl">Próxima</div><div style="font-weight:620">${st && st.n ? new Date(st.n).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "—"}</div></div>
+        <div><div class="lbl">Classe</div><div style="font-weight:620">${esc(w[4])}</div></div>
+      </div>
+    </div></div>`);
+  document.body.appendChild(box);
+  box.onclick = e => { if(e.target === box || e.target.id === "x") box.remove(); };
+  box.querySelector("#edPav").onclick = () => { box.remove(); editarPav(i, () => openWord(i)); };
+  const bT = box.querySelector("#imgTrocar");
+  if(bT) bT.onclick = () => { box.remove(); escolherImagem(i, () => openWord(i)); };
+  const bR = box.querySelector("#imgTirar");
+  if(bR) bR.onclick = async () => {
+    if(!(await confirmar("Remover a imagem desta palavra?"))) return;
+    await removerImagem(i);
+    toast("Imagem removida.");
+    box.remove(); openWord(i);
+  };
+}
+
+/* ---- edição manual do PAV ---- */
+function editarPav(id, depois){
+  const w = W[id];
+  const editado = !!(S.pav && S.pav[id]);
+  const box = el(`<div class="modal">
+    <div class="card" style="max-width:580px;width:100%;background:var(--surface2)">
+      <div class="spread" style="margin-bottom:14px">
+        <div>
+          <div class="lbl">Editar PAV</div>
+          <div style="font-weight:650;font-size:19px;margin-top:3px">${esc(w[2])} <span class="dim" style="font-weight:500;font-size:15px">· ${esc(cap(w[0]))}</span></div>
+        </div>
+        <button class="btn sm ghost" id="x">Cancelar</button>
+      </div>
+      <textarea id="ta" rows="4" placeholder="Escreva a cena do PAV…">${esc(pavOf(id))}</textarea>
+      <div class="mini" style="margin-top:8px">Uma frase curta: o significado, um elemento que puxa o som (${esc(w[1])}) e uma ação impossível.</div>
+      <div class="sep"></div>
+      <div class="lbl" style="margin-bottom:8px">Imagem da cena</div>
+      ${temImagens()
+        ? (imgOf(id)
+            ? `${blocoImagem(id)}<div class="row" style="gap:8px;margin-top:10px;justify-content:center">
+                 <button class="edt" id="imgTrocar">trocar imagem</button>
+                 <button class="edt" id="imgTirar">remover</button>
+               </div>`
+            : `<div class="imgvazio">Nenhuma imagem ainda.<div style="margin-top:10px"><button class="btn sm" id="imgTrocar">Enviar imagem</button></div></div>`)
+        : `<div class="imgvazio">As imagens só funcionam no link do sistema, não nesta cópia.</div>`}
+      <div class="spread" style="margin-top:16px">
+        <button class="edt" id="orig" ${editado?"":"style=visibility:hidden"}>voltar ao original</button>
+        <button class="btn pri" id="ok">Salvar</button>
+      </div>
+    </div></div>`);
+  document.body.appendChild(box);
+  const ta = box.querySelector("#ta");
+  ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  const fechar = () => { box.remove(); if(depois) depois(); };
+  box.onclick = e => { if(e.target === box) fechar(); };
+  box.querySelector("#x").onclick = fechar;
+  const bTrocar = box.querySelector("#imgTrocar");
+  if(bTrocar) bTrocar.onclick = () => { box.remove(); escolherImagem(id, () => editarPav(id, depois)); };
+  const bTirar = box.querySelector("#imgTirar");
+  if(bTirar) bTirar.onclick = async () => {
+    if(!(await confirmar("Remover a imagem desta palavra?"))) return;
+    await removerImagem(id);
+    toast("Imagem removida.");
+    box.remove(); editarPav(id, depois);
+  };
+  box.querySelector("#orig").onclick = () => {
+    if(S.pav) delete S.pav[id];
+    save(); toast("PAV original restaurado."); fechar();
+  };
+  box.querySelector("#ok").onclick = () => {
+    const txt = ta.value.trim();
+    if(!txt){ toast("O PAV não pode ficar vazio."); return; }
+    if(!S.pav) S.pav = {};
+    if(txt === W[id][3]) delete S.pav[id]; else S.pav[id] = txt;
+    save(); toast("PAV salvo."); fechar();
+  };
+  ta.onkeydown = e => {
+    if(e.key === "Escape"){ e.preventDefault(); fechar(); }
+    if(e.key === "Enter" && (e.ctrlKey || e.metaKey)){ e.preventDefault(); box.querySelector("#ok").click(); }
+    e.stopPropagation();
+  };
+}
+
+/* ============================ VIEW: CALENDÁRIO ============================ */
+let calRef = new Date();
+function viewCal(v){
+  const y = calRef.getFullYear(), m = calRef.getMonth();
+  const first = new Date(y,m,1), last = new Date(y,m+1,0);
+  const off = (first.getDay()+6)%7;
+  const nomes = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+  const st = streak(), protegidos = st.protegidos || [];
+  let cells = "";
+  for(let i=0;i<off;i++) cells += `<div class="cd void"></div>`;
+  for(let d=1; d<=last.getDate(); d++){
+    const k = dayKey(new Date(y,m,d));
+    const cls = dayFull(k) ? "full" : dayMin(k) ? "min" : (protegidos.indexOf(k) >= 0 ? "esc" : "");
+    const hoje = k === dayKey() ? "today" : "";
+    const info = S.dias[k];
+    cells += `<div class="cd ${cls} ${hoje}" data-k="${k}"><b>${d}</b>${info && info.novas ? `<span style="font-size:10px">${info.novas}</span>` : ""}</div>`;
+  }
+  v.innerHTML = `
+    <div class="spread" style="margin-bottom:16px;flex-wrap:wrap">
+      <div><h1>Calendário</h1><div class="muted" style="margin-top:3px">${st.cur} ${plural(st.cur,"dia seguido","dias seguidos")} · recorde ${st.best} · ${st.escudosSobrando} de ${ESCUDOS_MES} ${plural(ESCUDOS_MES,"folga","folgas")} sobrando este mês</div></div>
+      <div class="row"><button class="btn sm ghost" id="pv">←</button><div style="min-width:150px;text-align:center;font-weight:600">${nomes[m]} ${y}</div><button class="btn sm ghost" id="nx">→</button></div>
+    </div>
+    <div class="card">
+      <div class="cal">${["S","T","Q","Q","S","S","D"].map(d=>`<div class="hd">${d}</div>`).join("")}${cells}</div>
+      <div class="row" style="gap:18px;margin-top:16px;flex-wrap:wrap">
+        <span class="row mini"><span class="dotc" style="background:#3FB950"></span> dia completo</span>
+        <span class="row mini"><span class="dotc" style="background:#E3B341"></span> dia mínimo (10+ novas, revisões em dia)</span>
+        <span class="row mini"><span class="dotc" style="background:#6E7683"></span> folga usada (sequência mantida)</span>
+        <span class="row mini"><span class="dotc" style="background:#343945"></span> não estudado</span>
+      </div>
+    </div>
+    <div id="det" style="margin-top:14px"></div>`;
+  $("#pv").onclick = () => { calRef = new Date(y, m-1, 1); render(); };
+  $("#nx").onclick = () => { calRef = new Date(y, m+1, 1); render(); };
+  v.querySelectorAll(".cd[data-k]").forEach(c => c.onclick = () => {
+    const k = c.dataset.k, d = S.dias[k];
+    $("#det").innerHTML = `<div class="card">
+      <h2>${new Date(k+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"long"})}</h2>
+      ${d ? `<div class="tl">
+        <div class="tli"><div class="lbl">Palavras novas</div><div>${d.novas}</div></div>
+        <div class="tli"><div class="lbl">Revisões</div><div>${d.revs}</div></div>
+        <div class="tli"><div class="lbl">Treino de domínio</div><div>${d.dom}</div></div>
+        <div class="tli"><div class="lbl">Reduções novas</div><div>${d.red||0}</div></div>
+        <div class="tli"><div class="lbl">Blocos novos</div><div>${d.chk||0}</div></div>
+        <div class="tli"><div class="lbl">Textos lidos</div><div>${d.txt||0}</div></div>
+        <div class="tli"><div class="lbl">Listening</div><div>${d.li?"✓ feito":"—"}</div></div>
+        <div class="tli"><div class="lbl">Speaking</div><div>${d.sp?"✓ feito":"—"}</div></div>
+        <div class="tli"><div class="lbl">Grammar</div><div>${d.gr?"✓ feito":"—"}</div></div>
+      </div>` : `<div class="muted">Nenhum registro neste dia.</div>`}
+    </div>`;
+  });
+}
+
+/* ============================ VIEW: PROGRESSO ============================ */
+/* O número que importa no relâmpago não é o placar: é o tempo caindo. */
+function cardRelampago(){
+  const r = relEstado(), n = r.rodadas.length;
+  if(!n) return "";
+  const tempos = r.rodadas.filter(x => x[4] > 0).map(x => x[4]);
+  const media = a => a.length ? Math.round(a.reduce((s,x)=>s+x,0)/a.length) : null;
+  const k = Math.min(5, Math.floor(tempos.length/2));
+  const inicio = k ? media(tempos.slice(0,k)) : null;
+  const agora  = k ? media(tempos.slice(-k)) : null;
+  const ganho  = (inicio && agora) ? Math.round((1 - agora/inicio) * 100) : null;
+  return `
+    <div class="card" style="margin-bottom:14px">
+      <div class="spread" style="margin-bottom:12px">
+        <h2 style="margin:0">Relâmpago</h2>
+        <div class="mini">${n} ${plural(n,"rodada","rodadas")}</div>
+      </div>
+      <div class="rel-placarF">
+        <div><b>${r.seq||0}</b><span>recorde de sequência</span></div>
+        <div><b>${r.acertos||0}</b><span>recorde de acertos</span></div>
+        <div><b>${relSeg(r.tempo)}</b><span>melhor tempo médio</span></div>
+        <div><b>${relSeg(agora)}</b><span>tempo médio agora</span></div>
+      </div>
+      <div class="mini" style="margin-top:10px">
+        ${ganho !== null && ganho !== 0
+          ? (ganho > 0
+              ? `Você reconhece as palavras <b style="color:var(--solida)">${ganho}% mais rápido</b> do que nas primeiras rodadas (${relSeg(inicio)} → ${relSeg(agora)}). É essa queda que aparece na hora de entender fala real.`
+              : `Seu tempo subiu ${-ganho}% em relação ao começo (${relSeg(inicio)} → ${relSeg(agora)}). Normal quando entram palavras novas no sorteio.`)
+          : "Jogue mais algumas rodadas para o sistema medir se o seu tempo está caindo."}
+      </div>
+    </div>`;
+}
+function viewProg(v){
+  const c = counts(), st = streak();
+  const marcos = [1,10,30,60,100,180];
+  const dias = diasEstudados();
+  const porEtapa = [0,0,0,0,0,0,0,0,0];
+  for(const id in S.w){ if(S.w[id].l) porEtapa[S.w[id].s]++; }
+  v.innerHTML = `
+    <h1 style="margin-bottom:4px">Minha jornada</h1>
+    <div class="muted" style="margin-bottom:18px">Level 1 · ${LEVEL_TOTAL} palavras de alta frequência</div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="spread" style="margin-bottom:12px">
+        <h2 style="margin:0">Palavras dominadas</h2>
+        <div class="big" style="color:var(--dom)">${c.dom} <span class="dim" style="font-size:16px;font-weight:500">/ ${LEVEL_TOTAL}</span></div>
+      </div>
+      <div class="bar" style="height:10px"><i style="width:${pct(c.dom,LEVEL_TOTAL)}%;background:linear-gradient(90deg,#B8873A,#E9C46A)"></i></div>
+      <div class="mini" style="margin-top:8px">Uma palavra vira dominada quando passa no treino de domínio (inglês → português, sem PAV) ou ao completar a revisão de 3 meses.</div>
+    </div>
+
+    <div class="stats" style="margin-bottom:14px">
+      ${[["Aprendidas",c.learned],["Sólidas",c.solida],["Em revisão",c.rev],["Aprendendo",c.aprend],["Reforço",c.ref],["Total de revisões",totalRevs()]]
+        .map(([l,n])=>`<div class="st"><div class="lbl">${l}</div><div class="n">${n}</div></div>`).join("")}
+    </div>
+
+    ${cardRelampago()}
+
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="card">
+        <h2>Onde estão as palavras</h2>
+        <div class="tl">
+          ${SCHED.map((s,i)=>`<div class="tli"><div class="lbl">Revisão ${s.n} · ${s.nome}</div>
+            <div class="row"><div class="bar" style="flex:1"><i style="width:${pct(porEtapa[i], Math.max(1,c.learned))}%;background:${i>=7?"var(--dom)":i>=6?"var(--solida)":i>=3?"var(--rev)":"var(--aprend)"}"></i></div><span style="min-width:34px;text-align:right">${porEtapa[i]}</span></div></div>`).join("")}
+        </div>
+        <div class="mini" style="margin-top:10px">Quantas palavras já passaram por cada etapa.</div>
+      </div>
+      <div class="card">
+        <h2>Linha do tempo</h2>
+        <div class="tl">
+          ${marcos.map(d=>`<div class="tli">
+            <div class="lbl">Dia ${d}</div>
+            <div class="row"><span style="color:${dias>=d?"var(--solida)":"var(--tx3)"}">${dias>=d?"✓ alcançado":"a caminho"}</span></div>
+          </div>`).join("")}
+        </div>
+        <div class="sep"></div>
+        <div class="row" style="gap:26px">
+          <div><div class="lbl">Dias estudados</div><div style="font-size:20px;font-weight:640">${dias}</div></div>
+          <div><div class="lbl">Sequência</div><div style="font-size:20px;font-weight:640">${st.cur}</div></div>
+          <div><div class="lbl">Recorde</div><div style="font-size:20px;font-weight:640">${st.best}</div></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ============================ VIEW: DADOS ============================ */
+function viewCfg(v){
+  const conectado = !!fileHandle;
+  const comProgresso = Object.keys(S.w || {}).length;
+  const quando = t => t ? new Date(t).toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}) : "—";
+  v.innerHTML = `
+    <h1 style="margin-bottom:6px">Dados e backup</h1>
+    <div class="muted" style="margin-bottom:20px;max-width:64ch">Onde cada coisa fica guardada, e o que acontece se algo der errado.</div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="spread" style="margin-bottom:16px">
+        <h2 style="margin:0">Saúde dos dados</h2>
+        <span class="pill ${dbRef ? "s-solida" : "s-ref"}"><span class="dotc"></span>${dbRef ? "protegido" : "sem sincronização"}</span>
+      </div>
+      <div class="tl">
+        <div class="tli"><div class="lbl">Onde fica</div><div>${dbRef
+          ? "No banco do sistema, na sua conta — não no navegador. Grava a cada ação e aparece igual no PC e no celular."
+          : "Só na memória deste navegador. Abra pelo link do sistema para voltar a sincronizar."}</div></div>
+        <div class="tli"><div class="lbl">Imagens</div><div>${temImagens()
+          ? contaImagens() + " " + plural(contaImagens(),"imagem guardada","imagens guardadas") + " junto do sistema, fora do navegador."
+          : "Indisponíveis nesta cópia."}</div></div>
+        <div class="tli"><div class="lbl">Última gravação</div><div>${quando(S.ultimo)}</div></div>
+        <div class="tli"><div class="lbl">Em uso desde</div><div>${quando(S.criado)}</div></div>
+        <div class="tli"><div class="lbl">O que você tem</div><div>${comProgresso} ${plural(comProgresso,"palavra","palavras")} em estudo · ${Object.keys(S.r||{}).length} ${plural(Object.keys(S.r||{}).length,"redução","reduções")} · ${Object.keys(S.c||{}).length} ${plural(Object.keys(S.c||{}).length,"bloco","blocos")} · ${diasEstudados()} ${plural(diasEstudados(),"dia","dias")}</div></div>
+        <div class="tli"><div class="lbl">Conteúdo</div><div>${LEVEL_TOTAL} palavras · ${RED_TOTAL} reduções · ${CHK_TOTAL} blocos</div></div>
+        <div class="tli"><div class="lbl">Registros perdidos</div><div>${orfas
+          ? `<span class="no-tx">${orfas} ${plural(orfas,"registro","registros")} de item que não existe mais na lista</span>`
+          : "nenhum — todo o seu histórico casa com a lista atual"}</div></div>
+      </div>
+      <div class="sep"></div>
+      <p class="mini" style="margin-bottom:14px">Seu progresso é guardado pela palavra, não pela posição dela na lista. É isso que permite acrescentar palavras novas sem embaralhar o que você já estudou.</p>
+      <div class="row" style="gap:8px;flex-wrap:wrap">
+        <button class="btn" id="exp2">Baixar cópia agora</button>
+        <button class="btn ghost" id="imp2">Restaurar de um arquivo</button>
+      </div>
+    </div>
+
+    <div class="banner ${dbRef?"ok":""}" style="margin-bottom:14px">
+      <div style="flex:1">
+        <b>${dbRef ? "Sincronizado entre seus aparelhos" : "Sem sincronização aqui"}</b>
+        <div class="mini" style="margin-top:2px">
+          ${dbRef
+            ? "Salva sozinho a cada ação: não existe botão de salvar. Abra este mesmo link no PC e no celular, logado na sua conta, e os dois leem e gravam o mesmo progresso. Quem estudou por último manda."
+            : "Esta é a cópia que abre direto do arquivo. Para ter o mesmo progresso no PC e no celular, use o link do sistema em vez deste arquivo."}
+        </div>
+      </div>
+      <span class="pill ${dbRef?"s-solida":"s-nova"}"><span class="dotc"></span>${dbRef ? "ativo" : "local"}</span>
+    </div>
+
+    <div class="banner ${conectado?"ok":""}" style="margin-bottom:14px">
+      <div style="flex:1">
+        <b>${conectado ? "Arquivo conectado" : "Nenhum arquivo conectado"}</b>
+        <div class="mini" style="margin-top:2px">
+          ${conectado
+            ? "Todo progresso é gravado no arquivo automaticamente, a cada ação."
+            : (window.showSaveFilePicker
+                ? "Hoje o progresso está só na memória do navegador. Conecte um arquivo dentro da pasta Inglês fluente: como ela está no OneDrive, o backup na nuvem acontece sozinho."
+                : "Neste navegador não dá para conectar arquivo. Exporte uma cópia de vez em quando para não depender só da memória do navegador.")}
+        </div>
+      </div>
+      ${window.showSaveFilePicker ? `<button class="btn sm ${conectado?"ghost":"pri"}" id="conn">${conectado ? "Trocar arquivo" : (window.__pendingHandle ? "Reconectar arquivo" : "Conectar arquivo")}</button>` : ""}
+    </div>
+
+    <div class="banner ${temLeitura()?"ok":""}" style="margin-bottom:14px">
+      <div style="flex:1">
+        <b>Leitura do dia</b>
+        <div class="mini" style="margin-top:2px">
+          ${temLeitura()
+            ? "O sistema escreve histórias novas usando as palavras que você já domina, mais algumas que está estudando. Cada texto tem três passadas: o som, o inglês escrito e a tradução. Os " + MAX_TXT_GUARDADOS + " últimos ficam guardados."
+            : "Nesta cópia não dá para escrever textos. Use o link do sistema."}
+        </div>
+      </div>
+      <span class="pill ${(S.txt||[]).length?"s-solida":"s-nova"}"><span class="dotc"></span>${(S.txt||[]).length} ${plural((S.txt||[]).length,"texto","textos")}</span>
+    </div>
+
+    <div class="banner ${vibLigada?"ok":""}" style="margin-bottom:14px">
+      <div style="flex:1">
+        <b>Vibração no acerto ${vibLigada ? "ligada" : "desligada"}</b>
+        <div class="mini" style="margin-top:2px">Um toque curto quando acerta, dois quando erra. Só funciona no celular; no PC não faz nada.</div>
+      </div>
+      <button class="btn sm ${vibLigada?"ghost":"pri"}" id="vibTgl">${vibLigada ? "Desligar" : "Ligar"}</button>
+    </div>
+
+    <div class="banner ${temImagens()?"ok":""}" style="margin-bottom:14px">
+      <div style="flex:1">
+        <b>Imagens dos PAV</b>
+        <div class="mini" style="margin-top:2px">
+          ${temImagens()
+            ? "As imagens ficam guardadas junto do sistema, então o que você sobe no PC aparece no celular. Cada imagem é reduzida antes de subir. Envie pelo botão <b>+ imagem</b> na etapa do PAV, na revisão ou no banco de palavras."
+            : "Nesta cópia não dá para guardar imagens. Use o link do sistema."}
+        </div>
+      </div>
+      <div class="row" style="gap:8px">
+        <span class="pill ${contaImagens()?"s-solida":"s-nova"}"><span class="dotc"></span>${contaImagens()} ${plural(contaImagens(),"imagem","imagens")}</span>
+        ${temImagens() ? `<button class="btn sm ghost" id="imgEspaco">Espaço</button>` : ""}
+      </div>
+    </div>
+    <div id="imgInfo" style="margin-bottom:14px"></div>
+
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="card">
+        <h2>Cópia manual</h2>
+        <p class="muted" style="font-size:13.5px;margin-bottom:14px">Baixa um arquivo com todo o seu progresso. Guarde quando quiser uma cópia extra.</p>
+        <div class="row"><button class="btn" id="exp">Exportar</button><button class="btn ghost" id="imp">Importar</button></div>
+      </div>
+      <div class="card">
+        <h2>Como o sistema funciona</h2>
+        <div class="tl">
+          <div class="tli"><div class="lbl">Meta diária</div><div>${GOAL_NEW} palavras novas + revisões</div></div>
+          <div class="tli"><div class="lbl">Lote</div><div>A cada ${BATCH} novas, 1 revisão antiga</div></div>
+          <div class="tli"><div class="lbl">Dia mínimo</div><div>${GOAL_MIN} novas + revisões em dia mantêm a sequência</div></div>
+          <div class="tli"><div class="lbl">Revisões 1–3</div><div>Português + PAV → inglês</div></div>
+          <div class="tli"><div class="lbl">Revisão 4</div><div>Inglês + PAV → português</div></div>
+          <div class="tli"><div class="lbl">Revisões 5–6</div><div>Só o PAV → inglês</div></div>
+          <div class="tli"><div class="lbl">Revisões 7–8</div><div>Só o português → inglês</div></div>
+          <div class="tli"><div class="lbl">Dica</div><div>Disponível da revisão 5 em diante · conta como erro</div></div>
+          <div class="tli"><div class="lbl">Erro</div><div>Resposta + PAV, reteste na mesma sessão, revisão repete amanhã</div></div>
+          <div class="tli"><div class="lbl">Reduções</div><div>${GOAL_RED} novas por dia · ${RED_TOTAL} no total</div></div>
+          <div class="tli"><div class="lbl">Blocos</div><div>${GOAL_CHK} novos por dia · ${CHK_TOTAL} no total</div></div>
+          <div class="tli"><div class="lbl">Frases nas revisões</div><div>Mesma agenda de 8 das palavras</div></div>
+          <div class="tli"><div class="lbl">Leitura</div><div>${GOAL_TXT} textos por dia, escritos com o seu vocabulário</div></div>
+          <div class="tli"><div class="lbl">Famílias</div><div>${Object.keys(FAM).length} palavras mostram suas flexões</div></div>
+          <div class="tli"><div class="lbl">Chute</div><div>Escreva antes de revelar: tentar fixa mais que só ler</div></div>
+          <div class="tli"><div class="lbl">Folgas</div><div>${ESCUDOS_MES} por mês mantêm a sequência viva</div></div>
+          <div class="tli"><div class="lbl">PAVs editados</div><div>${Object.keys(S.pav||{}).length} de ${LEVEL_TOTAL}</div></div>
+          <div class="tli"><div class="lbl">PAVs com imagem</div><div>${contaImagens()} de ${LEVEL_TOTAL}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h2>Zerar progresso</h2>
+      <p class="muted" style="font-size:13.5px;margin-bottom:14px">Apaga todo o histórico e volta ao dia zero. As 1.200 palavras, os PAVs e as imagens continuam.</p>
+      <button class="btn bad" id="zerar">Zerar tudo</button>
+    </div>`;
+  if($("#conn")) $("#conn").onclick = () => window.__pendingHandle && !fileHandle ? reauthFile() : connectFile();
+  $("#exp").onclick = exportJSON;
+  if($("#exp2")) $("#exp2").onclick = exportJSON;
+  if($("#imp2")) $("#imp2").onclick = importJSON;
+  if($("#vibTgl")) $("#vibTgl").onclick = () => {
+    vibLigada = !vibLigada;
+    try{ localStorage.setItem(VIB_KEY, vibLigada ? "1" : "0"); }catch(e){}
+    if(vibLigada) vibrar(true);
+    render();
+  };
+  if($("#imgEspaco")) $("#imgEspaco").onclick = async () => {
+    const alvo = $("#imgInfo");
+    alvo.innerHTML = `<div class="mini">Consultando…</div>`;
+    try{
+      const r = await assetsRef.list();
+      const mb = n => (n / 1048576).toFixed(1) + " MB";
+      const orfas = r.assets.filter(x => Object.values(S.img || {}).indexOf(x.id) < 0).length;
+      alvo.innerHTML = `<div class="card tight"><div class="tl">
+        <div class="tli"><div class="lbl">Imagens</div><div>${r.usage.files} de ${r.usage.maxFiles}</div></div>
+        <div class="tli"><div class="lbl">Espaço</div><div>${mb(r.usage.bytes)} de ${mb(r.usage.maxBytes)}</div></div>
+        <div class="tli"><div class="lbl">Sem dono</div><div>${orfas} ${plural(orfas,"arquivo","arquivos")} que nenhuma palavra usa</div></div>
+      </div></div>`;
+    }catch(e){ alvo.innerHTML = `<div class="mini">Não consegui consultar o espaço agora.</div>`; }
+  };
+  $("#imp").onclick = importJSON;
+  $("#zerar").onclick = async () => {
+    if(!(await confirmar("Apagar TODO o progresso? Isso não tem volta."))) return;
+    if(!(await confirmar("Confirma mesmo?", "Recomendo exportar antes."))) return;
+    const imgs = S.img || {};
+    S = freshState(); S.img = imgs; save(); toast("Progresso zerado."); go("home");
+  };
+}
+
+/* ============================ BOOT ============================ */
+document.addEventListener("keydown", e => { if(SESSION && SESSION.key) SESSION.key(e); });
+
+(async function boot(){
+  try{
+    const raw = localStorage.getItem(STORE);
+    const cru = raw ? JSON.parse(raw) : null;
+    // guardado empacotado (f) ou no formato cru antigo: os dois voltam
+    S = cru ? (cru.f ? unpack(cru) : cru) : freshState();
+    if(!S || !S.w) S = freshState();
+    if(!S.pav) S.pav = {};
+    if(!S.r) S.r = {};
+    if(!S.img) S.img = {};
+    if(!Array.isArray(S.txt)) S.txt = [];
+    if(!S.c) S.c = {};
+    // primeiro dia com o módulo Frases: só a partir daqui ele conta no dia completo
+    if(!S.frasesDesde){ S.frasesDesde = dayKey(); try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
+  }catch(e){ S = freshState(); }
+  setSync("off");
+  await restoreFile();
+  if(fileHandle){
+    // se o arquivo tiver dados mais recentes, usa ele
+    try{
+      const f = await fileHandle.getFile();
+      if(f.size > 2){
+        const j = JSON.parse(await f.text());
+        if(j && j.w && (!S.ultimo || (j.ultimo||0) > (S.ultimo||0))) S = normaliza(j);
+      }
+    }catch(e){}
+  }
+  render();
+  await initAssets();
+  await initSample();
+  await initSync();
+  markClean();
+  render();
+})();
+</script>
+</body>
+</html>

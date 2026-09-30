@@ -1,0 +1,12 @@
+{
+  "name": "fluencia-ingles",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "python3 src/build.py",
+    "test": "node tests/test_dados.js && node tests/test_rel.js && node tests/test_ant.js && node tests/test_extra.js && node tests/test_v13.js && node tests/test_v11.js && node tests/test_frases.js && node tests/t2.js && node tests/t_img.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}
