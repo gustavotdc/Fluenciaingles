@@ -3,8 +3,10 @@
 Documento de referência. Toda sessão futura que for mexer no sistema de inglês
 do Gustavo deve ler isto antes.
 
-Atualizado em 26/09/2026 (versão 20 do sistema — push imediato ao marcar
-leitura como concluída, corrige texto "lido" que não sincronizava).
+Atualizado em 30/09/2026 (versão 20 do sistema — push imediato ao marcar
+leitura como concluída, corrige texto "lido" que não sincronizava; sistema
+migrado também pro GitHub Pages, com banco Supabase próprio — ver seção
+"Segunda plataforma").
 
 ---
 
@@ -115,6 +117,42 @@ Testes (`test_v13.js`, `test_extra.js`) continuam passando (36 + 11 = 47
 verificações destes dois arquivos). Se o problema voltar a acontecer, meu
 teste local não reproduziu a causa raiz com certeza — só o efeito, confirmado
 no banco real dele.
+
+---
+
+## Segunda plataforma: GitHub Pages + Supabase (30/09)
+
+Motivo: reduzir a dependência do Artifact do Claude (sandbox efêmero, sessão
+se reconstrói do zero a cada vez) e ter o código num repositório versionado
+de verdade, com testes obrigatórios antes de publicar.
+
+- **Repositório:** `https://github.com/gustavotdc/Fluenciaingles` (público —
+  necessário pro GitHub Pages funcionar no plano grátis).
+- **Publicação automática:** `.github/workflows/deploy.yml` roda
+  `python3 src/build.py` e publica `dist/index.html` no GitHub Pages a cada
+  push em `main`. Não precisa mexer em nada manual depois de um push — só
+  editar os arquivos fonte (`src/app_template.html`, `data/...`) e commitar.
+- **Site ao vivo:** `https://gustavotdc.github.io/Fluenciaingles/`.
+- **Banco de dados:** Supabase, projeto `gustavotdc's Project`
+  (`iopcocewxebrsiyqqezx`), tabela `estado` (`id text primary key, dados
+  jsonb, atualizado_em timestamptz`), uma linha só (`id = 'principal'`), RLS
+  liberado pra leitura/escrita pela chave publishable (é assim que o
+  Supabase espera que se use essa chave — o controle de acesso é por
+  política de RLS na tabela, não por esconder a chave, que fica visível no
+  código do navegador de qualquer jeito).
+- **Como sincroniza:** `src/app_template.html` ganhou um caminho novo em
+  `initSync()` — quando `window.claude` não existe (ou seja, fora do
+  Artifact), usa `supaRef()` (função nova) que fala com o Supabase pela API
+  REST (PostgREST), com a mesma forma (`get`/`set`) que o `dbRef` do Artifact
+  já usava, então todo o resto do código de sync (`pushRemote`, `schedulePush`,
+  `flushPush`, `adota`) não mudou nada. Como a API REST simples não tem
+  tempo real, a página busca de novo sempre que volta a ficar visível
+  (equivalente ao que o `onSnapshot` fazia no Artifact).
+- **Importante:** essa é uma base de dados **separada** da do Artifact —
+  progresso feito numa plataforma não aparece na outra. Ele decidiu focar no
+  GitHub Pages pra usar no celular e no computador com o mesmo progresso.
+- Chave publishable e URL do projeto ficam como constantes no topo do
+  `app_template.html` (`SUPA_URL`, `SUPA_KEY`, `SUPA_ROW`).
 
 ---
 
