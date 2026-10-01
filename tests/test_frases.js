@@ -120,19 +120,20 @@ const path = require('path').resolve(__dirname, '../dist/index.html');
   ok(roundtrip.bytes < 200000, 'tamanho do estado: ' + roundtrip.bytes + ' bytes');
 
   // ---------- proxima acao ----------
+  // Reduções saiu do fluxo obrigatório (pedido dele): depois do vocabulário,
+  // a próxima ação pula direto pra Blocos, sem passar por Reduções.
   const na = await p.evaluate(() => {
     S = freshState(); S.frasesDesde = dayKey();
     const d = today(); d.novas = 25; d.limpo = true;
     return nextAction().t;
   });
-  ok(na === 'red', 'depois do vocabulario a proxima acao e reducoes: ' + na);
+  ok(na === 'chk', 'depois do vocabulario a proxima acao pula reduções e vai pra blocos: ' + na);
 
   const na2 = await p.evaluate(() => {
-    const d = today(); d.red = 3;
-    for (let i = 0; i < 3; i++) { const x = fd('red', i); x.l = Date.now(); x.n = Date.now() + 9e8; x.s = 1; }
+    for (let i = 0; i < 5; i++) { const x = fd('chk', i); x.l = Date.now(); x.n = Date.now() + 9e8; x.s = 1; }
     return nextAction().t;
   });
-  ok(na2 === 'chk', 'depois das reducoes vem blocos: ' + na2);
+  ok(na2 !== 'red', 'reduções nunca aparece como próxima ação, mesmo pendente: ' + na2);
 
   // ---------- compatibilidade com estado antigo ----------
   const velho = await p.evaluate(() => {
