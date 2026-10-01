@@ -39,41 +39,12 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
   await p.waitForTimeout(100);
   const home = await p.evaluate(() => {
     const links = [...document.querySelectorAll('.treinos a.edt')];
-    return { n: links.length, hrefOk: links.every(a => a.href.startsWith('https://youglish.com/pronounce/')), temEscrita: !!document.querySelector('#bEsc') };
+    return { n: links.length, hrefOk: links.every(a => a.href.startsWith('https://youglish.com/pronounce/')), temGrammar: !!document.querySelector('[data-chk="gr"]'), temEscrita: !!document.querySelector('#bEsc') };
   });
   ok(home.n > 0 && home.hrefOk, `home mostra ${home.n} links pro YouGlish, todos apontando certo`);
-  ok(home.temEscrita, 'botão de Escrita aparece nos treinos de fora');
+  ok(!home.temGrammar && !home.temEscrita, 'Grammar e Escrita saíram dos treinos de fora (checklist principal)');
 
-  // ---------- escrita: traduzir e revelar (sem IA) ----------
-  await p.click('#bEsc');
-  await p.waitForTimeout(80);
-  const antes = await p.evaluate(() => !!today().wr);
-  ok(!antes, 'dia começa sem escrita marcada como feita');
-  const promptOk = await p.evaluate(() => /Escreva em inglês:/.test(document.querySelector('.modal .mini').textContent));
-  ok(promptOk, 'mostra a frase em português pra traduzir, sem chamar IA');
-
-  await p.fill('#escTxt', 'minha tentativa');
-  await p.click('#escGo');
-  await p.waitForTimeout(80);
-  const depois = await p.evaluate(() => ({
-    wr: !!today().wr,
-    revelou: !!document.querySelector('#escRes').textContent.trim()
-  }));
-  ok(depois.wr, '"ver resposta" marca o dia como feito');
-  ok(depois.revelou, 'revela a frase em inglês já pronta (banco de reduções/blocos)');
-  await p.click('#x');
-
-  // ---------- marcar como feito sem revelar também funciona ----------
-  await p.evaluate(() => { S = freshState(); go('home'); });
-  await p.waitForTimeout(80);
-  await p.click('#bEsc');
-  await p.waitForTimeout(50);
-  await p.click('#escOk');
-  await p.waitForTimeout(50);
-  const marcado = await p.evaluate(() => !!today().wr);
-  ok(marcado, '"marcar como feito" funciona sem revelar a resposta');
-
-  // ---------- persistência do campo wr ----------
+  // ---------- persistência do campo wr (o botão saiu da Home, mas o dado antigo continua lido certo) ----------
   const persist = await p.evaluate(doc => {
     S = normaliza(unpack(doc));
     today().wr = true;
@@ -154,7 +125,7 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
 
   // ---------- bancos prontos: leitura e antecipar sem gastar IA ----------
   const bancos = await p.evaluate(() => ({ txt: TXT_BANCO.length, ant: ANT_BANCO.length }));
-  ok(bancos.txt === 60, `banco de leitura tem 60 textos prontos (tem ${bancos.txt})`);
+  ok(bancos.txt === 150, `banco de leitura tem 150 textos prontos (tem ${bancos.txt})`);
   ok(bancos.ant === 150, `banco de antecipar tem 150 itens prontos (tem ${bancos.ant})`);
 
   const leituraBanco = await p.evaluate(() => new Promise(res => {
