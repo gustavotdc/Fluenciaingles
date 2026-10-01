@@ -4,11 +4,11 @@ const APP = 'file://' + require('path').resolve(__dirname, '../dist/index.html')
 const FAKE_TEXT = {
   titulo: 'The Late Order',
   linhas: [
-    { en: 'The phone rang at nine.', fon: 'dha FÔUN RÉNG ét NÁIN', pt: 'O telefone tocou às nove.' },
-    { en: 'A man wanted his food.', fon: 'a MÉN UÓN-rid riz FÚD', pt: 'Um homem queria a comida dele.' },
-    { en: 'It was two hours late.', fon: 'it uóz TÚ ÁU-erz LÊIT', pt: 'Estava duas horas atrasada.' },
-    { en: 'She said sorry many times.', fon: 'CHI SÉD SÁ-ri MÉ-ni TÁIMZ', pt: 'Ela pediu desculpa muitas vezes.' },
-    { en: 'In the end he laughed.', fon: 'in dhi ÉND ri LÉFT', pt: 'No fim ele riu.' }
+    { en: 'The phone rang at nine.', pt: 'O telefone tocou às nove.' },
+    { en: 'A man wanted his food.', pt: 'Um homem queria a comida dele.' },
+    { en: 'It was two hours late.', pt: 'Estava duas horas atrasada.' },
+    { en: 'She said sorry many times.', pt: 'Ela pediu desculpa muitas vezes.' },
+    { en: 'In the end he laughed.', pt: 'No fim ele riu.' }
   ]
 };
 
@@ -64,7 +64,7 @@ const FAKE_TEXT = {
 
   // ---------- gerar texto ----------
   // esvazia o banco pronto pra testar o caminho de geração ao vivo (o
-  // fallback, usado só depois que os 60 textos prontos acabarem)
+  // fallback, usado só depois que os 150 textos prontos acabarem)
   await p.evaluate(() => { TXT_BANCO.splice(0); S = freshState(); for (let i = 0; i < 40; i++) S.w[i] = { s: 8, n: null, l: Date.now(), e: 0, a: 3, m: true, r: false }; go('ler'); });
   await p.waitForTimeout(250);
   await p.click('#gerar');
@@ -73,26 +73,21 @@ const FAKE_TEXT = {
   ok(/PALAVRAS QUE ELE JÁ DOMINA/.test(pr.input) && pr.input.includes('be,'), 'o prompt leva o vocabulário dominado');
   ok(/CENA DE HOJE/.test(pr.input), 'o prompt leva uma cena sorteada');
   ok(pr.opts.cache === false, 'não usa resposta em cache: cada texto é novo');
-  ok(/MAI.SCULA/.test(pr.input) && /UÓ-rer/.test(pr.input), 'o prompt leva a notação fonética e exemplos de calibragem');
+  ok(!/fon/.test(pr.input), 'o prompt não pede mais fonética (removida a pedido dele)');
 
   const st = await p.evaluate(() => ({ n: S.txt.length, t: S.txt[0].t, l: S.txt[0].l.length, d: S.txt[0].d === dayKey() }));
   ok(st.n === 1 && st.t === 'The Late Order' && st.l === 5 && st.d, 'texto guardado no estado: ' + JSON.stringify(st));
 
-  // ---------- as três passadas ----------
+  // ---------- as duas passadas ----------
   await p.click('#lerHoje .lt-card');
   await p.waitForTimeout(250);
-  let tela = await p.evaluate(() => ({ passo: SESSION.passo, txt: $('.leitura').textContent, fon: document.querySelectorAll('.lt-fon').length, en: document.querySelectorAll('.lt-en').length }));
-  ok(tela.fon === 5 && tela.en === 0 && /dha FÔUN/.test(tela.txt), 'passada 1 mostra só a fonética');
-  ok(!/The phone rang/.test(tela.txt), 'passada 1 não vaza o inglês escrito');
-
-  await p.click('#nx'); await p.waitForTimeout(200);
-  tela = await p.evaluate(() => ({ txt: $('.leitura').textContent, fon: document.querySelectorAll('.lt-fon').length, en: document.querySelectorAll('.lt-en').length, pt: document.querySelectorAll('.lt-pt').length }));
-  ok(tela.en === 5 && tela.fon === 0 && tela.pt === 0 && /The phone rang/.test(tela.txt), 'passada 2 mostra só o inglês');
-  ok(!/telefone/.test(tela.txt), 'passada 2 não vaza a tradução');
+  let tela = await p.evaluate(() => ({ passo: SESSION.passo, txt: $('.leitura').textContent, en: document.querySelectorAll('.lt-en').length, pt: document.querySelectorAll('.lt-pt').length }));
+  ok(tela.en === 5 && tela.pt === 0 && /The phone rang/.test(tela.txt), 'passada 1 mostra só o inglês');
+  ok(!/telefone/.test(tela.txt), 'passada 1 não vaza a tradução');
 
   await p.click('#nx'); await p.waitForTimeout(200);
   tela = await p.evaluate(() => ({ en: document.querySelectorAll('.lt-en').length, pt: document.querySelectorAll('.lt-pt').length, txt: $('.leitura').textContent }));
-  ok(tela.en === 5 && tela.pt === 5 && /telefone/.test(tela.txt), 'passada 3 mostra inglês com tradução');
+  ok(tela.en === 5 && tela.pt === 5 && /telefone/.test(tela.txt), 'passada 2 mostra inglês com tradução');
 
   await p.click('#fim'); await p.waitForTimeout(300);
   const lido = await p.evaluate(() => ({ lido: S.txt[0].lido, dia: S.dias[dayKey()].txt, vib: window.__vib.length }));
@@ -116,12 +111,12 @@ const FAKE_TEXT = {
   // ---------- próxima ação e painel ----------
   const na = await p.evaluate(() => {
     S = freshState(); for (let i = 0; i < 40; i++) S.w[i] = { s: 8, n: null, l: 1, e: 0, a: 3, m: true, r: false };
-    const d = today(); d.novas = 25; d.limpo = true; d.red = 3; d.chk = 5;
+    const d = today(); d.novas = 25; d.limpo = true; d.red = 3; d.chk = 5; d.verb = 3;
     for (let i = 0; i < 3; i++) { const x = fd('red', i); x.l = 1; x.n = Date.now() + 9e8; x.s = 1; }
     for (let i = 0; i < 5; i++) { const x = fd('chk', i); x.l = 1; x.n = Date.now() + 9e8; x.s = 1; }
     return nextAction().t;
   });
-  ok(na === 'txt', 'depois dos blocos a próxima ação é a leitura: ' + na);
+  ok(na === 'txt', 'depois dos blocos e verbos a próxima ação é a leitura: ' + na);
   await p.evaluate(() => go('home'));
   await p.waitForTimeout(250);
   ok(/Leitura/.test(await p.textContent('#view')), 'painel mostra o bloco de Leitura');
