@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Fluência — Level 1</title>
+<title>Fluência</title>
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 
@@ -31,15 +31,15 @@
   --ink-2:#98A1B6;
   --ink-3:#5F6880;
 
-  --amber:#E9B44C;
-  --amber-2:#C9942F;
-  --amber-soft:#E9B44C1f;
+  --amber:#2EE6C4;
+  --amber-2:#20B79C;
+  --amber-soft:#2EE6C41f;
 
   --nova:#6E7891;
   --aprend:#5E8ACF;
   --rev:#8E7BD4;
   --solida:#4FB286;
-  --dom:#E9B44C;
+  --dom:#2EE6C4;
   --ref:#DD6B62;
 
   --r:16px; --r2:11px; --r3:8px;
@@ -57,8 +57,9 @@ body{
 }
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:none;background:none}
-::selection{background:#E9B44C33}
+::selection{background:#2EE6C433}
 .hide{display:none!important}
+mark{background:none;color:var(--solida);font-weight:650}
 :focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:4px}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
@@ -71,7 +72,7 @@ header.top{
 }
 .top-in{max-width:var(--mx);margin:0 auto;padding:0 22px;height:60px;display:flex;align-items:center;gap:20px}
 .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.14em;font-size:12.5px;text-transform:uppercase;white-space:nowrap;flex:none}
-.brand .dot{width:8px;height:8px;border-radius:2px;background:var(--amber);box-shadow:0 0 14px #E9B44Caa;flex:none}
+.brand .dot{width:8px;height:8px;border-radius:2px;background:var(--amber);box-shadow:0 0 14px #2EE6C4aa;flex:none}
 .brand .dim{font-family:var(--mono);font-weight:400;letter-spacing:.02em;text-transform:none;font-size:12px;color:var(--ink-3)}
 .sync{display:flex;align-items:center;gap:7px;font-size:11px;font-family:var(--mono);color:var(--ink-3);white-space:nowrap;flex:none}
 .sync i{width:6px;height:6px;border-radius:50%;background:var(--ink-3);flex:none;transition:background .3s}
@@ -86,10 +87,19 @@ nav.tabs button{
 }
 nav.tabs button:hover{color:var(--ink-2)}
 nav.tabs button.on{color:var(--ground);background:var(--ink)}
+.hud{position:relative;height:30px;overflow:hidden;background:var(--panel);border-bottom:1px solid var(--line)}
+.hud-fill{position:absolute;inset:0;width:0%;background:linear-gradient(90deg,transparent,var(--amber-soft) 60%,#2EE6C43a 100%);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.hud-fill::after{content:"";position:absolute;top:0;right:0;bottom:0;width:2px;background:var(--amber);box-shadow:0 0 10px 2px var(--amber),0 0 22px 5px #2EE6C477}
+.hud-in{position:relative;z-index:1;max-width:var(--mx);margin:0 auto;height:100%;padding:0 22px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.hud-tx{font-size:11.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-tx b{font-family:var(--mono);color:var(--ink);font-weight:600}
+.hud-pc{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--amber);white-space:nowrap;flex:none}
 main{flex:1;max-width:var(--mx);width:100%;margin:0 auto;padding-inline:22px;padding-block:30px 100px}
 @media(max-width:640px){
   .top-in{gap:12px;padding:0 16px;height:56px}
   .brand .dim{display:none}
+  .hud-in{padding:0 16px}
+  .hud-tx span{display:none}
   main{padding-inline:16px;padding-block:22px 84px}
 }
 @media(max-width:860px){.sync span{display:none}}
@@ -141,7 +151,7 @@ h2{font-size:15px;font-weight:650;letter-spacing:-.01em;margin-bottom:14px}
 .s-aprend{color:var(--aprend);border-color:#5E8ACF33;background:#5E8ACF1a}.s-aprend .dotc{background:var(--aprend)}
 .s-rev{color:var(--rev);border-color:#8E7BD433;background:#8E7BD41a}.s-rev .dotc{background:var(--rev)}
 .s-solida{color:var(--solida);border-color:#4FB28633;background:#4FB2861a}.s-solida .dotc{background:var(--solida)}
-.s-dom{color:var(--dom);border-color:#E9B44C33;background:#E9B44C1a}.s-dom .dotc{background:var(--dom)}
+.s-dom{color:var(--dom);border-color:#2EE6C433;background:#2EE6C41a}.s-dom .dotc{background:var(--dom)}
 .s-ref{color:var(--ref);border-color:#DD6B6233;background:#DD6B621a}.s-ref .dotc{background:var(--ref)}
 
 /* ---------------- painel ---------------- */
@@ -157,11 +167,11 @@ h2{font-size:15px;font-weight:650;letter-spacing:-.01em;margin-bottom:14px}
   border:1px solid #2C3348;border-radius:var(--r);padding:28px;
   display:flex;flex-direction:column;gap:20px;margin-bottom:14px;box-shadow:var(--sombra)
 }
-.next::after{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,#E9B44C55,transparent)}
+.next::after{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,#2EE6C455,transparent)}
 .next .what{font-size:27px;font-weight:700;letter-spacing:-.035em;line-height:1.15;text-wrap:balance}
 @media(max-width:560px){.next{padding:22px 20px}.next .what{font-size:22px}}
 
-.hoje{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:14px}
+.hoje{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-bottom:14px}
 /* 6 trilhas: 3 colunas no meio-termo, 2 no telefone. Nenhuma sobra sozinha. */
 @media(max-width:1000px){ .hoje{grid-template-columns:repeat(3,1fr)} }
 @media(max-width:700px){ .hoje{grid-template-columns:repeat(2,1fr)} }
@@ -468,9 +478,16 @@ textarea:focus{border-color:var(--amber)}
 <div id="app">
   <header class="top">
     <div class="top-in">
-      <div class="brand"><span class="dot"></span> FLUÊNCIA <span class="dim" style="font-weight:500">· Level 1</span></div>
+      <div class="brand"><span class="dot"></span> FLUÊNCIA</div>
       <div class="sync" id="sync" title="Sincronização"></div>
       <nav class="tabs" id="tabs"></nav>
+    </div>
+    <div class="hud">
+      <div class="hud-fill" id="hudFill"></div>
+      <div class="hud-in">
+        <span class="hud-tx"><span>Progresso geral · </span><b id="hudN">0</b> / <span id="hudTot">0</span> palavras</span>
+        <span class="hud-pc" id="hudPc">0%</span>
+      </div>
     </div>
   </header>
   <main id="view"></main>
@@ -488,10 +505,12 @@ const R = /*__RED__*/[];
 const C = /*__CHK__*/[];
 // famílias: id -> [[rótulo, forma], ...]
 const FAM = /*__FAM__*/{};
-// banco pronto de textos de leitura: {titulo, ctx, linhas:[[en,fon,pt],...]}
+// banco pronto de textos de leitura: {titulo, ctx, linhas:[[en,pt],...]}
 const TXT_BANCO = /*__TXTBANCO__*/[];
 // banco pronto de itens do antecipar: {ctx, en, alvo, pt}
 const ANT_BANCO = /*__ANTBANCO__*/[];
+// verbos prontos pro módulo Verbos: {id, word, modal, componentes:[[rótulo,domínio]], steps:[{label,form,hi,en,pt}]}
+const VERBOS = /*__VERBOS__*/[];
 
 /* ============================ CONSTANTES ============================ */
 const HOUR = 3600000, DAY = 86400000;
@@ -500,6 +519,7 @@ const GOAL_MIN = 10;       // mínimo para manter o streak
 const BATCH = 5;           // palavras por lote
 const GOAL_RED = 3;        // reduções novas por dia
 const GOAL_CHK = 5;        // blocos novos por dia
+const GOAL_VERB = 3;       // verbos praticados por dia
 const LEVEL_TOTAL = W.length;
 const RED_TOTAL = R.length;
 const CHK_TOTAL = C.length;
@@ -552,6 +572,9 @@ function freshState(){
     frasesDesde: null, // dia em que Frases entrou na meta diária
     rel:{seq:0, acertos:0, tempo:null, rodadas:[], recentes:[]}, // relâmpago: recordes e histórico
     ant:{feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0}, // antecipar: ilha separada
+    verb:{},           // id do verbo -> [domínio de cada componente, 0-100]
+    acum:{verb:0},     // regra de acúmulo: meta de verbos não batida vira pendência pro dia seguinte
+    ultimoDiaAtivo: null, // última chave 'YYYY-MM-DD' em que o dia foi tocado (pro cálculo do acúmulo)
     ultimo: null
   };
 }
@@ -736,8 +759,27 @@ function dayKey(d){
 function addDays(d,n){ const x = new Date(d); x.setDate(x.getDate()+n); return x; }
 function atHour(d,h){ const x = new Date(d); x.setHours(h,0,0,0); return x.getTime(); }
 function today(){ return dia(dayKey()); }
+/* diferença em dias de calendário entre duas chaves 'YYYY-MM-DD' (k2 - k1) */
+function diffDias(k1, k2){
+  return Math.round((new Date(k2+"T00:00:00") - new Date(k1+"T00:00:00")) / 86400000);
+}
 function dia(k){
-  if(!S.dias[k]) S.dias[k] = {novas:0, revs:0, dom:0, red:0, chk:0, li:false, sp:false, gr:false, limpo:false};
+  if(!S.dias[k]){
+    /* regra de acúmulo (só verbos, por enquanto): a meta de verbos não
+       reseta sozinha — o que faltou no último dia ativo (e em cada dia
+       vazio no meio, se ele ficou sem abrir o sistema) vira pendência
+       pro dia que está começando agora. */
+    if(S.acum && S.ultimoDiaAtivo && S.ultimoDiaAtivo !== k){
+      const anterior = S.dias[S.ultimoDiaAtivo];
+      const n = Math.max(1, diffDias(S.ultimoDiaAtivo, k));
+      if(anterior){
+        const feito = anterior.verb || 0;
+        S.acum.verb = (S.acum.verb||0) + GOAL_VERB - feito + Math.max(0, n-1) * GOAL_VERB;
+      }
+    }
+    S.dias[k] = {novas:0, revs:0, dom:0, red:0, chk:0, li:false, sp:false, gr:false, limpo:false};
+  }
+  S.ultimoDiaAtivo = k;
   const d = S.dias[k];
   if(d.red === undefined) d.red = 0;
   if(d.chk === undefined) d.chk = 0;
@@ -745,6 +787,7 @@ function dia(k){
   if(d.rel === undefined) d.rel = 0;
   if(d.ant === undefined) d.ant = 0;
   if(d.wr === undefined) d.wr = false;
+  if(d.verb === undefined) d.verb = 0;
   return d;
 }
 function wd(id){
@@ -793,10 +836,22 @@ function fDue(k){
   out.sort((a,b)=> st[a].n - st[b].n);
   return out;
 }
+const JANELA_CHK = 60;
 function fNovas(k, n){
-  const tot = DECK[k].dados().length, out = [];
-  for(let i=0;i<tot && out.length<n;i++) if(!fLearned(k,i)) out.push(i);
-  return out;
+  const tot = DECK[k].dados().length;
+  // reduções continuam sequenciais, de propósito; blocos (chk) ganham
+  // variedade: junta uma janela de candidatos e embaralha antes de tirar n
+  // (mesma ideia do nextNewIds pras palavras — pedido dele pra não repetir
+  // sempre a mesma sequência).
+  if(k !== "chk"){
+    const out = [];
+    for(let i=0;i<tot && out.length<n;i++) if(!fLearned(k,i)) out.push(i);
+    return out;
+  }
+  const pool = [];
+  for(let i=0;i<tot && pool.length<JANELA_CHK;i++) if(!fLearned(k,i)) pool.push(i);
+  const embaralhado = pool.slice().sort(() => Math.random() - .5);
+  return embaralhado.slice(0, n);
 }
 function fCounts(k){
   const tot = DECK[k].dados().length;
@@ -932,9 +987,10 @@ function totalRevs(){ let t=0; for(const k in S.dias) t += S.dias[k].revs; retur
 function dayMin(k){ const d = S.dias[k]; return !!d && d.novas >= GOAL_MIN && d.limpo; }
 function dayFull(k){
   const d = S.dias[k];
-  if(!(d && d.novas >= GOAL_NEW && d.limpo && d.li && d.sp && d.gr)) return false;
+  if(!(d && d.novas >= GOAL_NEW && d.limpo && d.li && d.sp)) return false;
   // Frases só entram na conta a partir do dia em que o módulo foi ligado
-  if(S.frasesDesde && k >= S.frasesDesde) return (d.red||0) >= GOAL_RED && (d.chk||0) >= GOAL_CHK;
+  // (Reduções ficou opcional — só Blocos é obrigatório pro dia fechar)
+  if(S.frasesDesde && k >= S.frasesDesde) return (d.chk||0) >= GOAL_CHK;
   return true;
 }
 /* Perder uma sequência longa é o que faz gente abandonar. Duas folgas por
@@ -1111,14 +1167,15 @@ function pack(){
   }
   for(const k in S.dias){
     const y = S.dias[k];
-    d[k] = [y.novas|0, y.revs|0, y.dom|0, y.li?1:0, y.sp?1:0, y.gr?1:0, y.limpo?1:0, y.red|0, y.chk|0, y.txt|0, y.rel|0, y.ant|0, y.wr?1:0];
+    d[k] = [y.novas|0, y.revs|0, y.dom|0, y.li?1:0, y.sp?1:0, y.gr?1:0, y.limpo?1:0, y.red|0, y.chk|0, y.txt|0, y.rel|0, y.ant|0, y.wr?1:0, y.verb|0];
   }
   return {f:4, cv:CONTEUDO, criado:S.criado||Date.now(), ultimo:S.ultimo||0,
           w, dias:d,
           pav:porId(S.pav, idW), img:porId(S.img, idW),
           r:porId(packF(S.r), idR), c:porId(packF(S.c), idC),
           fd:S.frasesDesde||null, txt:(S.txt||[]).slice(0,MAX_TXT_GUARDADOS),
-          rel:packRel(S.rel), ant:packAnt(S.ant)};
+          rel:packRel(S.rel), ant:packAnt(S.ant),
+          verb:S.verb||{}, acum:S.acum||{verb:0}, uda:S.ultimoDiaAtivo||null};
 }
 function unpack(p){
   if(!p) return null;
@@ -1131,7 +1188,10 @@ function unpack(p){
              r: unpackF(antigo ? p.r : porIndiceOuNumero(p.r, ixR)),
              c: unpackF(antigo ? p.c : porIndiceOuNumero(p.c, ixC)),
              frasesDesde:p.fd||null, txt:Array.isArray(p.txt)?p.txt:[],
-             rel:unpackRel(p.rel, antigo), ant:unpackAnt(p.ant)};
+             rel:unpackRel(p.rel, antigo), ant:unpackAnt(p.ant),
+             verb:(p.verb && typeof p.verb === "object") ? p.verb : {},
+             acum:(p.acum && typeof p.acum === "object") ? {verb:p.acum.verb|0} : {verb:0},
+             ultimoDiaAtivo:p.uda||null};
   for(const id in p.w){
     const a = p.w[id];
     let i = id;
@@ -1143,7 +1203,7 @@ function unpack(p){
   }
   for(const k in p.dias){
     const a = p.dias[k];
-    o.dias[k] = {novas:a[0]|0, revs:a[1]|0, dom:a[2]|0, li:!!a[3], sp:!!a[4], gr:!!a[5], limpo:!!a[6], red:a[7]|0, chk:a[8]|0, txt:a[9]|0, rel:a[10]|0, ant:a[11]|0, wr:!!a[12]};
+    o.dias[k] = {novas:a[0]|0, revs:a[1]|0, dom:a[2]|0, li:!!a[3], sp:!!a[4], gr:!!a[5], limpo:!!a[6], red:a[7]|0, chk:a[8]|0, txt:a[9]|0, rel:a[10]|0, ant:a[11]|0, wr:!!a[12], verb:a[13]|0};
   }
   return o;
 }
@@ -1213,6 +1273,10 @@ function normaliza(o){
   if(!Array.isArray(o.rel.recentes)) o.rel.recentes = [];
   if(!o.ant) o.ant = {feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0};
   if(!Array.isArray(o.ant.rodadas)) o.ant.rodadas = [];
+  if(!o.verb || typeof o.verb !== "object") o.verb = {};
+  if(!o.acum || typeof o.acum !== "object") o.acum = {verb:0};
+  if(o.acum.verb === undefined) o.acum.verb = 0;
+  if(o.ultimoDiaAtivo === undefined) o.ultimoDiaAtivo = Object.keys(o.dias||{}).sort().pop() || null;
   return o;
 }
 function adota(remoto, msg){
@@ -1380,11 +1444,22 @@ function cap(t){ return t.charAt(0).toUpperCase() + t.slice(1); }
 let TAB = "home";
 let SESSION = null;
 const TABS = [
-  ["home","Início"], ["bank","Palavras"], ["frases","Frases"], ["ler","Leitura"], ["ant","Antecipar"], ["cal","Calendário"], ["prog","Progresso"], ["cfg","Dados"]
+  ["home","Início"], ["bank","Palavras"], ["frases","Frases"], ["ler","Leitura"], ["verbos","Verbos"], ["ant","Antecipar"], ["cal","Calendário"], ["prog","Progresso"], ["cfg","Dados"]
 ];
 function go(t){ TAB = t; SESSION = null; render(); }
 
+function renderHud(){
+  const fill = $("#hudFill");
+  if(!fill) return;
+  const dom = counts().dom;
+  const pct = LEVEL_TOTAL ? Math.round(dom / LEVEL_TOTAL * 100) : 0;
+  fill.style.width = pct + "%";
+  $("#hudN").textContent = dom.toLocaleString("pt-BR");
+  $("#hudTot").textContent = LEVEL_TOTAL.toLocaleString("pt-BR");
+  $("#hudPc").textContent = pct + "%";
+}
 function render(){
+  renderHud();
   const nav = $("#tabs");
   nav.innerHTML = TABS.map(([k,l]) => `<button data-t="${k}" class="${TAB===k&&!SESSION?"on":""}">${l}</button>`).join("");
   nav.querySelectorAll("button").forEach(b => b.onclick = () => go(b.dataset.t));
@@ -1395,6 +1470,7 @@ function render(){
   if(TAB === "bank") return viewBank(v);
   if(TAB === "frases") return viewFrases(v);
   if(TAB === "ler") return viewLer(v);
+  if(TAB === "verbos") return viewVerbos(v);
   if(TAB === "ant") return viewAnt(v);
   if(TAB === "cal") return viewCal(v);
   if(TAB === "prog") return viewProg(v);
@@ -1409,14 +1485,6 @@ function nextAction(){
     const falta = GOAL_NEW - d.novas, n = Math.min(BATCH, falta);
     return {t:"new", txt:`Aprender ${n} ${plural(n,"palavra nova","palavras novas")}`, sub:`Lote de ${BATCH} · faltam ${falta} hoje`, run:()=>startLearn()};
   }
-  const redDue = fDue("red"), redNov = fFaltaHoje("red");
-  if(redDue.length || redNov){
-    const n = redDue.length || redNov;
-    return {t:"red",
-      txt: redDue.length ? `Revisar ${n} ${plural(n,"redução","reduções")}` : `Treinar ${n} ${plural(n,"redução nova","reduções novas")}`,
-      sub: "Fala conectada: gonna, lemme, gaddit. O ouvido vem antes da regra.",
-      run:()=>startFrases("red")};
-  }
   const chkDue = fDue("chk"), chkNov = fFaltaHoje("chk");
   if(chkDue.length || chkNov){
     const n = chkDue.length || chkNov;
@@ -1425,12 +1493,19 @@ function nextAction(){
       sub: "Frases prontas que saem inteiras na conversa.",
       run:()=>startFrases("chk")};
   }
+  const pendVerb = pendenteVerb();
+  if(pendVerb){
+    const sugestao = pickStudyVerb();
+    return {t:"verb", txt:`Praticar ${pendVerb} ${plural(pendVerb,"verbo","verbos")}`,
+      sub: sugestao ? `Sugestão de hoje: ${sugestao.word}.` : "Conjugação na prática.",
+      run:()=>startVerbStudy(sugestao && sugestao.id)};
+  }
   const faltaTxt = Math.max(0, GOAL_TXT - textosHoje().length);
   const naoLidos = textosHoje().filter(t => !t.lido).length;
   if(temLeitura() && (faltaTxt || naoLidos)){
     return {t:"txt",
       txt: naoLidos ? `Ler ${naoLidos} ${plural(naoLidos,"texto","textos")} do dia` : `Escrever ${faltaTxt} ${plural(faltaTxt,"texto","textos")} do dia`,
-      sub: "História nova com as palavras que você já domina. Som, inglês, tradução.",
+      sub: "História nova com as palavras que você já domina. Inglês, depois tradução.",
       run:()=>go("ler")};
   }
   if(!d.rel){
@@ -1442,7 +1517,6 @@ function nextAction(){
   }
   if(!d.li) return {t:"li", txt:"Listening — 20 minutos", sub:"Música ou série. Marque quando terminar.", run:()=>{ d.li = true; save(); toast("Listening concluído."); render(); }};
   if(!d.sp) return {t:"sp", txt:"Speaking — 20 minutos", sub:"Shadowing ou cantar. Marque quando terminar.", run:()=>{ d.sp = true; save(); toast("Speaking concluído."); render(); }};
-  if(!d.gr) return {t:"gr", txt:"Grammar — 20 minutos", sub:"To be e have. Marque quando terminar.", run:()=>{ d.gr = true; save(); toast("Grammar concluído."); render(); }};
   const pool = dominioPool();
   if(pool.sol.length + pool.dm.length > 0 && d.dom < 10)
     return {t:"dom", txt:"Treino de domínio", sub:`${pool.sol.length} ${plural(pool.sol.length,"palavra sólida","palavras sólidas")} esperando o teste final`, run:()=>startDominio()};
@@ -1478,6 +1552,8 @@ function viewHome(v){
   const naoLidos = textosHoje().filter(t => !t.lido).length;
   const marco = proximoMarco(c.dom);
   const pauta = pautaHoje(6);
+  const verbosEstudados = VERBOS.filter(vb => verbDomain(vb.id) > 0).length;
+  const leiturasFeitas = Object.values(S.dias).reduce((a,dd) => a + (dd.txt||0), 0);
 
   const aviso = (!fileHandle && !dbRef) ? `
     <div class="banner" style="margin-bottom:16px">
@@ -1520,6 +1596,7 @@ function viewHome(v){
       ${trilha("Revisões", d.revs, Math.max(1, d.revs + due), due ? due + " pendentes" : "em dia", na.t === "rev")}
       ${trilha("Reduções", d.red || 0, GOAL_RED, redDue ? redDue + " a revisar" : `de ${GOAL_RED} novas`, na.t === "red")}
       ${trilha("Blocos", d.chk || 0, GOAL_CHK, chkDue ? chkDue + " a revisar" : `de ${GOAL_CHK} novos`, na.t === "chk")}
+      ${trilha("Verbos", d.verb || 0, metaEfetivaVerb(), `de ${metaEfetivaVerb()} hoje`, na.t === "verb")}
       ${trilha("Leitura", d.txt || 0, GOAL_TXT, naoLidos ? naoLidos + " esperando" : `de ${GOAL_TXT} textos`, na.t === "txt")}
       ${trilha("Relâmpago", d.rel || 0, 1, relEstado().seq ? `recorde ${relEstado().seq} seguidas` : `${REL_SEG}s de velocidade`, na.t === "rel")}
     </div>
@@ -1532,13 +1609,12 @@ function viewHome(v){
         </div>
         <div class="n">${c.dom} <span class="dim" style="font-size:15px;font-weight:400">/ ${marco} dominadas</span></div>
         <div class="bar"><i style="width:${pct(c.dom, marco)}%;background:var(--dom)"></i></div>
-        <div class="mini">${c.dom} de ${LEVEL_TOTAL} no Level 1 inteiro</div>
+        <div class="mini">${c.dom} de ${LEVEL_TOTAL} no total</div>
       </div>
       <div class="treinos">
         <span class="lbl">Treinos de fora · 20 min cada</span>
-        ${[["li","Listening"],["sp","Speaking"],["gr","Grammar"]].map(([k,n]) =>
+        ${[["li","Listening"],["sp","Speaking"]].map(([k,n]) =>
           `<button class="chk ${d[k]?"on":""}" data-chk="${k}">${n}<i>${d[k]?"feito":"marcar"}</i></button>`).join("")}
-        <button class="chk ${d.wr?"on":""}" id="bEsc">Escrita<i>${d.wr?"feito":"frase curta"}</i></button>
         ${pauta.length ? `
         <div class="mini" style="margin-top:2px">Pauta pro Listening/Speaking — clique pra ouvir gente de verdade falando, no YouGlish:</div>
         <div class="row" style="flex-wrap:wrap;gap:6px">
@@ -1553,6 +1629,15 @@ function viewHome(v){
     </div>
 
     <div class="card tight" style="margin-top:14px">
+      <span class="lbl" style="display:block;margin-bottom:10px">No total, desde que começou</span>
+      <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:10px">
+        <div><div class="n" style="font-size:22px">${verbosEstudados}<span class="dim" style="font-size:13px;font-weight:400"> / ${VERBOS.length}</span></div><div class="mini">verbos estudados</div></div>
+        <div><div class="n" style="font-size:22px">${fCounts("chk").dom}<span class="dim" style="font-size:13px;font-weight:400"> / ${fCounts("chk").total}</span></div><div class="mini">blocos dominados</div></div>
+        <div><div class="n" style="font-size:22px">${leiturasFeitas}</div><div class="mini">${plural(leiturasFeitas,"leitura feita","leituras feitas")}</div></div>
+      </div>
+    </div>
+
+    <div class="card tight" style="margin-top:14px">
       <div class="spread" style="flex-wrap:wrap;gap:10px">
         <span class="lbl">Ir direto para</span>
         <div class="row" style="flex-wrap:wrap;gap:8px">
@@ -1560,6 +1645,7 @@ function viewHome(v){
           <button class="btn sm" id="aNew" ${c.nova?"":"disabled"}>Palavras novas</button>
           <button class="btn sm" id="aRed" ${(redDue||fFaltaHoje("red"))?"":"disabled"}>Reduções</button>
           <button class="btn sm" id="aChk" ${(chkDue||fFaltaHoje("chk"))?"":"disabled"}>Blocos</button>
+          <button class="btn sm" id="aVerb">Verbos</button>
           <button class="btn sm" id="aLer">Leitura</button>
           <button class="btn sm" id="aRel">Relâmpago</button>
           <button class="btn sm" id="aDom" ${(dominioPool().sol.length+dominioPool().dm.length)?"":"disabled"}>Treino de domínio</button>
@@ -1574,11 +1660,11 @@ function viewHome(v){
     const k = b.dataset.chk, dd = today();
     dd[k] = !dd[k]; vibrar(dd[k]); save(); render();
   });
-  if($("#bEsc")) $("#bEsc").onclick = () => abrirEscrita();
   if($("#aRev")) $("#aRev").onclick = () => startReview(dueList());
   if($("#aNew")) $("#aNew").onclick = () => startLearn();
   if($("#aRed")) $("#aRed").onclick = () => startFrases("red");
   if($("#aChk")) $("#aChk").onclick = () => startFrases("chk");
+  if($("#aVerb")) $("#aVerb").onclick = () => go("verbos");
   if($("#aLer")) $("#aLer").onclick = () => go("ler");
   if($("#aRel")) $("#aRel").onclick = () => startRelampago();
   if($("#aDom")) $("#aDom").onclick = () => startDominio();
@@ -1590,7 +1676,7 @@ function startLearn(){
   const falta = Math.max(0, GOAL_NEW - d.novas);
   const n = Math.min(BATCH, falta || BATCH);
   const ids = nextNewIds(n);
-  if(!ids.length){ toast("Não há mais palavras novas no Level 1."); return; }
+  if(!ids.length){ toast("Não há mais palavras novas."); return; }
   SESSION = new LearnSession(ids);
   render();
 }
@@ -2684,8 +2770,8 @@ function openFrase(k, i){
 /* ============================ LEITURA: TEXTOS DO DIA ============================ */
 /* Um texto com quase só palavras que você já domina é input compreensível
    sob medida — a única coisa que nenhum app consegue fazer, porque nenhum
-   sabe seu vocabulário com esta precisão. Cada texto tem três passadas:
-   som, inglês escrito, tradução. */
+   sabe seu vocabulário com esta precisão. Cada texto tem duas passadas:
+   inglês escrito, depois tradução. */
 const GOAL_TXT = 2;
 const MAX_TXT_GUARDADOS = 12;
 let sampleRef = null;
@@ -2734,16 +2820,6 @@ const CENAS = [
   "alguém tenta parar de olhar o celular por um dia"
 ];
 
-const LEGENDA_FON = [
-  "A sílaba forte vai em MAIÚSCULA e as fracas em minúscula, com hífen separando as sílabas.",
-  "Palavra terminada em consoante termina em consoante, sem vogal extra: HEAD = RÉD.",
-  "H inicial soa como R brasileiro: HAND = RÉND.",
-  "TH sem voz escreve TH; com voz escreve DH.",
-  "DJ é o dj de Djalma; TCH é o tch de tchau; CH é o ch de chá.",
-  "Vogais: É aberto (bed), Â de cama (cup), Á (hot), ÔU (go), ÊI (day), ÁI (my), ÁU (now), Í longo (see), Ú longo (too).",
-  "T entre vogais vira um R suave no inglês americano: WATER = UÓ-rer."
-].join(" ");
-
 async function initSample(){
   try{ sampleRef = (window.claude && window.claude.use) ? await window.claude.use("sample") : null; }
   catch(e){ sampleRef = null; }
@@ -2770,7 +2846,6 @@ function vocabDisponivel(limite){
 
 function montarPrompt(cena){
   const v = vocabDisponivel(340);
-  const amostraFon = Object.keys(v.fon).map(k => k + " = " + v.fon[k]).join(" | ");
   return [
     "Você escreve textos curtos em inglês para um brasileiro estudando vocabulário.",
     "",
@@ -2788,14 +2863,11 @@ function montarPrompt(cena){
     "- Frases curtas e faladas, inglês americano do dia a dia. Nada de vocabulário literário.",
     "- Quebre em 8 a 14 linhas, cada linha uma frase completa.",
     "",
-    "PARA CADA LINHA você entrega três versões:",
+    "PARA CADA LINHA você entrega duas versões:",
     '- "en": a frase em inglês.',
-    '- "fon": como a frase SOA, escrita para um brasileiro ler em voz alta. ' + LEGENDA_FON,
     '- "pt": a tradução natural em português do Brasil.',
     "",
-    "Calibre a notação fonética por estes exemplos já usados com ele: " + amostraFon,
-    "",
-    'Responda SÓ com JSON: {"titulo":"...","linhas":[{"en":"...","fon":"...","pt":"..."}]}',
+    'Responda SÓ com JSON: {"titulo":"...","linhas":[{"en":"...","pt":"..."}]}',
     'O título tem no máximo 4 palavras, em inglês.'
   ].join("\n");
 }
@@ -2828,8 +2900,8 @@ async function gerarTexto(aoTerminar, aoErro){
       cache: false, modelTier: "default", signal: gerando.signal
     });
     const linhas = (j && Array.isArray(j.linhas) ? j.linhas : [])
-      .map(l => [String(l.en || "").trim(), String(l.fon || "").trim(), String(l.pt || "").trim()])
-      .filter(l => l[0] && l[2]);
+      .map(l => [String(l.en || "").trim(), String(l.pt || "").trim()])
+      .filter(l => l[0] && l[1]);
     if(linhas.length < 3) throw {code:"invalid_json"};
     if(!S.txt) S.txt = [];
     S.txt.unshift({d: dayKey(), ctx: cena, t: String((j && j.titulo) || "Sem título").slice(0, 60), l: linhas, lido: 0});
@@ -2903,7 +2975,7 @@ function abrirEscrita(){
   box.querySelector("#escOk").onclick = () => { const d = today(); d.wr = true; save(); box.remove(); render(); };
 }
 
-/* ---------------- sessão de leitura: três passadas ---------------- */
+/* ---------------- sessão de leitura: duas passadas ---------------- */
 function abrirTexto(idx){
   const t = (S.txt || [])[idx];
   if(!t) return;
@@ -2917,22 +2989,20 @@ class LeituraSession{
     const t = this.txt;
     if(!t) return go("ler");
     const passos = [
-      {n:"01 — O som", dica:"Leia em voz alta. Não é inglês escrito: é como a frase soa."},
-      {n:"02 — O inglês", dica:"Agora confira o que você estava lendo."},
-      {n:"03 — O significado", dica:"Por último, o que a história dizia."}
+      {n:"01 — O inglês", dica:"Leia em voz alta, do seu jeito. Depois confira o significado."},
+      {n:"02 — O significado", dica:"Agora veja o que a história dizia."}
     ];
     const p = passos[this.passo];
     const corpo = t.l.map(l => {
-      if(this.passo === 0) return `<div class="lt-fon">${esc(l[1])}</div>`;
-      if(this.passo === 1) return `<div class="lt-en">${esc(l[0])}</div>`;
-      return `<div class="lt-par"><div class="lt-en">${esc(l[0])}</div><div class="lt-pt">${esc(l[2])}</div></div>`;
+      if(this.passo === 0) return `<div class="lt-en">${esc(l[0])}</div>`;
+      return `<div class="lt-par"><div class="lt-en">${esc(l[0])}</div><div class="lt-pt">${esc(l[1])}</div></div>`;
     }).join("");
     v.innerHTML = `
       <div class="sess" style="max-width:720px">
         <div class="sbar">
           <button class="btn sm ghost" id="sair">Sair</button>
-          <div class="bar"><i style="width:${(this.passo+1)/3*100}%;background:var(--rev)"></i></div>
-          <div class="mini">${this.passo+1} / 3</div>
+          <div class="bar"><i style="width:${(this.passo+1)/2*100}%;background:var(--rev)"></i></div>
+          <div class="mini">${this.passo+1} / 2</div>
         </div>
         <div class="card" style="padding:26px 24px">
           <div class="step" style="color:var(--rev)">${p.n}</div>
@@ -2945,8 +3015,8 @@ class LeituraSession{
       </div>`;
     $("#sair").onclick = () => go("ler");
     const a = $("#acts");
-    if(this.passo < 2){
-      a.innerHTML = `<button class="btn pri lg" id="nx">${this.passo === 0 ? "Ver em inglês" : "Ver a tradução"}</button>`;
+    if(this.passo < 1){
+      a.innerHTML = `<button class="btn pri lg" id="nx">Ver a tradução</button>`;
       $("#nx").onclick = () => { this.passo++; this.render($("#view")); };
     } else {
       a.innerHTML = `<button class="btn ok" id="fim">Terminei</button><button class="btn ghost" id="volta">Ler de novo</button>`;
@@ -2959,7 +3029,7 @@ class LeituraSession{
     }
   }
   key(e){
-    if(e.key === " "){ e.preventDefault(); if(this.passo < 2){ this.passo++; this.render($("#view")); } }
+    if(e.key === " "){ e.preventDefault(); if(this.passo < 1){ this.passo++; this.render($("#view")); } }
   }
 }
 
@@ -2976,13 +3046,13 @@ function viewLer(v){
         </div>
         ${t.lido ? `<span class="pill s-solida"><span class="dotc"></span>lido</span>` : `<span class="pill s-nova"><span class="dotc"></span>novo</span>`}
       </div>
-      <div class="mini" style="margin-top:10px">${t.l.length} frases · três passadas</div>
+      <div class="mini" style="margin-top:10px">${t.l.length} frases · duas passadas</div>
     </div>`;
   v.innerHTML = `
     <div class="spread" style="margin-bottom:16px;flex-wrap:wrap">
       <div>
         <h1>Leitura do dia</h1>
-        <div class="muted" style="margin-top:3px">Histórias escritas com as palavras que você já domina. Som primeiro, inglês depois, tradução no fim.</div>
+        <div class="muted" style="margin-top:3px">Histórias escritas com as palavras que você já domina. Inglês primeiro, tradução depois.</div>
       </div>
       <div class="mini">${(d.txt || 0)} de ${GOAL_TXT} hoje</div>
     </div>
@@ -3017,6 +3087,137 @@ function viewLer(v){
   };
   pintaAcao();
   v.querySelectorAll("[data-ler]").forEach(c => c.onclick = () => abrirTexto(+c.dataset.ler));
+}
+
+/* ============================ MÓDULO: VERBOS ============================ */
+/* 80 verbos reais. Cada um tem "componentes" (presente, negativa, perguntas,
+   passado, particípio, futuro — só 3 pros modais) que sobem de domínio
+   conforme ele pratica. A sugestão do dia sempre pega o verbo com menor
+   domínio médio, pra passar pelos 80 antes de aprofundar demais um só. */
+function verbProgresso(id){
+  const verbo = VERBOS.find(x => x.id === id);
+  if(!verbo) return [];
+  if(!S.verb[id] || S.verb[id].length !== verbo.componentes.length) S.verb[id] = verbo.componentes.map(() => 0);
+  return S.verb[id];
+}
+function verbDomain(id){
+  const p = verbProgresso(id);
+  return p.length ? Math.round(p.reduce((a,b) => a+b, 0) / p.length) : 0;
+}
+function verbStatusOf(dom){ return dom >= 90 ? "dom" : dom >= 40 ? "rev" : "nova"; }
+function verbStatusLabel(dom){ return dom >= 90 ? "dominado" : dom >= 40 ? "em progresso" : "iniciando"; }
+function pickStudyVerb(){
+  return VERBOS.slice().sort((a,b) => verbDomain(a.id) - verbDomain(b.id))[0] || null;
+}
+/* regra de acúmulo: a meta de verbos não reseta sozinha (ver dia() em
+   PERSISTÊNCIA) — o que faltou vira pendência, o que passou vira crédito. */
+function metaEfetivaVerb(){ return GOAL_VERB + Math.max(0, S.acum.verb||0); }
+function pendenteVerb(){ return Math.max(0, metaEfetivaVerb() - (today().verb||0)); }
+
+function highlight(frase, termos){
+  let out = esc(frase);
+  (termos||[]).forEach(t => {
+    const re = new RegExp("(" + String(t).replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + ")", "i");
+    out = out.replace(re, "<mark>$1</mark>");
+  });
+  return out;
+}
+function startVerbStudy(id){
+  const alvo = VERBOS.find(x => x.id === id) || pickStudyVerb();
+  if(!alvo) return;
+  SESSION = new VerbSession(alvo.id);
+  render();
+}
+class VerbSession{
+  constructor(id){ this.id = id; this.step = 0; this.contado = false; }
+  get verbo(){ return VERBOS.find(v => v.id === this.id); }
+  render(v){
+    const verbo = this.verbo;
+    if(!verbo) return go("verbos");
+    const total = verbo.steps.length;
+    if(this.step >= total) return this.renderEnd(v);
+    const s = verbo.steps[this.step];
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${pct(this.step,total)}%;background:var(--solida)"></i></div>
+          <div class="mini">${this.step+1} / ${total}</div>
+        </div>
+        <div class="stage">
+          <div class="step" style="color:var(--solida)">${esc(verbo.word)} · ${esc(s.label)}</div>
+          <div class="word-en" style="font-size:26px;text-transform:none">${highlight(s.en, s.hi)}</div>
+          <div class="word-pt" style="font-size:18px;margin-top:8px">${esc(s.pt)}</div>
+          <div class="acts" style="justify-content:flex-start;margin-top:18px" id="acts"></div>
+        </div>
+      </div>`;
+    $("#sair").onclick = () => go("verbos");
+    $("#acts").innerHTML = `<button class="btn pri lg" id="nx">Continuar</button>`;
+    $("#nx").onclick = () => { this.step++; this.render($("#view")); };
+  }
+  renderEnd(v){
+    const verbo = this.verbo;
+    const p = verbProgresso(this.id);
+    verbo.componentes.forEach((c,i) => { p[i] = Math.min(100, (p[i]||0) + 14); });
+    if(!this.contado){ const d = today(); d.verb = (d.verb||0) + 1; this.contado = true; save(); flushPush(); vibrar(true); }
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage">
+          <div class="celebrate">
+            <div class="ic">✓</div>
+            <div style="font-size:22px;font-weight:650;letter-spacing:-.02em">${esc(verbo.word)} praticado</div>
+            <div class="muted" style="margin-top:6px">Domínio agora: ${verbDomain(this.id)}%</div>
+          </div>
+          <div class="acts">
+            <button class="btn pri" id="outro">Praticar outro verbo</button>
+            <button class="btn ghost" id="home">Voltar</button>
+          </div>
+        </div>
+      </div>`;
+    $("#outro").onclick = () => { const p2 = pickStudyVerb(); if(p2) startVerbStudy(p2.id); };
+    $("#home").onclick = () => go("verbos");
+  }
+  key(e){
+    if(e.key === " "){
+      e.preventDefault();
+      const verbo = this.verbo;
+      if(verbo && this.step < verbo.steps.length){ this.step++; this.render($("#view")); }
+    }
+  }
+}
+function viewVerbos(v){
+  const d = today();
+  const pend = pendenteVerb(), meta = metaEfetivaVerb();
+  const sugestao = pickStudyVerb();
+  const lista = VERBOS.map(verbo => ({verbo, dom: verbDomain(verbo.id)})).sort((a,b) => a.dom - b.dom);
+  v.innerHTML = `
+    <div style="margin-bottom:16px">
+      <h1>Verbos</h1>
+      <div class="muted" style="margin-top:3px">Os verbos mais usados do inglês, na prática: presente, negativa, pergunta, passado, particípio e futuro.</div>
+    </div>
+    <div class="card" style="margin-bottom:18px">
+      <div class="spread" style="margin-bottom:10px">
+        <h2 style="margin:0">Hoje</h2>
+        <span class="mini">${d.verb||0} / ${meta}</span>
+      </div>
+      <div class="bar" style="margin-bottom:12px"><i style="width:${pct(d.verb||0,meta)}%;background:var(--solida)"></i></div>
+      <p class="mini" style="margin-bottom:14px">${pend
+        ? `Faltam ${pend} ${plural(pend,"verbo","verbos")} hoje${(S.acum.verb||0) > GOAL_VERB ? " (inclui pendência de dias anteriores)" : ""}.`
+        : "Meta de hoje cumprida."}</p>
+      ${sugestao ? `<button class="btn pri lg" id="bVerb">Praticar: ${esc(sugestao.word)}</button>` : ""}
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">
+      ${lista.map(({verbo,dom}) => `
+        <div class="card tight" data-v="${verbo.id}" style="cursor:pointer">
+          <div class="spread" style="margin-bottom:6px">
+            <b style="font-size:15px">${esc(verbo.word)}</b>
+            <span class="pill s-${verbStatusOf(dom)}"><span class="dotc"></span>${verbStatusLabel(dom)}</span>
+          </div>
+          <div class="bar" style="height:6px"><i style="width:${dom}%;background:var(--solida)"></i></div>
+        </div>`).join("")}
+    </div>`;
+  if($("#bVerb")) $("#bVerb").onclick = () => startVerbStudy(sugestao.id);
+  v.querySelectorAll("[data-v]").forEach(b => b.onclick = () => startVerbStudy(b.dataset.v));
 }
 
 /* ============================ ANTECIPAR ============================ */
@@ -3624,7 +3825,7 @@ function viewProg(v){
   for(const id in S.w){ if(S.w[id].l) porEtapa[S.w[id].s]++; }
   v.innerHTML = `
     <h1 style="margin-bottom:4px">Minha jornada</h1>
-    <div class="muted" style="margin-bottom:18px">Level 1 · ${LEVEL_TOTAL} palavras de alta frequência</div>
+    <div class="muted" style="margin-bottom:18px">${LEVEL_TOTAL} palavras de alta frequência</div>
 
     <div class="card" style="margin-bottom:14px">
       <div class="spread" style="margin-bottom:12px">
@@ -3737,7 +3938,7 @@ function viewCfg(v){
         <b>Leitura do dia</b>
         <div class="mini" style="margin-top:2px">
           ${temLeitura()
-            ? "O sistema escreve histórias novas usando as palavras que você já domina, mais algumas que está estudando. Cada texto tem três passadas: o som, o inglês escrito e a tradução. Os " + MAX_TXT_GUARDADOS + " últimos ficam guardados."
+            ? "O sistema escreve histórias novas usando as palavras que você já domina, mais algumas que está estudando. Cada texto tem duas passadas: o inglês escrito e a tradução. Os " + MAX_TXT_GUARDADOS + " últimos ficam guardados."
             : "Nesta cópia não dá para escrever textos. Use o link do sistema."}
         </div>
       </div>
