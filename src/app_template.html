@@ -740,6 +740,32 @@ function linhaChute(dig, esperado){
   return `<div class="chuteres ${v ? "ok-tx" : "no-tx"}">${v ? "✓" : "✗"} você escreveu: <b>${esc(dig.trim())}</b></div>`;
 }
 
+/* ============================ ESCOLHA (revisão 5 e 6: en → pt) ============================ */
+/* Reaproveita o distrator do Relâmpago (mesma classe gramatical, frequência
+   próxima — ver relDistrator) para montar 4 opções em português. A opção
+   certa é identificada pelo id (data-id), não pelo texto: 458 das 3000
+   palavras têm tradução com "/" (ex. "ser/estar"), e o comparador de chute
+   (avaliaChute) separa essas alternativas — comparar o texto inteiro da
+   opção contra isso marcaria a resposta certa como errada. */
+function opcoesEscolha(id){
+  const usados = new Set([id]), dists = [];
+  for(let i = 0; i < 3; i++){
+    const d = relDistrator(id, usados);
+    if(d == null) break;
+    usados.add(d); dists.push(d);
+  }
+  return [id, ...dists].map(i => ({id:i, txt:cap(W[i][0])})).sort(() => Math.random() - .5);
+}
+function campoEscolha(id){
+  return `<div class="rel-ops">${opcoesEscolha(id).map(o =>
+    `<button class="rel-op mc-op" data-id="${o.id}" data-txt="${esc(o.txt)}">${esc(o.txt)}</button>`).join("")}</div>`;
+}
+/* Linha "você escolheu" paralela à linhaChute(), mas com o acerto decidido
+   pelo id clicado (ver opcoesEscolha), não por avaliaChute(). */
+function linhaEscolha(txt, ok){
+  return `<div class="chuteres ${ok ? "ok-tx" : "no-tx"}">${ok ? "✓" : "✗"} você escolheu: <b>${esc(txt)}</b></div>`;
+}
+
 /* PAV em uso: o editado à mão, se existir; senão o original */
 function pavOf(id){
   return (S.pav && S.pav[id]) ? S.pav[id] : W[id][3];
@@ -941,7 +967,11 @@ function soonList(){
 function modeFor(target){
   if(target <= 3) return {mostra:"pt+pav", pede:"en"};
   if(target === 4) return {mostra:"en+pav", pede:"pt"};
-  if(target <= 6) return {mostra:"pav", pede:"en"};
+  /* Revisões 5 e 6 (pedido dele, 13/10): tirado o "só PAV → escreva em
+     inglês" (ele acha o PAV horrível de ver de novo nessa etapa). Agora é
+     reconhecimento: vê só a palavra em inglês, escolhe a tradução certa
+     entre opções — ver campoEscolha()/opcoesEscolha(). */
+  if(target <= 6) return {mostra:"en", pede:"pt_mc"};
   return {mostra:"pt", pede:"en"};
 }
 
@@ -987,11 +1017,10 @@ function totalRevs(){ let t=0; for(const k in S.dias) t += S.dias[k].revs; retur
 function dayMin(k){ const d = S.dias[k]; return !!d && d.novas >= GOAL_MIN && d.limpo; }
 function dayFull(k){
   const d = S.dias[k];
-  if(!(d && d.novas >= GOAL_NEW && d.limpo && d.li && d.sp)) return false;
-  // Frases só entram na conta a partir do dia em que o módulo foi ligado
-  // (Reduções ficou opcional — só Blocos é obrigatório pro dia fechar)
-  if(S.frasesDesde && k >= S.frasesDesde) return (d.chk||0) >= GOAL_CHK;
-  return true;
+  // Reduções e Blocos saíram das tarefas diárias (pedido dele, 13/10 — não
+  // usa nenhum dos dois). Frases/Blocos não fecham mais o dia nem aparecem
+  // aqui; o módulo continua existindo na aba Frases, só não é obrigatório.
+  return !!(d && d.novas >= GOAL_NEW && d.limpo && d.li && d.sp);
 }
 /* Perder uma sequência longa é o que faz gente abandonar. Duas folgas por
    mês seguram o tranco sem tirar a pressão. */
@@ -1485,14 +1514,9 @@ function nextAction(){
     const falta = GOAL_NEW - d.novas, n = Math.min(BATCH, falta);
     return {t:"new", txt:`Aprender ${n} ${plural(n,"palavra nova","palavras novas")}`, sub:`Lote de ${BATCH} · faltam ${falta} hoje`, run:()=>startLearn()};
   }
-  const chkDue = fDue("chk"), chkNov = fFaltaHoje("chk");
-  if(chkDue.length || chkNov){
-    const n = chkDue.length || chkNov;
-    return {t:"chk",
-      txt: chkDue.length ? `Revisar ${n} ${plural(n,"bloco","blocos")}` : `Aprender ${n} ${plural(n,"bloco novo","blocos novos")}`,
-      sub: "Frases prontas que saem inteiras na conversa.",
-      run:()=>startFrases("chk")};
-  }
+  // Reduções e Blocos saíram da próxima ação (pedido dele, 13/10) — não
+  // entram mais como tarefa diária. A aba Frases continua existindo pra
+  // quem quiser usar por conta própria.
   const pendVerb = pendenteVerb();
   if(pendVerb){
     const sugestao = pickStudyVerb();
@@ -1548,7 +1572,6 @@ function trilha(nome, feito, meta, sub, ativa){
 function viewHome(v){
   markClean();
   const d = today(), c = counts(), st = streak(), na = nextAction(), due = dueList().length;
-  const redDue = fDue("red").length, chkDue = fDue("chk").length;
   const naoLidos = textosHoje().filter(t => !t.lido).length;
   const marco = proximoMarco(c.dom);
   const pauta = pautaHoje(6);
@@ -1594,8 +1617,6 @@ function viewHome(v){
     <div class="hoje">
       ${trilha("Palavras", d.novas, GOAL_NEW, `de ${GOAL_NEW} novas`, na.t === "new")}
       ${trilha("Revisões", d.revs, Math.max(1, d.revs + due), due ? due + " pendentes" : "em dia", na.t === "rev")}
-      ${trilha("Reduções", d.red || 0, GOAL_RED, redDue ? redDue + " a revisar" : `de ${GOAL_RED} novas`, na.t === "red")}
-      ${trilha("Blocos", d.chk || 0, GOAL_CHK, chkDue ? chkDue + " a revisar" : `de ${GOAL_CHK} novos`, na.t === "chk")}
       ${trilha("Verbos", d.verb || 0, metaEfetivaVerb(), `de ${metaEfetivaVerb()} hoje`, na.t === "verb")}
       ${trilha("Leitura", d.txt || 0, GOAL_TXT, naoLidos ? naoLidos + " esperando" : `de ${GOAL_TXT} textos`, na.t === "txt")}
       ${trilha("Relâmpago", d.rel || 0, 1, relEstado().seq ? `recorde ${relEstado().seq} seguidas` : `${REL_SEG}s de velocidade`, na.t === "rel")}
@@ -1643,8 +1664,6 @@ function viewHome(v){
         <div class="row" style="flex-wrap:wrap;gap:8px">
           <button class="btn sm" id="aRev" ${due?"":"disabled"}>Revisar ${due||""}</button>
           <button class="btn sm" id="aNew" ${c.nova?"":"disabled"}>Palavras novas</button>
-          <button class="btn sm" id="aRed" ${(redDue||fFaltaHoje("red"))?"":"disabled"}>Reduções</button>
-          <button class="btn sm" id="aChk" ${(chkDue||fFaltaHoje("chk"))?"":"disabled"}>Blocos</button>
           <button class="btn sm" id="aVerb">Verbos</button>
           <button class="btn sm" id="aLer">Leitura</button>
           <button class="btn sm" id="aRel">Relâmpago</button>
@@ -1662,8 +1681,6 @@ function viewHome(v){
   });
   if($("#aRev")) $("#aRev").onclick = () => startReview(dueList());
   if($("#aNew")) $("#aNew").onclick = () => startLearn();
-  if($("#aRed")) $("#aRed").onclick = () => startFrases("red");
-  if($("#aChk")) $("#aChk").onclick = () => startFrases("chk");
   if($("#aVerb")) $("#aVerb").onclick = () => go("verbos");
   if($("#aLer")) $("#aLer").onclick = () => go("ler");
   if($("#aRel")) $("#aRel").onclick = () => startRelampago();
@@ -1789,6 +1806,7 @@ class LearnSession{
   }
   renderExtra(v){
     const id = this.extra, w = W[id], st = S.w[id], target = st.s + 1, m = modeFor(target);
+    const soMC = m.pede === "pt_mc";
     v.innerHTML = `
       <div class="sess">
         <div class="sbar">
@@ -1799,23 +1817,27 @@ class LearnSession{
         <div class="stage">
           <div class="step">Revisão ${target} de 8 · ${SCHED[target-1].nome}</div>
           ${cardFront(w, m, this.exRevealed, id)}
-          ${!this.exRevealed ? campoChute(m.pede === "en" ? "escreva em inglês" : "escreva em português") : ""}
+          ${!this.exRevealed ? (soMC ? campoEscolha(id) : campoChute(m.pede === "en" ? "escreva em inglês" : "escreva em português")) : ""}
           ${this.exRevealed ? cardBack(w, m, id) : ""}
-          ${this.exRevealed ? linhaChute(this.exChute || "", m.pede === "en" ? w[2] : w[0]) : ""}
+          ${this.exRevealed ? (soMC ? linhaEscolha(this.exChute || "", this.exMcOk) : linhaChute(this.exChute || "", m.pede === "en" ? w[2] : w[0])) : ""}
           <div class="acts" id="acts"></div>
         </div>
       </div>`;
     const a = $("#acts");
     if(!this.exRevealed){
-      a.innerHTML = `<button class="btn pri lg" id="rev">Ver resposta</button>`;
+      a.innerHTML = soMC ? "" : `<button class="btn pri lg" id="rev">Ver resposta</button>`;
       const revelar = () => { this.exChute = valorChute(); this.exRevealed = true; this.render($("#view")); };
-      $("#rev").onclick = revelar;
+      if($("#rev")) $("#rev").onclick = revelar;
       ligaChute(revelar);
+      if(soMC) v.querySelectorAll(".mc-op").forEach(b => b.onclick = () => {
+        this.exChute = b.dataset.txt; this.exMcOk = Number(b.dataset.id) === id; this.exRevealed = true; this.render($("#view"));
+      });
     } else {
       a.innerHTML = `<button class="btn bad" id="err">Errei</button><button class="btn ok" id="ok">Acertei</button>`;
       $("#err").onclick = () => { applyReview(id,false); markClean(); this.fase="end"; this.render($("#view")); };
       $("#ok").onclick  = () => { applyReview(id,true);  markClean(); this.fase="end"; this.render($("#view")); };
-      sugereBotao(this.exChute || "", m.pede === "en" ? w[2] : w[0]);
+      if(soMC) $(this.exMcOk ? "#ok" : "#err").classList.add("sug");
+      else sugereBotao(this.exChute || "", m.pede === "en" ? w[2] : w[0]);
     }
   }
   renderEnd(v){
@@ -1861,7 +1883,7 @@ function cardFront(w, m, revealed, id){
   const pav = esc(pavOf(id)), img = blocoImagem(id);
   if(m.mostra === "pt+pav")  return `<div class="word-pt">${esc(cap(w[0]))}</div>${img}<div class="pav">${pav}</div>`;
   if(m.mostra === "en+pav")  return `<div class="word-en">${esc(w[2])}</div>${img}<div class="pav">${pav}</div>`;
-  if(m.mostra === "pav")     return `${img}<div class="pav" style="font-size:21px">${pav}</div>`;
+  if(m.mostra === "en")      return `<div class="word-en">${esc(w[2])}</div>`;
   // revisões 7 e 8: só o português. A imagem entra borrada, como isca —
   // a lacuna de curiosidade fecha quando você revela.
   return `<div class="word-pt">${esc(cap(w[0]))}</div>
@@ -1903,7 +1925,7 @@ class ReviewSession{
   constructor(q){
     this.q = q.map(id => ({id, redo:false}));
     this.total = q.length; this.feitas = 0; this.acertos = 0;
-    this.revealed = false; this.hinted = false; this.chute = "";
+    this.revealed = false; this.hinted = false; this.chute = ""; this.mcOk = false;
     this.seq = 0; this.melhor = 0; this.ultimoErrado = false;
     this.fecho = null; this.fechoFeito = false; this.fechoVisto = false;
   }
@@ -1911,7 +1933,8 @@ class ReviewSession{
     if(!this.q.length) return this.renderFim(v);
     const {id, redo} = this.q[0];
     const w = W[id], st = S.w[id], target = Math.min(8, st.s + 1), m = modeFor(target);
-    const hintable = target >= 5;
+    const hintable = target >= 7;
+    const soMC = m.pede === "pt_mc";
     v.innerHTML = `
       <div class="sess">
         <div class="sbar">
@@ -1925,29 +1948,33 @@ class ReviewSession{
             ${redo ? `<span class="redo">reteste</span>` : ""}
           </div>
           ${cardFront(w, m, this.revealed, id)}
-          ${this.hinted && !this.revealed ? `<div class="hintbox">${target>=7 ? esc(pavOf(id)) : esc(cap(w[0]))}</div>${target>=7 ? blocoImagem(id, "sm") : ""}` : ""}
-          ${!this.revealed ? campoChute(m.pede === "en" ? "escreva em inglês" : "escreva em português") : ""}
+          ${this.hinted && !this.revealed ? `<div class="hintbox">${esc(pavOf(id))}</div>${blocoImagem(id, "sm")}` : ""}
+          ${!this.revealed ? (soMC ? campoEscolha(id) : campoChute(m.pede === "en" ? "escreva em inglês" : "escreva em português")) : ""}
           ${this.revealed ? cardBack(w, m, id) : ""}
-          ${this.revealed ? linhaChute(this.chute, m.pede === "en" ? w[2] : w[0]) : ""}
+          ${this.revealed ? (soMC ? linhaEscolha(this.chute, this.mcOk) : linhaChute(this.chute, m.pede === "en" ? w[2] : w[0])) : ""}
           ${this.revealed && this.lastWrong ? `<div class="hintbox" style="border-color:#6B2C28">${esc(pavOf(id))}<div class="mini" style="margin-top:8px;color:var(--ref)">Fale a palavra em voz alta 3 vezes. Ela volta daqui a pouco.</div></div>` : ""}
           <div class="acts" id="acts"></div>
           ${this.revealed ? `<div class="row" style="justify-content:center;gap:8px"><button class="edt" id="edPav">editar PAV</button>${botaoImagem(id)}</div>` : ""}
         </div>
-        <div class="kbd">${this.revealed ? `<span>1</span> errei &nbsp; <span>2</span> acertei` : `<span>espaço</span> ver resposta`}</div>
+        <div class="kbd">${this.revealed ? `<span>1</span> errei &nbsp; <span>2</span> acertei` : soMC ? "toque na opção certa" : `<span>espaço</span> ver resposta`}</div>
       </div>`;
     $("#sair").onclick = async () => { if(await confirmar("Sair da revisão? O que já foi feito está salvo.")) go("home"); };
     const a = $("#acts");
     if(!this.revealed){
-      a.innerHTML = `${hintable && !this.hinted ? `<button class="btn ghost" id="dica">Dica</button>` : ""}<button class="btn pri lg" id="rev">Ver resposta</button>`;
+      a.innerHTML = soMC ? "" : `${hintable && !this.hinted ? `<button class="btn ghost" id="dica">Dica</button>` : ""}<button class="btn pri lg" id="rev">Ver resposta</button>`;
       if($("#dica")) $("#dica").onclick = () => { this.chute = valorChute(); this.hinted = true; this.render($("#view")); };
-      $("#rev").onclick = () => this.reveal();
+      if($("#rev")) $("#rev").onclick = () => this.reveal();
       ligaChute(() => this.reveal());
+      if(soMC) v.querySelectorAll(".mc-op").forEach(b => b.onclick = () => {
+        this.chute = b.dataset.txt; this.mcOk = Number(b.dataset.id) === id; this.reveal();
+      });
     } else {
       a.innerHTML = `<button class="btn bad" id="err">Errei</button><button class="btn ok" id="ok">Acertei</button>`;
       $("#err").onclick = () => this.answer(false);
       $("#ok").onclick = () => this.answer(true);
       $("#edPav").onclick = () => editarPav(id, () => this.render($("#view")));
-      sugereBotao(this.chute, m.pede === "en" ? w[2] : w[0]);
+      if(soMC) $(this.mcOk ? "#ok" : "#err").classList.add("sug");
+      else sugereBotao(this.chute, m.pede === "en" ? w[2] : w[0]);
     }
   }
   reveal(){ this.chute = valorChute() || this.chute; this.revealed = true; this.lastWrong = false; this.render($("#view")); }
@@ -1973,7 +2000,7 @@ class ReviewSession{
         this.q.splice(pos, 0, {id:item.id, redo:true, vezes});
       }
     }
-    this.revealed = false; this.hinted = false; this.lastWrong = false; this.chute = "";
+    this.revealed = false; this.hinted = false; this.lastWrong = false; this.chute = ""; this.mcOk = false;
     markClean();
     this.render($("#view"));
   }
@@ -2824,7 +2851,12 @@ async function initSample(){
   try{ sampleRef = (window.claude && window.claude.use) ? await window.claude.use("sample") : null; }
   catch(e){ sampleRef = null; }
 }
-function temLeitura(){ return !!sampleRef; }
+/* Bug (pedido dele, 13/10): isto só olhava sampleRef (a IA do Artifact),
+   então no GitHub Pages — onde window.claude não existe — a Leitura inteira
+   ficava desligada, mesmo com os 60 textos prontos do TXT_BANCO parados ali
+   sem uso. gerarTexto() já tenta o banco primeiro; esta função só precisava
+   saber disso também. */
+function temLeitura(){ return !!(TXT_BANCO.length || sampleRef); }
 function textosDe(k){ return (S.txt || []).filter(t => t.d === k); }
 function textosHoje(){ return textosDe(dayKey()); }
 
@@ -3983,12 +4015,12 @@ function viewCfg(v){
           <div class="tli"><div class="lbl">Dia mínimo</div><div>${GOAL_MIN} novas + revisões em dia mantêm a sequência</div></div>
           <div class="tli"><div class="lbl">Revisões 1–3</div><div>Português + PAV → inglês</div></div>
           <div class="tli"><div class="lbl">Revisão 4</div><div>Inglês + PAV → português</div></div>
-          <div class="tli"><div class="lbl">Revisões 5–6</div><div>Só o PAV → inglês</div></div>
+          <div class="tli"><div class="lbl">Revisões 5–6</div><div>Inglês → escolha a tradução em português</div></div>
           <div class="tli"><div class="lbl">Revisões 7–8</div><div>Só o português → inglês</div></div>
-          <div class="tli"><div class="lbl">Dica</div><div>Disponível da revisão 5 em diante · conta como erro</div></div>
+          <div class="tli"><div class="lbl">Dica</div><div>Disponível da revisão 7 em diante · conta como erro</div></div>
           <div class="tli"><div class="lbl">Erro</div><div>Resposta + PAV, reteste na mesma sessão, revisão repete amanhã</div></div>
-          <div class="tli"><div class="lbl">Reduções</div><div>${GOAL_RED} novas por dia · ${RED_TOTAL} no total</div></div>
-          <div class="tli"><div class="lbl">Blocos</div><div>${GOAL_CHK} novos por dia · ${CHK_TOTAL} no total</div></div>
+          <div class="tli"><div class="lbl">Reduções</div><div>${RED_TOTAL} no total · opcional, fora da meta diária (aba Frases)</div></div>
+          <div class="tli"><div class="lbl">Blocos</div><div>${CHK_TOTAL} no total · opcional, fora da meta diária (aba Frases)</div></div>
           <div class="tli"><div class="lbl">Frases nas revisões</div><div>Mesma agenda de 8 das palavras</div></div>
           <div class="tli"><div class="lbl">Leitura</div><div>${GOAL_TXT} textos por dia, escritos com o seu vocabulário</div></div>
           <div class="tli"><div class="lbl">Famílias</div><div>${Object.keys(FAM).length} palavras mostram suas flexões</div></div>
