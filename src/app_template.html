@@ -511,6 +511,7 @@ const TXT_BANCO = /*__TXTBANCO__*/[];
 const ANT_BANCO = /*__ANTBANCO__*/[];
 // verbos prontos pro módulo Verbos: {id, word, modal, componentes:[[rótulo,domínio]], steps:[{label,form,hi,en,pt}]}
 const VERBOS = /*__VERBOS__*/[];
+const MISSOES = /*__MISSOES__*/[]; // missão do dia: banco pronto, zero IA em tempo de uso — ver build.py
 
 /* ============================ CONSTANTES ============================ */
 const HOUR = 3600000, DAY = 86400000;
@@ -572,6 +573,8 @@ function freshState(){
     frasesDesde: null, // dia em que Frases entrou na meta diária
     rel:{seq:0, acertos:0, tempo:null, rodadas:[], recentes:[]}, // relâmpago: recordes e histórico
     ant:{feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0}, // antecipar: ilha separada
+    rush:{recs:{}, hist:[], misses:{}}, // recall rush: recordes por duração, histórico e erros isolados
+    missao:{selecionado:null, progresso:{passo:0, respostas:[], concluida:false}, historico:[]}, // missão do dia
     verb:{},           // id do verbo -> [domínio de cada componente, 0-100]
     acum:{verb:0},     // regra de acúmulo: meta de verbos não batida vira pendência pro dia seguinte
     ultimoDiaAtivo: null, // última chave 'YYYY-MM-DD' em que o dia foi tocado (pro cálculo do acúmulo)
@@ -814,6 +817,8 @@ function dia(k){
   if(d.ant === undefined) d.ant = 0;
   if(d.wr === undefined) d.wr = false;
   if(d.verb === undefined) d.verb = 0;
+  if(d.rush === undefined) d.rush = 0;
+  if(d.missao === undefined) d.missao = false;
   return d;
 }
 function wd(id){
@@ -1187,6 +1192,40 @@ function unpackAnt(a){
   o.rodadas = Array.isArray(a.r) ? a.r : [];
   return o;
 }
+/* O recall rush guarda recordes por duração (números), um histórico curto
+   de sessões e os erros recentes DESSE treino — por texto, como o resto,
+   pra sobreviver a qualquer reordenação do banco. Nunca toca em S.w. */
+const RUSH_HIST = 30;
+function packRush(r){
+  if(!r) return null;
+  return {recs:r.recs||{}, hist:(r.hist||[]).slice(-RUSH_HIST), miss:porId(r.misses, idW)};
+}
+function unpackRush(r){
+  const o = {recs:{}, hist:[], misses:{}};
+  if(!r) return o;
+  o.recs = (r.recs && typeof r.recs === "object") ? r.recs : {};
+  o.hist = Array.isArray(r.hist) ? r.hist : [];
+  o.misses = porIndiceOuNumero(r.miss, ixW);
+  return o;
+}
+/* Missão do Dia: a seleção do dia, o progresso em aberto (pra sobreviver a
+   um reload sem sortear outra) e um histórico curto de conclusões. Os ids
+   aqui são os ids das MISSÕES (texto fixo que eu escolho ao escrever o
+   conteúdo, não índice de array) — não precisam da conversão por idW/ixW
+   que as palavras precisam. */
+const MISSAO_HIST = 30;
+function packMissao(m){
+  if(!m) return null;
+  return {sel:m.selecionado||null, prog:m.progresso||null, hist:(m.historico||[]).slice(-MISSAO_HIST)};
+}
+function unpackMissao(m){
+  const o = {selecionado:null, progresso:{passo:0, respostas:[], concluida:false}, historico:[]};
+  if(!m) return o;
+  o.selecionado = (m.sel && typeof m.sel === "object") ? m.sel : null;
+  o.progresso = (m.prog && typeof m.prog === "object") ? m.prog : {passo:0, respostas:[], concluida:false};
+  o.historico = Array.isArray(m.hist) ? m.hist : [];
+  return o;
+}
 function pack(){
   const w = {}, d = {};
   for(const id in S.w){
@@ -1196,14 +1235,14 @@ function pack(){
   }
   for(const k in S.dias){
     const y = S.dias[k];
-    d[k] = [y.novas|0, y.revs|0, y.dom|0, y.li?1:0, y.sp?1:0, y.gr?1:0, y.limpo?1:0, y.red|0, y.chk|0, y.txt|0, y.rel|0, y.ant|0, y.wr?1:0, y.verb|0];
+    d[k] = [y.novas|0, y.revs|0, y.dom|0, y.li?1:0, y.sp?1:0, y.gr?1:0, y.limpo?1:0, y.red|0, y.chk|0, y.txt|0, y.rel|0, y.ant|0, y.wr?1:0, y.verb|0, y.rush|0, y.missao?1:0];
   }
   return {f:4, cv:CONTEUDO, criado:S.criado||Date.now(), ultimo:S.ultimo||0,
           w, dias:d,
           pav:porId(S.pav, idW), img:porId(S.img, idW),
           r:porId(packF(S.r), idR), c:porId(packF(S.c), idC),
           fd:S.frasesDesde||null, txt:(S.txt||[]).slice(0,MAX_TXT_GUARDADOS),
-          rel:packRel(S.rel), ant:packAnt(S.ant),
+          rel:packRel(S.rel), ant:packAnt(S.ant), rush:packRush(S.rush), missao:packMissao(S.missao),
           verb:S.verb||{}, acum:S.acum||{verb:0}, uda:S.ultimoDiaAtivo||null};
 }
 function unpack(p){
@@ -1217,7 +1256,7 @@ function unpack(p){
              r: unpackF(antigo ? p.r : porIndiceOuNumero(p.r, ixR)),
              c: unpackF(antigo ? p.c : porIndiceOuNumero(p.c, ixC)),
              frasesDesde:p.fd||null, txt:Array.isArray(p.txt)?p.txt:[],
-             rel:unpackRel(p.rel, antigo), ant:unpackAnt(p.ant),
+             rel:unpackRel(p.rel, antigo), ant:unpackAnt(p.ant), rush:unpackRush(p.rush), missao:unpackMissao(p.missao),
              verb:(p.verb && typeof p.verb === "object") ? p.verb : {},
              acum:(p.acum && typeof p.acum === "object") ? {verb:p.acum.verb|0} : {verb:0},
              ultimoDiaAtivo:p.uda||null};
@@ -1232,7 +1271,7 @@ function unpack(p){
   }
   for(const k in p.dias){
     const a = p.dias[k];
-    o.dias[k] = {novas:a[0]|0, revs:a[1]|0, dom:a[2]|0, li:!!a[3], sp:!!a[4], gr:!!a[5], limpo:!!a[6], red:a[7]|0, chk:a[8]|0, txt:a[9]|0, rel:a[10]|0, ant:a[11]|0, wr:!!a[12], verb:a[13]|0};
+    o.dias[k] = {novas:a[0]|0, revs:a[1]|0, dom:a[2]|0, li:!!a[3], sp:!!a[4], gr:!!a[5], limpo:!!a[6], red:a[7]|0, chk:a[8]|0, txt:a[9]|0, rel:a[10]|0, ant:a[11]|0, wr:!!a[12], verb:a[13]|0, rush:a[14]|0, missao:!!a[15]};
   }
   return o;
 }
@@ -1302,6 +1341,14 @@ function normaliza(o){
   if(!Array.isArray(o.rel.recentes)) o.rel.recentes = [];
   if(!o.ant) o.ant = {feitas:0, cheios:0, perto:0, rodadas:[], itens:null, i:0};
   if(!Array.isArray(o.ant.rodadas)) o.ant.rodadas = [];
+  if(!o.rush || typeof o.rush !== "object") o.rush = {recs:{}, hist:[], misses:{}};
+  if(!o.rush.recs || typeof o.rush.recs !== "object") o.rush.recs = {};
+  if(!Array.isArray(o.rush.hist)) o.rush.hist = [];
+  if(!o.rush.misses || typeof o.rush.misses !== "object") o.rush.misses = {};
+  if(!o.missao || typeof o.missao !== "object") o.missao = {selecionado:null, progresso:{passo:0, respostas:[], concluida:false}, historico:[]};
+  if(!o.missao.progresso || typeof o.missao.progresso !== "object") o.missao.progresso = {passo:0, respostas:[], concluida:false};
+  if(!Array.isArray(o.missao.progresso.respostas)) o.missao.progresso.respostas = [];
+  if(!Array.isArray(o.missao.historico)) o.missao.historico = [];
   if(!o.verb || typeof o.verb !== "object") o.verb = {};
   if(!o.acum || typeof o.acum !== "object") o.acum = {verb:0};
   if(o.acum.verb === undefined) o.acum.verb = 0;
@@ -1577,6 +1624,13 @@ function viewHome(v){
   const pauta = pautaHoje(6);
   const verbosEstudados = VERBOS.filter(vb => verbDomain(vb.id) > 0).length;
   const leiturasFeitas = Object.values(S.dias).reduce((a,dd) => a + (dd.txt||0), 0);
+  const ultimoRush = (S.rush.hist && S.rush.hist.length) ? S.rush.hist[S.rush.hist.length - 1] : null;
+  const ultimoRushTxt = ultimoRush
+    ? `Última sessão (${rushMin(ultimoRush.dur)} min): ${ultimoRush.acertos} acertos, ${ultimoRush.erros} erros · ${pct(ultimoRush.acertos, ultimoRush.acertos + ultimoRush.erros)}% de acerto.`
+    : "Recall rápido com as palavras que você já está estudando. Não conta pra nenhuma meta do dia.";
+  const missaoDoDia = missaoHoje();
+  const missaoFeitaHoje = !!d.missao;
+  const missaoEmAndamento = !missaoFeitaHoje && S.missao.progresso && S.missao.progresso.respostas && S.missao.progresso.respostas.length > 0;
 
   const aviso = (!fileHandle && !dbRef) ? `
     <div class="banner" style="margin-bottom:16px">
@@ -1671,6 +1725,32 @@ function viewHome(v){
         </div>
       </div>
     </div>
+
+    <div class="card tight" style="margin-top:14px">
+      <div class="spread" style="flex-wrap:wrap;gap:10px">
+        <span class="lbl">Recall Rush</span>
+        <div class="row" style="flex-wrap:wrap;gap:8px">
+          <button class="btn sm" id="aRush2">2 min</button>
+          <button class="btn sm" id="aRush3">3 min</button>
+          <button class="btn sm" id="aRush5">5 min</button>
+        </div>
+      </div>
+      <div class="mini" style="margin-top:8px">${esc(ultimoRushTxt)}</div>
+    </div>
+
+    <div class="card tight" style="margin-top:14px">
+      <div class="spread" style="flex-wrap:wrap;gap:10px">
+        <span class="lbl">Missão do Dia</span>
+        ${missaoFeitaHoje ? `<span class="pill s-solida"><span class="dotc"></span>concluída</span>` : ""}
+      </div>
+      ${missaoDoDia ? `
+        <div style="margin-top:8px;font-size:15px;font-weight:600">${esc(missaoDoDia.titulo)}</div>
+        <div class="mini" style="margin-top:3px">${esc(missaoDoDia.cenario)}</div>
+        <div class="acts" style="margin-top:10px">
+          <button class="btn ${missaoFeitaHoje ? "ghost" : "pri"} sm" id="aMissao">${missaoFeitaHoje ? "Jogar de novo" : (missaoEmAndamento ? "Continuar" : "Começar")}</button>
+        </div>
+      ` : `<div class="mini" style="margin-top:8px">Nenhuma missão disponível ainda.</div>`}
+    </div>
   `;
   if($("#bConn")) $("#bConn").onclick = () => window.__pendingHandle ? reauthFile() : connectFile();
   if($("#bExp")) $("#bExp").onclick = exportJSON;
@@ -1685,6 +1765,10 @@ function viewHome(v){
   if($("#aLer")) $("#aLer").onclick = () => go("ler");
   if($("#aRel")) $("#aRel").onclick = () => startRelampago();
   if($("#aDom")) $("#aDom").onclick = () => startDominio();
+  if($("#aRush2")) $("#aRush2").onclick = () => startRush(120);
+  if($("#aRush3")) $("#aRush3").onclick = () => startRush(180);
+  if($("#aRush5")) $("#aRush5").onclick = () => startRush(300);
+  if($("#aMissao")) $("#aMissao").onclick = () => startMissao();
 }
 
 /* ============================ SESSÃO: APRENDER ============================ */
@@ -2452,6 +2536,568 @@ class RelampagoSession{
     const b = document.querySelectorAll(".rel-op");
     if(e.key === "1" && b[0]) b[0].click();
     if(e.key === "2" && b[1]) b[1].click();
+  }
+}
+
+/* ============================ RECALL RUSH ============================ */
+/* Sessão cronometrada (2/3/5 min) só com palavras que ele já começou a
+   estudar (isLearned — estágio 1+, pedido dele em 16/10) — nunca com
+   palavra nova/não vista. Mede recall de SIGNIFICADO, não tempo de
+   reação como o Relâmpago; por isso ficam separados. Não avança estágio
+   nenhum do SRS, não marca "aprendida"/"dominada" por acerto aqui, não
+   toca na agenda de revisão nem no histórico original — só grava placar
+   e um registro de erro isolado (S.rush.misses), próprio deste treino,
+   pra priorizar o que ele mais erra DENTRO do Recall Rush. */
+const RUSH_DURACOES = [120, 180, 300];      // 2, 3, 5 minutos
+const RUSH_COOLDOWN = 3;                     // perguntas até uma errada poder voltar
+const RUSH_MISS_DIAS = 14;                   // por quanto tempo um erro aqui pesa no sorteio
+const rushMin = seg => Math.round(seg / 60);
+
+/* todas as já aprendidas — cresce sozinho conforme o banco cresce,
+   nunca cai pra palavra não vista mesmo com poucas elegíveis */
+function rushElegiveis(){
+  const out = [];
+  for(let i = 0; i < W.length; i++) if(isLearned(i)) out.push(i);
+  return out;
+}
+/* peso maior = aparece com mais frequência — sempre por sorteio, nunca
+   ordem fixa. Prioriza quem está em reforço, quem mais errou no estudo
+   normal e quem errou recentemente aqui dentro do próprio Recall Rush. */
+function rushPeso(id){
+  const w = S.w[id];
+  let p = 1;
+  if(w.r) p += 3;
+  p += Math.min(3, w.e || 0);
+  const falhou = S.rush.misses[id];
+  if(falhou && Date.now() - falhou < RUSH_MISS_DIAS * 86400000) p += 2;
+  return p;
+}
+function rushRecordes(dur){ return (S.rush.recs && S.rush.recs[dur]) || {acertos:0, seq:0}; }
+
+function startRush(dur){
+  const elig = rushElegiveis();
+  if(elig.length < 4){ toast("Ainda não há palavras estudadas o bastante para o Recall Rush — continue aprendendo palavras novas primeiro."); return; }
+  SESSION = new RushSession(dur, elig);
+  render();
+}
+
+class RushSession{
+  constructor(dur, elig){
+    this.dur = dur;
+    this.elig = elig;
+    this.fase = "pronto";          // pronto | contando | jogando | fim
+    this.conta = 3;
+    this.usados = new Set();
+    this.recentes = [];             // últimos ids mostrados — não repete em sequência
+    this.pendentes = [];            // [{id, desde}] erradas aguardando voltar
+    this.atual = null;
+    this.acertos = 0; this.erros = 0; this.total = 0;
+    this.seq = 0; this.melhorSeq = 0;
+    this.itens = [];
+    this.ultimo = null;
+    this.fimEm = 0; this.timer = null;
+    this.recordes = null;
+  }
+
+  trocarDuracao(dur){
+    if(this.fase !== "pronto" || dur === this.dur) return;
+    this.dur = dur;
+    this.render($("#view"));
+  }
+
+  /* ---- ciclo ---- */
+  comecar(){
+    this.fase = "contando"; this.conta = 3;
+    this.render($("#view"));
+    const passo = () => {
+      if(SESSION !== this) return;
+      this.conta--;
+      if(this.conta > 0){ this.render($("#view")); setTimeout(passo, 620); return; }
+      this.jogar();
+    };
+    setTimeout(passo, 620);
+  }
+  jogar(){
+    this.fase = "jogando";
+    this.fimEm = performance.now() + this.dur * 1000;
+    this.proxima();
+    this.timer = setInterval(() => {
+      if(SESSION !== this){ clearInterval(this.timer); return; }
+      const resta = this.fimEm - performance.now();
+      if(resta <= 0){ this.encerrar(); return; }
+      const b = $("#rushBar"), s = $("#rushSeg");
+      if(b) b.style.width = (resta / (this.dur * 1000) * 100).toFixed(1) + "%";
+      if(s) s.textContent = Math.ceil(resta / 1000);
+    }, 100);
+    this.render($("#view"));
+  }
+  /* erro não desaparece: volta depois de RUSH_COOLDOWN outras perguntas,
+     nunca na pergunta seguinte — e sem tirar tempo do cronômetro */
+  escolheId(){
+    const pronto = this.pendentes.find(p => this.total - p.desde >= RUSH_COOLDOWN);
+    if(pronto){
+      this.pendentes = this.pendentes.filter(p => p !== pronto);
+      return pronto.id;
+    }
+    const evitar = new Set(this.recentes);
+    let cand = this.elig.filter(id => !evitar.has(id));
+    if(cand.length < 4) cand = this.elig;              // banco elegível pequeno: relaxa
+    let soma = 0;
+    const pesos = cand.map(id => { const p = rushPeso(id); soma += p; return p; });
+    let r = Math.random() * soma;
+    for(let i = 0; i < cand.length; i++){ r -= pesos[i]; if(r <= 0) return cand[i]; }
+    return cand[cand.length - 1];
+  }
+  proxima(){
+    const id = this.escolheId();
+    if(id == null){ this.encerrar(); return; }
+    this.usados.add(id);
+    const dist = relDistrator(id, this.usados);
+    if(dist == null){ this.encerrar(); return; }
+    this.usados.add(dist);
+    this.recentes.push(id);
+    if(this.recentes.length > Math.min(6, this.elig.length - 1)) this.recentes.shift();
+    this.atual = {id, dist, esq: Math.random() < .5};
+  }
+  responder(certo){
+    if(this.fase !== "jogando" || !this.atual) return;
+    const a = this.atual;
+    vibrar(certo);
+    this.total++;
+    if(certo){
+      this.acertos++; this.seq++;
+      if(this.seq > this.melhorSeq) this.melhorSeq = this.seq;
+    } else {
+      this.erros++; this.seq = 0;
+      this.pendentes.push({id:a.id, desde:this.total});
+      S.rush.misses[a.id] = Date.now();
+    }
+    this.itens.push({id:a.id, dist:a.dist, ok:certo});
+    this.ultimo = certo;
+    this.proxima();
+    if(this.fase === "jogando") this.render($("#view"));
+  }
+  encerrar(){
+    clearInterval(this.timer); this.timer = null;
+    this.fase = "fim";
+    const rec = rushRecordes(this.dur);
+    this.recordes = {
+      acertos: this.acertos > (rec.acertos || 0),
+      seq: this.melhorSeq > (rec.seq || 0),
+      antes: {acertos: rec.acertos || 0, seq: rec.seq || 0}
+    };
+    if(this.total){
+      if(!S.rush.recs) S.rush.recs = {};
+      S.rush.recs[this.dur] = {
+        acertos: Math.max(this.acertos, rec.acertos || 0),
+        seq: Math.max(this.melhorSeq, rec.seq || 0)
+      };
+      S.rush.hist.push({t:Date.now(), dur:this.dur, acertos:this.acertos, erros:this.erros, seq:this.melhorSeq});
+      if(S.rush.hist.length > RUSH_HIST) S.rush.hist = S.rush.hist.slice(-RUSH_HIST);
+      today().rush = (today().rush || 0) + 1;      // só estatística — não entra em meta nenhuma
+      save();
+    }
+    this.render($("#view"));
+  }
+
+  /* ---- telas ---- */
+  render(v){
+    if(this.fase === "fim") return this.renderFim(v);
+    if(this.fase === "pronto") return this.renderPronto(v);
+    if(this.fase === "contando") return this.renderConta(v);
+    return this.renderJogo(v);
+  }
+  renderPronto(v){
+    const rec = rushRecordes(this.dur), m = rushMin(this.dur);
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="mini">Recall Rush</div>
+        </div>
+        <div class="stage">
+          <div class="rel-ic">🧠</div>
+          <div style="font-size:26px;font-weight:700;letter-spacing:-.03em">Quantas você lembra em ${m} ${plural(m, "minuto", "minutos")}?</div>
+          <div class="muted" style="max-width:46ch;font-size:14.5px;line-height:1.55">
+            Só palavras que você já está estudando. Aparece a palavra em inglês e duas opções
+            em português — toque na certa. Errou? Ela volta mais adiante, sem pressa.
+          </div>
+          <div class="row" style="gap:8px;justify-content:center">
+            ${RUSH_DURACOES.map(d => `<button class="btn sm ${d === this.dur ? "pri" : "ghost"}" data-dur="${d}">${rushMin(d)} min</button>`).join("")}
+          </div>
+          ${(rec.acertos || rec.seq) ? `<div class="rel-recs">
+            <div><span>Recorde de acertos</span><b>${rec.acertos || 0}</b></div>
+            <div><span>Recorde de sequência</span><b>${rec.seq || 0}</b></div>
+          </div>` : ""}
+          <div class="acts"><button class="btn pri lg" id="vai">Começar</button></div>
+        </div>
+        <div class="kbd"><span>1</span> opção da esquerda &nbsp; <span>2</span> opção da direita</div>
+      </div>`;
+    $("#sair").onclick = () => go("home");
+    $("#vai").onclick = () => this.comecar();
+    v.querySelectorAll("[data-dur]").forEach(b => b.onclick = () => this.trocarDuracao(+b.dataset.dur));
+  }
+  renderConta(v){
+    v.innerHTML = `<div class="sess"><div class="stage"><div class="rel-conta">${this.conta}</div></div></div>`;
+  }
+  renderJogo(v){
+    const a = this.atual, w = W[a.id], d = W[a.dist];
+    const resta = Math.max(0, this.fimEm - performance.now());
+    const ops = a.esq ? [[cap(w[0]), true], [cap(d[0]), false]] : [[cap(d[0]), false], [cap(w[0]), true]];
+    v.innerHTML = `
+      <div class="sess rel-sess">
+        <div class="rel-topo">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="rel-placar">
+            <b class="ok">${this.acertos}</b><i>·</i><b class="bad">${this.erros}</b>
+            ${this.seq >= 3 ? `<span class="rel-fogo">${this.seq} seguidas</span>` : ""}
+          </div>
+          <div class="rel-seg"><b id="rushSeg">${Math.ceil(resta / 1000)}</b>s</div>
+        </div>
+        <div class="rel-trilho"><i id="rushBar" style="width:${(resta / (this.dur * 1000) * 100).toFixed(1)}%"></i></div>
+        <div class="rel-arena ${this.ultimo === true ? "pulso-ok" : this.ultimo === false ? "pulso-bad" : ""}">
+          <div class="rel-q">
+            <div class="rel-dir">o que significa</div>
+            <div class="rel-alvo en">${esc(w[2])}</div>
+          </div>
+          <div class="rel-ops">
+            ${ops.map(([t, ok], i) => `<button class="rel-op" data-ok="${ok ? 1 : 0}"><span class="rel-n">${i + 1}</span>${esc(t)}</button>`).join("")}
+          </div>
+        </div>
+      </div>`;
+    $("#sair").onclick = () => { clearInterval(this.timer); go("home"); };
+    v.querySelectorAll(".rel-op").forEach(b => b.onclick = () => this.responder(b.dataset.ok === "1"));
+  }
+  renderFim(v){
+    const total = this.total, rec = this.recordes || {}, m = rushMin(this.dur);
+    const vistos = new Set(), unicos = [];
+    this.itens.forEach(x => { if(!vistos.has(x.id)){ vistos.add(x.id); unicos.push(x.id); } });
+    const errouAlgumaVez = id => this.itens.some(x => x.id === id && !x.ok);
+    const errados = unicos.filter(errouAlgumaVez);
+    const linha = id => {
+      const w = W[id];
+      return `<div class="rel-l bad">
+        <div class="rel-par"><b>${esc(w[2])}</b><i>${esc(w[1])}</i><span>${esc(cap(w[0]))}</span></div>
+      </div>`;
+    };
+    const medalha = (cond, txt) => cond ? `<div class="rel-med">🏅 ${txt}</div>` : "";
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage" style="align-items:stretch;text-align:left">
+          <div class="rel-fim">
+            <div class="rel-ic">🧠</div>
+            <div class="rel-placarF">
+              <div><b class="ok">${this.acertos}</b><span>acertos</span></div>
+              <div><b class="bad">${this.erros}</b><span>erros</span></div>
+              <div><b>${this.melhorSeq}</b><span>maior sequência</span></div>
+              <div><b>${pct(this.acertos, total)}%</b><span>de acerto</span></div>
+            </div>
+            ${medalha(rec.acertos, `Novo recorde de acertos em ${m} min: ${this.acertos} (antes ${rec.antes ? rec.antes.acertos : 0})`)}
+            ${medalha(rec.seq, `Novo recorde de sequência: ${this.melhorSeq} (antes ${rec.antes ? rec.antes.seq : 0})`)}
+            ${total ? `<div class="mini" style="margin-top:2px">${total} ${plural(total, "pergunta", "perguntas")} em ${m} ${plural(m, "minuto", "minutos")}.</div>` : ""}
+          </div>
+
+          ${errados.length ? `<div class="rel-bloco">
+            <div class="lbl" style="color:var(--ref)">Errou · ${errados.length}</div>
+            ${errados.map(linha).join("")}
+          </div>` : (total ? `<div class="rel-bloco"><div class="lbl" style="color:var(--solida)">Nenhum erro.</div></div>` : "")}
+
+          <div class="acts">
+            <button class="btn ghost" id="home">Voltar ao início</button>
+            <button class="btn pri" id="dnv">Jogar de novo</button>
+          </div>
+        </div>
+      </div>`;
+    $("#home").onclick = () => go("home");
+    $("#dnv").onclick = () => startRush(this.dur);
+  }
+  key(e){
+    if(this.fase === "pronto" && (e.key === " " || e.key === "Enter")){ e.preventDefault(); this.comecar(); return; }
+    if(this.fase !== "jogando") return;
+    const b = document.querySelectorAll(".rel-op");
+    if(e.key === "1" && b[0]) b[0].click();
+    if(e.key === "2" && b[1]) b[1].click();
+  }
+}
+
+/* ============================ MISSÃO DO DIA ============================ */
+/* Cenários curtos de comunicação prática com o vocabulário que ele já
+   estuda — pedir café, avisar atraso, contar o dia, etc. Pedido dele em
+   16/10, junto com o Recall Rush. Conteúdo 100% pré-autorado (banco
+   MISSOES, mesmo padrão de TXT_BANCO/ANT_BANCO/VERBOS — ver build.py):
+   ZERO chamada de IA em tempo de uso. Cada missão tem um `id` de texto
+   fixo (escolhido na autoria, nunca índice de array) e declara quais
+   palavras do banco ela pratica (`palavras`, por texto — resolvido na hora
+   por `ixW`, igual a tudo que já usa esse padrão no sistema).
+
+   Nunca compete com a agenda formal: não entra em nextAction(), não altera
+   meta diária nenhuma. `dias[].missao` é só um flag informativo (missão do
+   dia feita ou não), igual ao padrão de `wr` (escrita). */
+const MISSAO_FOLGA = 2;   // quantas palavras não estudadas uma missão pode exigir, se faltar opção melhor (decisão dele, 16/10: "afrouxar no início")
+
+/* quais palavras da missão ele ainda não estuda */
+function missaoCobertura(m){
+  return (m.palavras || []).filter(t => {
+    const i = ixW[String(t).toLowerCase()];
+    return i === undefined || !isLearned(i);
+  });
+}
+/* 1) tenta achar missão 100% com vocabulário já estudado; 2) se não achar,
+   afrouxa até MISSAO_FOLGA palavras fora; 3) se ainda assim não achar (base
+   muito nova), pega a(s) com menos lacuna — nunca bloqueia a feature nem
+   gera palavra nova. Evita repetir a de ontem quando há alternativa. */
+function missaoEscolher(evitarId){
+  if(!MISSOES.length) return null;
+  let pool = MISSOES.filter(m => missaoCobertura(m).length === 0);
+  if(!pool.length) pool = MISSOES.filter(m => missaoCobertura(m).length <= MISSAO_FOLGA);
+  if(!pool.length){
+    let min = Infinity;
+    MISSOES.forEach(m => { const n = missaoCobertura(m).length; if(n < min) min = n; });
+    pool = MISSOES.filter(m => missaoCobertura(m).length === min);
+  }
+  let finalPool = pool.filter(m => m.id !== evitarId);
+  if(!finalPool.length) finalPool = pool;     // só repete se não houver alternativa mesmo
+  return finalPool[Math.floor(Math.random() * finalPool.length)];
+}
+/* a missão do dia é sorteada UMA VEZ por dia e fica estável — recarregar a
+   página não troca nem perde o progresso em aberto. */
+function missaoHoje(){
+  const k = dayKey();
+  if(!S.missao.selecionado || S.missao.selecionado.dataChave !== k){
+    const anteriorId = S.missao.selecionado ? S.missao.selecionado.id : null;
+    const m = missaoEscolher(anteriorId);
+    S.missao.selecionado = {id: m ? m.id : null, dataChave: k};
+    S.missao.progresso = {passo:0, respostas:[], concluida:false};
+    save();
+  }
+  if(!S.missao.selecionado.id) return null;
+  return MISSOES.find(m => m.id === S.missao.selecionado.id) || null;
+}
+
+function startMissao(){
+  const m = missaoHoje();
+  if(!m){ toast("Nenhuma missão disponível ainda."); return; }
+  SESSION = new MissaoSession(m);
+  render();
+}
+
+class MissaoSession{
+  constructor(missao){
+    this.missao = missao;
+    const prog = S.missao.progresso;
+    /* retoma a partir do primeiro passo ainda sem resposta — nunca sorteia
+       missão nova, nunca perde o que já foi respondido */
+    const temProgresso = prog && !prog.concluida && Array.isArray(prog.respostas) && prog.respostas.length > 0;
+    this.respostas = temProgresso ? prog.respostas.slice() : [];
+    this.i = Math.min(this.respostas.length, missao.passos.length - 1);
+    this.fase = "intro";           // intro | passo | fim
+    this.escolha = null;
+    this.revelado = false;
+    this.blocos = null; this.montada = []; this.confirmado = false;
+  }
+  get passo(){ return this.missao.passos[this.i]; }
+  get total(){ return this.missao.passos.length; }
+
+  iniciarPasso(){
+    this.escolha = null; this.revelado = false; this.confirmado = false;
+    const p = this.passo;
+    if(p && p.tipo === "producaoB"){
+      this.blocos = p.resposta.map((t, i) => ({t, i})).sort(() => Math.random() - .5);
+      this.montada = [];
+    }
+  }
+  comecar(){
+    this.fase = "passo";
+    this.iniciarPasso();
+    this.render($("#view"));
+  }
+  salvarProgresso(){
+    S.missao.progresso = {passo:this.i, respostas:this.respostas, concluida:false};
+    save();
+  }
+  responderEscolha(idx){
+    if(this.fase !== "passo" || this.revelado) return;
+    const p = this.passo;
+    const ok = !!p.opcoes[idx].ok;
+    this.escolha = idx; this.revelado = true;
+    vibrar(ok);
+    this.respostas[this.i] = {ok};
+    this.salvarProgresso();
+    this.render($("#view"));
+  }
+  clicarBloco(i){
+    if(this.fase !== "passo" || this.confirmado) return;
+    if(this.montada.indexOf(i) < 0) this.montada.push(i);
+    this.render($("#view"));
+  }
+  removerBloco(i){
+    if(this.confirmado) return;
+    const pos = this.montada.indexOf(i);
+    if(pos >= 0) this.montada = this.montada.slice(0, pos);
+    this.render($("#view"));
+  }
+  confirmarMontagem(){
+    const p = this.passo;
+    const ok = this.montada.length === p.resposta.length && this.montada.every((v, idx) => v === idx);
+    this.confirmado = true;
+    vibrar(ok);
+    this.respostas[this.i] = {ok};
+    this.salvarProgresso();
+    this.render($("#view"));
+  }
+  proximo(){
+    if(this.i < this.total - 1){
+      this.i++;
+      this.iniciarPasso();
+      this.salvarProgresso();
+      this.render($("#view"));
+    } else {
+      this.encerrar();
+    }
+  }
+  encerrar(){
+    this.fase = "fim";
+    const acertos = this.respostas.filter(r => r && r.ok).length;
+    S.missao.progresso = {passo:this.i, respostas:this.respostas, concluida:true};
+    S.missao.historico.push({dataChave:dayKey(), id:this.missao.id, acertos, total:this.total});
+    if(S.missao.historico.length > MISSAO_HIST) S.missao.historico = S.missao.historico.slice(-MISSAO_HIST);
+    today().missao = true;
+    save();
+    this.render($("#view"));
+  }
+
+  /* ---- telas ---- */
+  render(v){
+    if(this.fase === "intro") return this.renderIntro(v);
+    if(this.fase === "fim") return this.renderFim(v);
+    return this.renderPasso(v);
+  }
+  renderIntro(v){
+    const m = this.missao, falt = missaoCobertura(m);
+    const retomar = this.respostas.length > 0;
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar"><button class="btn sm ghost" id="sair">Sair</button><div class="mini">Missão do Dia</div></div>
+        <div class="stage">
+          <div class="rel-ic">🎯</div>
+          <div style="font-size:22px;font-weight:700;letter-spacing:-.03em;text-align:center">${esc(m.titulo)}</div>
+          <div class="muted" style="max-width:48ch;font-size:14.5px;line-height:1.55;text-align:center">${esc(m.cenario)}</div>
+          <div class="mini" style="max-width:48ch;text-align:center"><b>Objetivo:</b> ${esc(m.objetivo)}</div>
+          ${falt.length ? `<div class="mini" style="max-width:48ch;text-align:center">Tem ${falt.length} ${plural(falt.length,"palavra","palavras")} aqui que você ainda não estudou — sem problema, vai ter ajuda na hora.</div>` : ""}
+          <div class="acts"><button class="btn pri lg" id="vai">${retomar ? "Continuar de onde parou" : "Começar"}</button></div>
+        </div>
+      </div>`;
+    $("#sair").onclick = () => go("home");
+    $("#vai").onclick = () => this.comecar();
+  }
+  renderPasso(v){
+    const p = this.passo;
+    const corpo = p.tipo === "producaoB" ? this.corpoProducaoB(p) : this.corpoEscolha(p);
+    v.innerHTML = `
+      <div class="sess">
+        <div class="sbar">
+          <button class="btn sm ghost" id="sair">Sair</button>
+          <div class="bar"><i style="width:${pct(this.i, this.total)}%"></i></div>
+          <div class="mini">${this.i + 1} / ${this.total}</div>
+        </div>
+        <div class="stage" style="align-items:stretch;text-align:left">
+          ${corpo}
+        </div>
+      </div>`;
+    $("#sair").onclick = async () => { if(await confirmar("Sair da missão? O que já foi feito está salvo.")) go("home"); };
+    this.ligarEventosPasso(v, p);
+  }
+  corpoEscolha(p){
+    const compreensao = p.tipo === "compreensao";
+    return `
+      <div class="step">${compreensao ? "Compreensão" : "Sua resposta"}</div>
+      ${compreensao ? `
+        ${p.falante ? `<div class="mini">${esc(p.falante)}</div>` : ""}
+        <div style="font-size:19px;font-weight:600;line-height:1.4;margin:4px 0">${esc(p.en)}</div>
+        <div class="muted" style="font-size:14.5px">${esc(p.pergunta)}</div>
+      ` : `<div class="muted" style="font-size:14.5px">${esc(p.contexto)}</div>`}
+      <div class="rel-ops" style="max-width:none;margin-top:10px">
+        ${p.opcoes.map((o, i) => {
+          let estilo = "";
+          if(this.revelado){
+            if(o.ok) estilo = "border-color:var(--solida);color:var(--solida)";
+            else if(i === this.escolha) estilo = "border-color:var(--ref);color:var(--ref)";
+          }
+          return `<button class="rel-op" data-i="${i}" style="${estilo}" ${this.revelado ? "disabled" : ""}>${esc(o.t)}</button>`;
+        }).join("")}
+      </div>
+      ${this.revelado ? (() => {
+        const o = p.opcoes[this.escolha];
+        const explic = compreensao ? p.explicacao : (o.ok ? null : o.explicacao);
+        return `
+          <div class="pron" style="margin-top:10px;font-size:19px">${esc(p.significado)}</div>
+          ${explic ? `<div class="mini" style="margin-top:4px">${esc(explic)}</div>` : ""}
+          <div class="acts"><button class="btn pri lg" id="continuar">${this.i < this.total - 1 ? "Continuar" : "Ver resultado"}</button></div>
+        `;
+      })() : ""}
+    `;
+  }
+  corpoProducaoB(p){
+    const feito = this.confirmado;
+    const certo = feito && this.montada.length === p.resposta.length && this.montada.every((v, i) => v === i);
+    return `
+      <div class="step">Monte a frase</div>
+      <div class="muted" style="font-size:14.5px">${esc(p.contexto)}</div>
+      <div class="row" style="flex-wrap:wrap;gap:6px;min-height:42px;border-bottom:1px dashed var(--line);padding:10px 0;margin-top:8px">
+        ${this.montada.length
+          ? this.montada.map(i => `<button class="btn sm pri" data-montado="${i}" ${feito ? "disabled" : ""}>${esc(p.resposta[i])}</button>`).join("")
+          : `<span class="mini">toque nos blocos abaixo, na ordem certa</span>`}
+      </div>
+      <div class="row" style="flex-wrap:wrap;gap:6px;margin-top:10px">
+        ${this.blocos.filter(b => this.montada.indexOf(b.i) < 0).map(b => `<button class="btn sm ghost" data-bloco="${b.i}" ${feito ? "disabled" : ""}>${esc(b.t)}</button>`).join("")}
+      </div>
+      ${!feito ? `
+        <div class="acts">
+          <button class="btn ghost" id="limpar" ${this.montada.length ? "" : "disabled"}>Limpar</button>
+          <button class="btn pri" id="confirmar" ${this.montada.length === p.resposta.length ? "" : "disabled"}>Confirmar</button>
+        </div>
+      ` : `
+        ${!certo ? `<div class="mini" style="margin-top:8px">Ordem certa: <b>${esc(p.resposta.join(" "))}</b></div>` : ""}
+        <div class="pron" style="margin-top:8px;font-size:19px">${esc(p.significado)}</div>
+        <div class="acts"><button class="btn pri lg" id="continuar">${this.i < this.total - 1 ? "Continuar" : "Ver resultado"}</button></div>
+      `}
+    `;
+  }
+  ligarEventosPasso(v, p){
+    if(p.tipo === "producaoB"){
+      v.querySelectorAll("[data-bloco]").forEach(b => b.onclick = () => this.clicarBloco(+b.dataset.bloco));
+      v.querySelectorAll("[data-montado]").forEach(b => b.onclick = () => this.removerBloco(+b.dataset.montado));
+      if($("#limpar")) $("#limpar").onclick = () => { this.montada = []; this.render($("#view")); };
+      if($("#confirmar")) $("#confirmar").onclick = () => this.confirmarMontagem();
+      if($("#continuar")) $("#continuar").onclick = () => this.proximo();
+    } else {
+      v.querySelectorAll(".rel-op").forEach(b => b.onclick = () => this.responderEscolha(+b.dataset.i));
+      if($("#continuar")) $("#continuar").onclick = () => this.proximo();
+    }
+  }
+  renderFim(v){
+    const acertos = this.respostas.filter(r => r && r.ok).length, total = this.total;
+    const rec = this.missao.recompensa || {pontos:10, texto:"Missão concluída!"};
+    const palavras = this.missao.palavras || [];
+    v.innerHTML = `
+      <div class="sess">
+        <div class="stage">
+          <div class="rel-ic">🏁</div>
+          <div style="font-size:24px;font-weight:700;letter-spacing:-.03em;text-align:center">${esc(rec.texto || "Missão concluída!")}</div>
+          <div class="rel-placarF">
+            <div><b class="ok">${acertos}</b><span>certas</span></div>
+            <div><b>${total}</b><span>passos</span></div>
+            <div><b>${pct(acertos, total)}%</b><span>acerto</span></div>
+          </div>
+          <div class="mini" style="text-align:center;max-width:48ch">+${rec.pontos || 10} pontos · palavras praticadas: ${esc(palavras.join(", "))}</div>
+          <div class="acts"><button class="btn ghost" id="home">Voltar ao início</button></div>
+        </div>
+      </div>`;
+    $("#home").onclick = () => go("home");
+  }
+  key(e){
+    if(this.fase === "intro" && (e.key === " " || e.key === "Enter")){ e.preventDefault(); this.comecar(); return; }
+    if(this.fase === "passo" && this.revelado && e.key === "Enter"){ const c = $("#continuar"); if(c) c.click(); }
   }
 }
 

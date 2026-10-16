@@ -49,10 +49,11 @@ def load_json_opt(path):
 TXT_BANCO = load_json_opt(os.path.join(ROOT, "data", "txt_banco.json"))
 ANT_BANCO = load_json_opt(os.path.join(ROOT, "data", "ant_banco.json"))
 VERBOS = load_json_opt(os.path.join(ROOT, "data", "verbos.json"))
+MISSOES = load_json_opt(os.path.join(ROOT, "data", "missoes.json"))
 
 print("palavras", len(W), "| reducoes", len(R), "| blocos", len(C), "| familias", len(FAM),
       "| textos prontos", len(TXT_BANCO), "| antecipar prontos", len(ANT_BANCO),
-      "| verbos prontos", len(VERBOS))
+      "| verbos prontos", len(VERBOS), "| missoes prontas", len(MISSOES))
 
 tpl = open(TPL, encoding="utf-8").read()
 html = (tpl
@@ -62,8 +63,9 @@ html = (tpl
         .replace("/*__FAM__*/{}", json.dumps(FAM, ensure_ascii=False, separators=(",", ":")))
         .replace("/*__TXTBANCO__*/[]", json.dumps(TXT_BANCO, ensure_ascii=False, separators=(",", ":")))
         .replace("/*__ANTBANCO__*/[]", json.dumps(ANT_BANCO, ensure_ascii=False, separators=(",", ":")))
-        .replace("/*__VERBOS__*/[]", json.dumps(VERBOS, ensure_ascii=False, separators=(",", ":"))))
-assert not any(m in html for m in ("__WORDS__", "__RED__", "__CHK__", "__FAM__", "__TXTBANCO__", "__ANTBANCO__", "__VERBOS__"))
+        .replace("/*__VERBOS__*/[]", json.dumps(VERBOS, ensure_ascii=False, separators=(",", ":")))
+        .replace("/*__MISSOES__*/[]", json.dumps(MISSOES, ensure_ascii=False, separators=(",", ":"))))
+assert not any(m in html for m in ("__WORDS__", "__RED__", "__CHK__", "__FAM__", "__TXTBANCO__", "__ANTBANCO__", "__VERBOS__", "__MISSOES__"))
 
 os.makedirs(OUT_DIR, exist_ok=True)
 open(os.path.join(OUT_DIR, "index.html"), "w", encoding="utf-8").write(html)
