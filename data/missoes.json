@@ -1,0 +1,678 @@
+[
+  {
+    "id": "cafe_pedido",
+    "titulo": "Pedindo um café",
+    "categoria": "cotidiano",
+    "dificuldade": 1,
+    "cenario": "Você está numa cafeteria em outro país e precisa pedir o seu café.",
+    "objetivo": "Entender a pergunta do atendente e responder o que você quer.",
+    "palavras": ["coffee", "cup", "small", "sugar", "please", "thanks"],
+    "recompensa": { "pontos": 10, "texto": "Café pedido com sucesso!" },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Atendente",
+        "en": "What size coffee would you like?",
+        "pergunta": "O que o atendente está perguntando pra você?",
+        "opcoes": [
+          { "t": "Que tamanho de café você quer", "ok": true },
+          { "t": "Se você vai pagar em dinheiro ou cartão", "ok": false },
+          { "t": "Se você quer leite no café", "ok": false }
+        ],
+        "significado": "Que tamanho de café você gostaria?",
+        "explicacao": "\"Would you like\" é um jeito educado de perguntar o que alguém quer."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Responda pedindo um café pequeno, com açúcar, por favor.",
+        "opcoes": [
+          { "t": "Small, with sugar, please.", "ok": true },
+          { "t": "Large, no sugar, thanks.", "ok": false, "explicacao": "Isso pede grande, sem açúcar — o oposto do que você quer." },
+          { "t": "I don't like coffee.", "ok": false, "explicacao": "Isso diz que você não gosta de café — não responde o pedido do atendente." }
+        ],
+        "significado": "Pequeno, com açúcar, por favor."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Agora monte a frase para agradecer e perguntar o preço.",
+        "resposta": ["Thanks,", "how much", "is it", "?"],
+        "significado": "Obrigado, quanto custa?"
+      }
+    ]
+  },
+  {
+    "id": "explicar_atraso",
+    "titulo": "Explicando um atraso",
+    "categoria": "trabalho",
+    "dificuldade": 2,
+    "cenario": "Você vai chegar atrasado numa reunião por causa do trânsito e precisa avisar.",
+    "objetivo": "Entender a pergunta do colega e explicar por que você está atrasado.",
+    "palavras": ["late", "sorry", "traffic", "meeting", "minute", "boss"],
+    "recompensa": { "pontos": 10, "texto": "Atraso explicado — ninguém ficou bravo." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Colega",
+        "en": "Are you coming to the meeting? You're late.",
+        "pergunta": "O que o colega quer saber?",
+        "opcoes": [
+          { "t": "Se você vai pra reunião, porque você está atrasado", "ok": true },
+          { "t": "Se você já almoçou", "ok": false },
+          { "t": "Se a reunião foi cancelada", "ok": false }
+        ],
+        "significado": "Você vem pra reunião? Você está atrasado.",
+        "explicacao": "\"You're late\" é um jeito direto de dizer que alguém chegou depois da hora."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Responda se desculpando e explicando que é por causa do trânsito.",
+        "opcoes": [
+          { "t": "Sorry, there's a lot of traffic.", "ok": true },
+          { "t": "The meeting is not important.", "ok": false, "explicacao": "Isso soa como se você não se importasse com a reunião — não é uma desculpa." },
+          { "t": "I don't like meetings.", "ok": false, "explicacao": "Isso não explica o atraso, só diz que você não gosta de reuniões." }
+        ],
+        "significado": "Desculpa, tem muito trânsito."
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Colega",
+        "en": "Okay, no problem. How many minutes?",
+        "pergunta": "O que o colega está perguntando agora?",
+        "opcoes": [
+          { "t": "Quantos minutos você vai demorar", "ok": true },
+          { "t": "Quantas pessoas estão no trânsito", "ok": false },
+          { "t": "Se você quer café", "ok": false }
+        ],
+        "significado": "Tudo bem, sem problema. Quantos minutos?",
+        "explicacao": "\"How many\" pergunta uma quantidade — aqui, de minutos."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase dizendo que você chega em dez minutos.",
+        "resposta": ["I'll be there", "in ten", "minutes"],
+        "significado": "Eu chego em dez minutos."
+      }
+    ]
+  },
+  {
+    "id": "falar_do_dia",
+    "titulo": "Contando como foi o seu dia",
+    "categoria": "cotidiano",
+    "dificuldade": 1,
+    "cenario": "Um amigo pergunta como foi o seu dia de trabalho.",
+    "objetivo": "Entender a pergunta e contar, de forma simples, como foi o seu dia.",
+    "palavras": ["day", "work", "busy", "tired", "good"],
+    "recompensa": { "pontos": 10, "texto": "Conversa tranquila sobre o dia." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Amigo",
+        "en": "How was your day at work?",
+        "pergunta": "O que o amigo está perguntando?",
+        "opcoes": [
+          { "t": "Como foi o seu dia de trabalho", "ok": true },
+          { "t": "Onde você trabalha", "ok": false },
+          { "t": "Se você gosta do seu trabalho", "ok": false }
+        ],
+        "significado": "Como foi seu dia de trabalho?",
+        "explicacao": "\"How was\" pergunta sobre uma experiência que já aconteceu."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Responda dizendo que foi bom, mas você está cansado — teve muito trabalho.",
+        "opcoes": [
+          { "t": "It was good, but I'm tired. Busy day.", "ok": true },
+          { "t": "I don't work.", "ok": false, "explicacao": "Isso contradiz o contexto — você está voltando do trabalho." },
+          { "t": "Tomorrow is a good day.", "ok": false, "explicacao": "Isso fala de amanhã, não responde como foi hoje." }
+        ],
+        "significado": "Foi bom, mas estou cansado. Dia cheio."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase perguntando de volta: \"e o seu dia, como foi?\"",
+        "resposta": ["And how", "was your", "day", "?"],
+        "significado": "E como foi o seu dia?"
+      }
+    ]
+  },
+  {
+    "id": "responder_mensagem",
+    "titulo": "Respondendo uma mensagem",
+    "categoria": "social",
+    "dificuldade": 1,
+    "cenario": "Um amigo manda uma mensagem de texto perguntando se você está livre hoje à noite.",
+    "objetivo": "Entender a mensagem e responder dizendo se você pode ou não.",
+    "palavras": ["free", "tonight", "busy", "plan", "message"],
+    "recompensa": { "pontos": 10, "texto": "Mensagem respondida." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Mensagem recebida",
+        "en": "Are you free tonight? I have no plans.",
+        "pergunta": "O que a mensagem está perguntando?",
+        "opcoes": [
+          { "t": "Se você está livre hoje à noite", "ok": true },
+          { "t": "Se você já tem planos pra semana toda", "ok": false },
+          { "t": "Se você gosta de sair à noite", "ok": false }
+        ],
+        "significado": "Você está livre hoje à noite? Eu não tenho planos.",
+        "explicacao": "\"No plans\" significa que a pessoa não tem nada marcado."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Você está ocupado hoje. Responda explicando isso.",
+        "opcoes": [
+          { "t": "Sorry, I'm busy tonight.", "ok": true },
+          { "t": "Yes, I have a lot of plans tomorrow.", "ok": false, "explicacao": "Isso fala de amanhã, não responde sobre hoje à noite." },
+          { "t": "I don't have a phone.", "ok": false, "explicacao": "Isso não tem nada a ver com a pergunta." }
+        ],
+        "significado": "Desculpa, estou ocupado hoje à noite."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase propondo o fim de semana no lugar.",
+        "resposta": ["How about", "this", "weekend", "?"],
+        "significado": "Que tal este fim de semana?"
+      }
+    ]
+  },
+  {
+    "id": "pedir_informacao",
+    "titulo": "Pedindo informação na rua",
+    "categoria": "viagem",
+    "dificuldade": 2,
+    "cenario": "Você está perdido numa rua e precisa pedir informação a alguém.",
+    "objetivo": "Fazer a pergunta certa e entender a resposta com a direção.",
+    "palavras": ["excuse", "street", "near", "left", "right"],
+    "recompensa": { "pontos": 10, "texto": "Você achou o caminho." },
+    "passos": [
+      {
+        "tipo": "producaoA",
+        "contexto": "Você quer chamar a atenção de alguém educadamente para perguntar o caminho. O que você diz primeiro?",
+        "opcoes": [
+          { "t": "Excuse me, where is Main Street?", "ok": true },
+          { "t": "Hey, you!", "ok": false, "explicacao": "Não é educado — soa rude pra chamar a atenção de um estranho." },
+          { "t": "I am lost here.", "ok": false, "explicacao": "Diz que você está perdido, mas não faz a pergunta — não pede a informação." }
+        ],
+        "significado": "Com licença, onde fica a Main Street?"
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Pessoa na rua",
+        "en": "It's near here — turn left, then right.",
+        "pergunta": "O que a pessoa está explicando?",
+        "opcoes": [
+          { "t": "O caminho: é perto, vire à esquerda e depois à direita", "ok": true },
+          { "t": "Que o lugar é muito longe daqui", "ok": false },
+          { "t": "Que ela não sabe o caminho", "ok": false }
+        ],
+        "significado": "É perto daqui — vire à esquerda, depois à direita.",
+        "explicacao": "\"Turn left\"/\"turn right\" são as instruções básicas de direção."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Agradeça pela informação.",
+        "resposta": ["Thank you", "very much", "!"],
+        "significado": "Muito obrigado!"
+      }
+    ]
+  },
+  {
+    "id": "falar_sobre_trabalho",
+    "titulo": "Falando sobre o trabalho",
+    "categoria": "trabalho",
+    "dificuldade": 2,
+    "cenario": "Alguém pergunta sobre a sua rotina no trabalho, numa conversa casual.",
+    "objetivo": "Entender a pergunta sobre horário e responder sobre sua rotina.",
+    "palavras": ["work", "office", "start", "finish", "team"],
+    "recompensa": { "pontos": 10, "texto": "Rotina de trabalho explicada." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Conhecido",
+        "en": "What time do you start work?",
+        "pergunta": "O que a pessoa está perguntando?",
+        "opcoes": [
+          { "t": "A que horas você começa a trabalhar", "ok": true },
+          { "t": "Onde fica o seu escritório", "ok": false },
+          { "t": "Quantas pessoas tem no seu time", "ok": false }
+        ],
+        "significado": "A que horas você começa a trabalhar?",
+        "explicacao": "\"What time\" pergunta por um horário específico."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Responda dizendo que você começa de manhã no escritório e termina à tarde.",
+        "opcoes": [
+          { "t": "I start in the morning at the office and finish in the afternoon.", "ok": true },
+          { "t": "I don't have a team.", "ok": false, "explicacao": "Fala sobre equipe, não sobre horário — não responde a pergunta." },
+          { "t": "The office is near my house.", "ok": false, "explicacao": "Fala sobre localização, não sobre horário de início e fim." }
+        ],
+        "significado": "Eu começo de manhã no escritório e termino à tarde."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase dizendo que você trabalha com uma boa equipe.",
+        "resposta": ["I work", "with a", "good team"],
+        "significado": "Eu trabalho com uma boa equipe."
+      }
+    ]
+  },
+  {
+    "id": "perguntas_comuns",
+    "titulo": "Se apresentando pra alguém novo",
+    "categoria": "social",
+    "dificuldade": 1,
+    "cenario": "Você acabou de conhecer alguém numa festa e a conversa está começando.",
+    "objetivo": "Responder às perguntas básicas que toda apresentação tem.",
+    "palavras": ["name", "nice", "meet", "where", "work"],
+    "recompensa": { "pontos": 10, "texto": "Primeira conversa feita." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Pessoa nova",
+        "en": "Hi, what's your name?",
+        "pergunta": "O que a pessoa está perguntando?",
+        "opcoes": [
+          { "t": "Qual é o seu nome", "ok": true },
+          { "t": "De onde você é", "ok": false },
+          { "t": "O que você faz no trabalho", "ok": false }
+        ],
+        "significado": "Oi, qual é o seu nome?",
+        "explicacao": "\"What's your name\" é a pergunta clássica de apresentação."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Diga o seu nome e que é um prazer conhecer a pessoa.",
+        "opcoes": [
+          { "t": "Nice to meet you! My name is...", "ok": true },
+          { "t": "I don't know you.", "ok": false, "explicacao": "Soa estranho e frio — não é uma resposta educada de apresentação." },
+          { "t": "Where do you work?", "ok": false, "explicacao": "Isso é uma pergunta de volta, mas ignora a pergunta do nome." }
+        ],
+        "significado": "Prazer em conhecer você! Meu nome é..."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase perguntando onde a pessoa trabalha.",
+        "resposta": ["Where do", "you", "work", "?"],
+        "significado": "Onde você trabalha?"
+      }
+    ]
+  },
+  {
+    "id": "problema_viagem",
+    "titulo": "Problema no aeroporto",
+    "categoria": "viagem",
+    "dificuldade": 3,
+    "cenario": "Você chegou ao aeroporto e não encontra a sua bagagem.",
+    "objetivo": "Explicar o problema e entender a instrução de onde esperar.",
+    "palavras": ["lost", "bag", "airport", "help", "wait"],
+    "recompensa": { "pontos": 10, "texto": "Problema resolvido com calma." },
+    "passos": [
+      {
+        "tipo": "producaoA",
+        "contexto": "Você precisa explicar que a sua bagagem está perdida. O que você diz pro atendente?",
+        "opcoes": [
+          { "t": "Excuse me, I lost my bag. Can you help me?", "ok": true },
+          { "t": "The airport is very big.", "ok": false, "explicacao": "Não explica o problema — só comenta sobre o tamanho do aeroporto." },
+          { "t": "I want to go home.", "ok": false, "explicacao": "Não explica o problema da bagagem, só diz que quer ir para casa." }
+        ],
+        "significado": "Com licença, perdi minha bagagem. Você pode me ajudar?"
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Atendente",
+        "en": "Okay, please wait here. I'll check for you.",
+        "pergunta": "O que o atendente está pedindo?",
+        "opcoes": [
+          { "t": "Que você espere ali enquanto ele verifica", "ok": true },
+          { "t": "Que você volte pro avião", "ok": false },
+          { "t": "Que você compre uma bagagem nova", "ok": false }
+        ],
+        "significado": "Tudo bem, por favor espere aqui. Eu vou verificar pra você.",
+        "explicacao": "\"I'll check for you\" é um jeito educado de dizer que vai investigar o problema."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Agradeça e diga que você vai esperar.",
+        "resposta": ["Thank you,", "I'll", "wait", "here"],
+        "significado": "Obrigado, eu vou esperar aqui."
+      }
+    ]
+  },
+  {
+    "id": "restaurante_pedido",
+    "titulo": "Pedindo comida no restaurante",
+    "categoria": "cotidiano",
+    "dificuldade": 1,
+    "cenario": "Você está num restaurante e o garçom vem anotar o seu pedido.",
+    "objetivo": "Entender a pergunta do garçom e fazer o pedido.",
+    "palavras": ["table", "menu", "order", "food", "ready"],
+    "recompensa": { "pontos": 10, "texto": "Pedido feito, agora é só esperar." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Garçom",
+        "en": "Are you ready to order?",
+        "pergunta": "O que o garçom está perguntando?",
+        "opcoes": [
+          { "t": "Se você já está pronto para fazer o pedido", "ok": true },
+          { "t": "Se você gostou da comida", "ok": false },
+          { "t": "Se você quer trocar de mesa", "ok": false }
+        ],
+        "significado": "Você está pronto para pedir?",
+        "explicacao": "\"Ready to\" pergunta se alguém já pode fazer algo agora."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Responda dizendo que sim, e peça o item do menu que você quer.",
+        "opcoes": [
+          { "t": "Yes, I'd like this one from the menu, please.", "ok": true },
+          { "t": "The table is nice.", "ok": false, "explicacao": "Comenta sobre a mesa, não faz o pedido." },
+          { "t": "I don't like food.", "ok": false, "explicacao": "Não faz sentido num restaurante e não responde o pedido." }
+        ],
+        "significado": "Sim, eu quero este do menu, por favor."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase perguntando quanto tempo vai demorar.",
+        "resposta": ["How long", "will it", "take", "?"],
+        "significado": "Quanto tempo vai demorar?"
+      }
+    ]
+  },
+  {
+    "id": "hotel_checkin",
+    "titulo": "Check-in no hotel",
+    "categoria": "viagem",
+    "dificuldade": 2,
+    "cenario": "Você chega num hotel e precisa fazer o check-in no balcão.",
+    "objetivo": "Entender a pergunta da recepção e dar as informações certas.",
+    "palavras": ["room", "key", "name", "night", "card"],
+    "recompensa": { "pontos": 10, "texto": "Check-in feito, chave na mão." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Recepção",
+        "en": "What's your name, and how many nights?",
+        "pergunta": "O que a recepção está perguntando?",
+        "opcoes": [
+          { "t": "Seu nome e por quantas noites você vai ficar", "ok": true },
+          { "t": "Se você já esteve nesse hotel antes", "ok": false },
+          { "t": "Se você quer um quarto maior", "ok": false }
+        ],
+        "significado": "Qual é o seu nome e por quantas noites?",
+        "explicacao": "A pergunta tem duas partes — nome e número de noites."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Diga seu nome e que vai ficar duas noites.",
+        "opcoes": [
+          { "t": "My name is... and I'm staying two nights.", "ok": true },
+          { "t": "I have a card.", "ok": false, "explicacao": "Fala sobre pagamento, não responde o nome nem o número de noites." },
+          { "t": "The room is big.", "ok": false, "explicacao": "Comenta sobre o quarto, não responde a pergunta feita." }
+        ],
+        "significado": "Meu nome é... e eu vou ficar duas noites."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase perguntando onde fica a chave do quarto.",
+        "resposta": ["Where is", "my room", "key", "?"],
+        "significado": "Onde está a chave do meu quarto?"
+      }
+    ]
+  },
+  {
+    "id": "telefone_remarcar",
+    "titulo": "Remarcando uma reunião por telefone",
+    "categoria": "trabalho",
+    "dificuldade": 3,
+    "cenario": "Seu colega liga pra remarcar uma reunião porque está ocupado.",
+    "objetivo": "Entender o motivo e propor um novo horário.",
+    "palavras": ["call", "busy", "meeting", "tomorrow", "free"],
+    "recompensa": { "pontos": 10, "texto": "Reunião remarcada sem estresse." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Colega (ligação)",
+        "en": "Sorry, I'm busy today. Can we move the meeting?",
+        "pergunta": "O que o colega está pedindo?",
+        "opcoes": [
+          { "t": "Pra mudar o horário da reunião, porque ele está ocupado hoje", "ok": true },
+          { "t": "Pra cancelar a reunião pra sempre", "ok": false },
+          { "t": "Pra você ligar de volta mais tarde", "ok": false }
+        ],
+        "significado": "Desculpa, estou ocupado hoje. Podemos mudar a reunião?",
+        "explicacao": "\"Move the meeting\" significa remarcar para outro dia ou horário."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Responda dizendo que está tudo bem e pergunte se amanhã funciona.",
+        "opcoes": [
+          { "t": "No problem. Does tomorrow work?", "ok": true },
+          { "t": "I'm busy too.", "ok": false, "explicacao": "Não propõe solução nenhuma — só repete o problema." },
+          { "t": "The meeting was good.", "ok": false, "explicacao": "Fala no passado, não ajuda a remarcar nada." }
+        ],
+        "significado": "Sem problema. Amanhã funciona?"
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Colega (ligação)",
+        "en": "Yes, I'm free tomorrow morning.",
+        "pergunta": "O que o colega está confirmando?",
+        "opcoes": [
+          { "t": "Que ele está livre amanhã de manhã", "ok": true },
+          { "t": "Que ele vai estar ocupado amanhã também", "ok": false },
+          { "t": "Que a reunião foi cancelada", "ok": false }
+        ],
+        "significado": "Sim, estou livre amanhã de manhã.",
+        "explicacao": "\"I'm free\" é o oposto de \"I'm busy\" — significa disponível."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase confirmando o novo horário.",
+        "resposta": ["Great,", "see you", "tomorrow", "morning"],
+        "significado": "Ótimo, te vejo amanhã de manhã."
+      }
+    ]
+  },
+  {
+    "id": "clima_small_talk",
+    "titulo": "Conversa pequena sobre o tempo",
+    "categoria": "social",
+    "dificuldade": 1,
+    "cenario": "Está chovendo e alguém comenta sobre o tempo esperando o elevador.",
+    "objetivo": "Entender o comentário e responder algo simples sobre o clima.",
+    "palavras": ["rain", "cold", "weather", "today"],
+    "recompensa": { "pontos": 10, "texto": "Conversa de elevador feita com sucesso." },
+    "passos": [
+      {
+        "tipo": "compreensao",
+        "falante": "Vizinho",
+        "en": "Terrible weather today, right? So much rain.",
+        "pergunta": "O que a pessoa está comentando?",
+        "opcoes": [
+          { "t": "Que o tempo está feio hoje, com muita chuva", "ok": true },
+          { "t": "Que está muito calor hoje", "ok": false },
+          { "t": "Que ela gosta de chuva", "ok": false }
+        ],
+        "significado": "Tempo horrível hoje, não é? Tanta chuva.",
+        "explicacao": "\"Right?\" no fim é só um jeito de pedir confirmação, igual \"né?\" em português."
+      },
+      {
+        "tipo": "producaoA",
+        "contexto": "Concorde e comente que também está frio.",
+        "opcoes": [
+          { "t": "Yeah, and it's cold too.", "ok": true },
+          { "t": "I like hot weather.", "ok": false, "explicacao": "Fala de calor, não concorda com o comentário sobre chuva e frio." },
+          { "t": "The rain is nice for plants.", "ok": false, "explicacao": "Diverge do tom da conversa — a pessoa estava reclamando do tempo." }
+        ],
+        "significado": "É, e também está frio."
+      }
+    ]
+  },
+  {
+    "id": "pedir_ajuda_problema",
+    "titulo": "Pedindo ajuda com um problema",
+    "categoria": "cotidiano",
+    "dificuldade": 2,
+    "cenario": "Algo deu errado (um aparelho, uma reserva) e você precisa pedir ajuda.",
+    "objetivo": "Explicar o problema de forma clara e entender a resposta.",
+    "palavras": ["problem", "help", "wrong", "fix"],
+    "recompensa": { "pontos": 10, "texto": "Ajuda conseguida, problema no caminho de resolver." },
+    "passos": [
+      {
+        "tipo": "producaoA",
+        "contexto": "Você precisa pedir ajuda porque algo está errado. O que você diz?",
+        "opcoes": [
+          { "t": "Excuse me, there's a problem. Can you help?", "ok": true },
+          { "t": "Everything is fine.", "ok": false, "explicacao": "Diz o contrário do que você quer comunicar." },
+          { "t": "I don't need anything.", "ok": false, "explicacao": "Também diz o contrário — você precisa de ajuda, não o oposto." }
+        ],
+        "significado": "Com licença, tem um problema. Você pode ajudar?"
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Atendente",
+        "en": "Sure, what's wrong exactly?",
+        "pergunta": "O que o atendente está pedindo?",
+        "opcoes": [
+          { "t": "Que você explique exatamente qual é o problema", "ok": true },
+          { "t": "Que você vá embora", "ok": false },
+          { "t": "Que você pague mais pra resolver", "ok": false }
+        ],
+        "significado": "Claro, o que exatamente está errado?",
+        "explicacao": "\"What's wrong\" pergunta qual é o problema específico."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase pedindo pra ele arrumar/resolver o problema.",
+        "resposta": ["Can you", "fix", "it", "?"],
+        "significado": "Você pode arrumar isso?"
+      }
+    ]
+  },
+  {
+    "id": "pagar_conta",
+    "titulo": "Pagando a conta",
+    "categoria": "cotidiano",
+    "dificuldade": 1,
+    "cenario": "Você terminou de comer e precisa pedir e pagar a conta.",
+    "objetivo": "Pedir a conta e entender como pagar.",
+    "palavras": ["bill", "pay", "card", "cash", "check"],
+    "recompensa": { "pontos": 10, "texto": "Conta paga, sem complicação." },
+    "passos": [
+      {
+        "tipo": "producaoA",
+        "contexto": "Você terminou de comer. O que você diz pro garçom pra pedir a conta?",
+        "opcoes": [
+          { "t": "Can I have the bill, please?", "ok": true },
+          { "t": "The food was here.", "ok": false, "explicacao": "Não faz sentido — não pede a conta." },
+          { "t": "I want more water.", "ok": false, "explicacao": "Pede água, não pede a conta." }
+        ],
+        "significado": "Posso pegar a conta, por favor?"
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Garçom",
+        "en": "Sure. Cash or card?",
+        "pergunta": "O que o garçom está perguntando?",
+        "opcoes": [
+          { "t": "Como você vai pagar — dinheiro ou cartão", "ok": true },
+          { "t": "Se você quer mais comida", "ok": false },
+          { "t": "Se você gostou da comida", "ok": false }
+        ],
+        "significado": "Claro. Dinheiro ou cartão?",
+        "explicacao": "\"Cash or card\" é a pergunta padrão sobre forma de pagamento."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase dizendo que você vai pagar com cartão.",
+        "resposta": ["I'll pay", "with", "card"],
+        "significado": "Eu vou pagar com cartão."
+      }
+    ]
+  },
+  {
+    "id": "taxi_endereco",
+    "titulo": "Dando o endereço pro taxista",
+    "categoria": "viagem",
+    "dificuldade": 2,
+    "cenario": "Você entra num taxi e precisa dizer pro motorista pra onde ir.",
+    "objetivo": "Dar o endereço certo e confirmar o tempo de viagem.",
+    "palavras": ["address", "airport", "near", "far", "time"],
+    "recompensa": { "pontos": 10, "texto": "No caminho certo." },
+    "passos": [
+      {
+        "tipo": "producaoA",
+        "contexto": "O motorista pergunta pra onde você quer ir. Diga o endereço do aeroporto.",
+        "opcoes": [
+          { "t": "This address, please — the airport.", "ok": true },
+          { "t": "I live near here.", "ok": false, "explicacao": "Não diz pra onde ele deve te levar." },
+          { "t": "The taxi is nice.", "ok": false, "explicacao": "Comenta sobre o táxi, não dá o endereço." }
+        ],
+        "significado": "Este endereço, por favor — o aeroporto."
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Motorista",
+        "en": "It's not far — about twenty minutes.",
+        "pergunta": "O que o motorista está informando?",
+        "opcoes": [
+          { "t": "Que o lugar é perto, a viagem dura cerca de vinte minutos", "ok": true },
+          { "t": "Que o lugar é muito longe", "ok": false },
+          { "t": "Que o táxi vai quebrar no caminho", "ok": false }
+        ],
+        "significado": "Não é longe — mais ou menos vinte minutos.",
+        "explicacao": "\"Not far\" significa perto, e \"about\" indica um tempo aproximado."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase perguntando se tem tempo suficiente, já que seu voo é em uma hora.",
+        "resposta": ["Is that", "enough", "time", "?"],
+        "significado": "Isso é tempo suficiente?"
+      }
+    ]
+  },
+  {
+    "id": "pedir_repetir",
+    "titulo": "Pedindo pra repetir e falar mais devagar",
+    "categoria": "social",
+    "dificuldade": 1,
+    "cenario": "Alguém falou rápido demais e você não entendeu tudo.",
+    "objetivo": "Pedir, de forma educada, pra repetir e falar mais devagar.",
+    "palavras": ["sorry", "understand", "speak", "slowly", "again"],
+    "recompensa": { "pontos": 10, "texto": "Agora sim — entendido!" },
+    "passos": [
+      {
+        "tipo": "producaoA",
+        "contexto": "Você não entendeu o que a pessoa disse. O que você diz?",
+        "opcoes": [
+          { "t": "Sorry, I don't understand. Can you speak slowly?", "ok": true },
+          { "t": "Yes, I agree with everything.", "ok": false, "explicacao": "Finge ter entendido quando não entendeu — pode causar mal-entendido." },
+          { "t": "I don't speak at all.", "ok": false, "explicacao": "Não faz sentido — você está falando, só não entendeu a outra pessoa." }
+        ],
+        "significado": "Desculpa, eu não entendo. Você pode falar mais devagar?"
+      },
+      {
+        "tipo": "compreensao",
+        "falante": "Pessoa",
+        "en": "Sure, no problem. I'll say it again, slowly.",
+        "pergunta": "O que a pessoa concorda em fazer?",
+        "opcoes": [
+          { "t": "Repetir o que disse, mais devagar", "ok": true },
+          { "t": "Mudar completamente de assunto", "ok": false },
+          { "t": "Parar de falar com você", "ok": false }
+        ],
+        "significado": "Claro, sem problema. Eu vou repetir, mais devagar.",
+        "explicacao": "\"Say it again\" significa repetir o que já foi dito."
+      },
+      {
+        "tipo": "producaoB",
+        "contexto": "Agradeça pela paciência.",
+        "resposta": ["Thank you", "for your", "patience"],
+        "significado": "Obrigado pela sua paciência."
+      }
+    ]
+  }
+]
