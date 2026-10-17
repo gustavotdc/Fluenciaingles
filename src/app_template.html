@@ -1091,6 +1091,16 @@ function save(){
 
 /* ---- sincronização entre aparelhos (banco do artifact) ---- */
 let dbRef = null, dbUnsub = null;
+/* true só depois que initSync() já tentou resolver contra o remoto (adotou
+   ou empurrou). Enquanto for false, nada que roda no primeiro render (antes
+   do sync) pode chamar save() — isso carimbaria S.ultimo = Date.now() num
+   estado local que pode estar desatualizado/vazio, e esse carimbo artificial
+   faz esse estado parecer "mais novo" que o remoto de verdade, fazendo a
+   sincronização EMPURRAR o estado errado por cima do progresso real.
+   (Foi exatamente isso que apagou o histórico de palavras em 16/10: a seleção
+   da Missão do Dia, que acontece dentro do próprio render() da Home, chamava
+   save() antes do initSync() ter rodado.) */
+let SYNC_PRONTO = false;
 let pushTimer = null, pushing = false, pushAgain = false;
 let syncEstado = "off";   // off | wait | on
 
@@ -1381,10 +1391,11 @@ async function initSync(){
       adota(r, "Progresso atualizado do outro aparelho.");
       setSync("on");
     }, () => { dbRef = null; dbUnsub = null; setSync("off"); });
+    SYNC_PRONTO = true;
     return;
   }
   /* fora do Claude Artifact (ex: GitHub Pages): usa o Supabase, se configurado */
-  if(!SUPA_URL || !SUPA_KEY){ setSync("off"); return; }
+  if(!SUPA_URL || !SUPA_KEY){ setSync("off"); SYNC_PRONTO = true; return; }
   dbRef = supaRef();
   try{
     const snap = await dbRef.get();
@@ -1393,6 +1404,7 @@ async function initSync(){
     else if(!remoto || (S.ultimo||0) > (remoto.ultimo||0)) await pushRemote();
     setSync("on");
   }catch(e){ setSync("wait"); }
+  SYNC_PRONTO = true;
   /* sem tempo real por REST simples: ao voltar pra aba, busca de novo pra
      pegar o que foi feito no outro aparelho */
   document.addEventListener("visibilitychange", async () => {
@@ -2860,7 +2872,15 @@ function missaoEscolher(evitarId){
   return finalPool[Math.floor(Math.random() * finalPool.length)];
 }
 /* a missão do dia é sorteada UMA VEZ por dia e fica estável — recarregar a
-   página não troca nem perde o progresso em aberto. */
+   página não troca nem perde o progresso em aberto.
+   Importante: isso é chamado dentro do render() da Home, que roda ANTES do
+   initSync() (ver boot()). Só persiste (save()) depois que o sync já tentou
+   resolver contra o remoto (SYNC_PRONTO) — senão o S.ultimo = Date.now() do
+   save() carimba um estado ainda não sincronizado como "mais novo" que o
+   remoto de verdade, e o sync empurra esse estado por cima do progresso
+   real (foi assim que o histórico de palavras foi apagado em 16/10). Sem
+   SYNC_PRONTO, a missão escolhida fica só em memória até o próximo render
+   (que já roda depois do initSync(), com o estado certo). */
 function missaoHoje(){
   const k = dayKey();
   if(!S.missao.selecionado || S.missao.selecionado.dataChave !== k){
@@ -2868,7 +2888,7 @@ function missaoHoje(){
     const m = missaoEscolher(anteriorId);
     S.missao.selecionado = {id: m ? m.id : null, dataChave: k};
     S.missao.progresso = {passo:0, respostas:[], concluida:false};
-    save();
+    if(SYNC_PRONTO) save();
   }
   if(!S.missao.selecionado.id) return null;
   return MISSOES.find(m => m.id === S.missao.selecionado.id) || null;
