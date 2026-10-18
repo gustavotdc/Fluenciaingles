@@ -58,7 +58,7 @@ const FAKE_TEXT = {
   ok(/mais:bigger/.test(fam.big) && !fam.water, 'adjetivo tem grau, incontável não tem família');
 
   // ---------- aba Leitura existe ----------
-  const abas = await p.$$eval('#tabs button', bs => bs.map(x => x.textContent));
+  const abas = await p.$$eval('#tabbar button[data-t]', bs => bs.map(x => x.textContent));
   ok(abas.includes('Leitura'), 'abas: ' + abas.join(', '));
   ok(await p.evaluate(() => temLeitura()) === true, 'capability de escrita conectada');
 

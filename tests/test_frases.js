@@ -29,10 +29,10 @@ const path = require('path').resolve(__dirname, '../dist/index.html');
   ok(d.w === 3000 && d.r === 67 && d.c === 413, `dados W=${d.w} R=${d.r} C=${d.c}`);
 
   // aba Frases existe
-  const abas = await p.$$eval('#tabs button', bs => bs.map(x => x.textContent));
+  const abas = await p.$$eval('#tabbar button[data-t]', bs => bs.map(x => x.textContent));
   ok(abas.includes('Frases'), 'aba Frases: ' + abas.join(', '));
 
-  await p.click('#tabs button[data-t="frases"]');
+  await p.click('#tabbar button[data-t="frases"]');
   await p.waitForTimeout(200);
   const cards = await p.$$eval('#view [data-go]', bs => bs.map(x => x.dataset.go));
   ok(cards.join(',') === 'red,chk', 'dois cartoes: ' + cards.join(','));
@@ -75,7 +75,7 @@ const path = require('path').resolve(__dirname, '../dist/index.html');
 
   // ---------- BLOCOS ----------
   await p.click('#home'); await p.waitForTimeout(150);
-  await p.click('#tabs button[data-t="frases"]'); await p.waitForTimeout(150);
+  await p.click('#tabbar button[data-t="frases"]'); await p.waitForTimeout(150);
   await p.click('#view [data-go="chk"]'); await p.waitForTimeout(200);
   const ptPrimeiro = await p.textContent('.word-pt');
   ok(ptPrimeiro.trim().length > 0, 'bloco comeca pelo portugues: ' + ptPrimeiro.trim());
@@ -120,20 +120,21 @@ const path = require('path').resolve(__dirname, '../dist/index.html');
   ok(roundtrip.bytes < 200000, 'tamanho do estado: ' + roundtrip.bytes + ' bytes');
 
   // ---------- proxima acao ----------
-  // Reduções saiu do fluxo obrigatório (pedido dele): depois do vocabulário,
-  // a próxima ação pula direto pra Blocos, sem passar por Reduções.
+  // Reduções e Blocos saíram do fluxo obrigatório (pedido dele, 13/10): não
+  // usa nenhum dos dois, então a próxima ação nunca aponta pra eles, mesmo
+  // com pendência acumulada — ela pula direto pro que vem depois (verbos).
   const na = await p.evaluate(() => {
     S = freshState(); S.frasesDesde = dayKey();
     const d = today(); d.novas = 25; d.limpo = true;
     return nextAction().t;
   });
-  ok(na === 'chk', 'depois do vocabulario a proxima acao pula reduções e vai pra blocos: ' + na);
+  ok(na !== 'red' && na !== 'chk', 'depois do vocabulario a proxima acao pula reduções e blocos: ' + na);
 
   const na2 = await p.evaluate(() => {
     for (let i = 0; i < 5; i++) { const x = fd('chk', i); x.l = Date.now(); x.n = Date.now() + 9e8; x.s = 1; }
     return nextAction().t;
   });
-  ok(na2 !== 'red', 'reduções nunca aparece como próxima ação, mesmo pendente: ' + na2);
+  ok(na2 !== 'red' && na2 !== 'chk', 'reduções e blocos nunca aparecem como próxima ação, mesmo pendentes: ' + na2);
 
   // ---------- compatibilidade com estado antigo ----------
   const velho = await p.evaluate(() => {
@@ -143,7 +144,9 @@ const path = require('path').resolve(__dirname, '../dist/index.html');
   });
   ok(velho.w === 1 && velho.red === 0 && velho.r && velho.fd, 'estado antigo (f:2) migra: ' + JSON.stringify(velho));
 
-  // ---------- dia completo historico nao quebra ----------
+  // ---------- dia completo nao depende mais de frases ----------
+  // Blocos deixou de ser obrigatório pro dia fechar (pedido dele, 13/10):
+  // dia sem nenhum bloco feito fecha igual a um com blocos feitos.
   const hist = await p.evaluate(() => {
     S = freshState(); S.frasesDesde = '2026-06-01';
     S.dias['2026-05-10'] = { novas: 25, revs: 0, dom: 0, red: 0, chk: 0, li: true, sp: true, gr: true, limpo: true };
@@ -151,7 +154,7 @@ const path = require('path').resolve(__dirname, '../dist/index.html');
     S.dias['2026-06-11'] = { novas: 25, revs: 0, dom: 0, red: 3, chk: 5, li: true, sp: true, gr: true, limpo: true };
     return [dayFull('2026-05-10'), dayFull('2026-06-10'), dayFull('2026-06-11')];
   });
-  ok(hist[0] === true && hist[1] === false && hist[2] === true, 'dia completo: antigo vale, novo exige frases: ' + JSON.stringify(hist));
+  ok(hist[0] === true && hist[1] === true && hist[2] === true, 'dia completo: blocos não é mais obrigatório, com ou sem uso: ' + JSON.stringify(hist));
 
   console.log(erros.length ? '\nERROS:\n' + erros.join('\n') : '\nSem erros de console.');
   await b.close();

@@ -256,11 +256,11 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
     go('home');
     const t = document.querySelector('#view').textContent.replace(/\s+/g, ' ');
     return { trilhas: document.querySelectorAll('.hoje .trilha').length, temTrilha: /Relâmpago/.test(t),
-             recorde: /recorde 11 seguidas/.test(t), botao: !!document.querySelector('#aRel') };
+             recorde: /recorde 11 seguidas/.test(t), botao: !!document.querySelector('.hoje [data-trilha="rel"]') };
   }, REAL);
-  ok(home.trilhas === 7 && home.temTrilha, 'Relâmpago aparece entre as trilhas do dia (7 ao todo, com Verbos)');
+  ok(home.trilhas === 6 && home.temTrilha, 'Relâmpago aparece entre as trilhas do dia (6 ao todo, com o Recall Rush desde 16/10)');
   ok(home.recorde, 'a trilha mostra o recorde dele');
-  ok(home.botao, 'tem atalho direto no "Ir direto para"');
+  ok(home.botao, 'a trilha do Relâmpago é um botão que abre o jogo (o bloco "Ir direto para" saiu em 17/10)');
 
   const prox = await p.evaluate(doc => {
     S = normaliza(unpack(doc));
@@ -272,7 +272,9 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
     for (const i in S.c) { S.c[i].n = Date.now() + 99 * 86400000; }
     const d = today();
     d.novas = 99; d.red = 99; d.chk = 99; d.txt = 99; d.verb = 99;
-    S.txt = (S.txt || []).map(t => ({ ...t, lido: true }));
+    // Leitura (corrigido 13/10: funciona pelo banco, sem precisar de IA) também
+    // precisa estar "feita" pra zerar as pendências de verdade.
+    S.txt = Array.from({ length: GOAL_TXT }, (_, i) => ({ d: dayKey(), ctx: '', t: 'teste' + i, l: [['a', 'b']], lido: 1 }));
     const depois = nextAction();
     return { comPendencia, t: depois.t, txt: depois.txt, sub: depois.sub };
   }, REAL);

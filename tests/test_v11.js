@@ -39,7 +39,11 @@ const APP = 'file://' + require('path').resolve(__dirname, '../dist/index.html')
   await p.goto(APP);
   await p.waitForTimeout(700);
 
-  // ---------- áudio removido por completo ----------
+  // ---------- áudio por IA (v19) removido por completo ----------
+  // Desde 17/10 o Phrase Reactor usa a Web Speech API do navegador
+  // (speechSynthesis) pra ouvir as frases — decisão nova dele, Web Speech em
+  // vez de geração por IA. Isso não traz de volta o sistema antigo de áudio
+  // (falar/btnSom/.spk/[data-say]/audIndex), que continua checado abaixo.
   const limpo = await p.evaluate(() => {
     const src = document.querySelector('script') ? document.documentElement.innerHTML : '';
     return {
@@ -47,11 +51,11 @@ const APP = 'file://' + require('path').resolve(__dirname, '../dist/index.html')
       btnSom: typeof window.btnSom,
       spk: document.querySelectorAll('.spk').length,
       say: document.querySelectorAll('[data-say]').length,
-      menciona: /speechSynthesis|btnSom|audIndex/.test(src)
+      menciona: /btnSom|audIndex/.test(src)
     };
   });
-  ok(limpo.falar === 'undefined' && limpo.btnSom === 'undefined', 'funções de áudio não existem mais');
-  ok(limpo.spk === 0 && limpo.say === 0 && !limpo.menciona, 'nenhum vestígio de áudio na página');
+  ok(limpo.falar === 'undefined' && limpo.btnSom === 'undefined', 'funções do sistema antigo de áudio por IA não existem mais');
+  ok(limpo.spk === 0 && limpo.say === 0 && !limpo.menciona, 'nenhum vestígio do sistema antigo de áudio por IA na página');
 
   // ---------- assets conectado ----------
   ok(await p.evaluate(() => temImagens()) === true, 'capability de imagens conectada');
@@ -127,20 +131,43 @@ const APP = 'file://' + require('path').resolve(__dirname, '../dist/index.html')
   });
   ok(vaza === false, 'espaço digitado no campo não revela a resposta');
 
-  // ---------- revisão mostra imagem e chute ----------
+  // ---------- revisão 5/6: inglês -> escolha a tradução em português ----------
+  // Pedido dele (13/10): tirar o "só PAV" dessas duas revisões (ele acha o
+  // PAV horrível de rever assim). Agora é reconhecimento por opções.
   const rev = await p.evaluate(async () => {
     S.w[0] = {s:4,n:Date.now()-1000,l:Date.now()-9e6,e:0,a:1,m:false,r:false};
     startReview([0]);
     await new Promise(r => setTimeout(r, 100));
-    const frente = { img: !!document.querySelector('.stage .pavimg'), chute: !!$('#chute'), modo: modeFor(5).mostra };
-    $('#chute').value = W[0][2];
-    SESSION.reveal();
+    const ops = Array.from(document.querySelectorAll('.mc-op'));
+    const frente = {
+      modo: modeFor(5).mostra,
+      enCorreto: (document.querySelector('.stage .word-en') || {}).textContent === W[0][2],
+      semImg: !document.querySelector('.stage .pavimg'),
+      semChute: !document.querySelector('#chute'),
+      nOps: ops.length,
+      umaCerta: ops.filter(b => b.dataset.txt.toLowerCase() === W[0][0].toLowerCase()).length === 1
+    };
+    const certa = ops.find(b => b.dataset.txt.toLowerCase() === W[0][0].toLowerCase());
+    certa.click();
     await new Promise(r => setTimeout(r, 100));
     return { frente, verso: $('.stage').textContent.replace(/\s+/g,' '), btnImg: !!document.querySelector('[data-img]') };
   });
-  ok(rev.frente.modo === 'pav' && rev.frente.img && rev.frente.chute,
-    'revisão 5 mostra a imagem como pista, com campo de chute');
-  ok(/✓/.test(rev.verso) && rev.btnImg, 'verso da revisão confere o chute e oferece trocar imagem');
+  ok(rev.frente.modo === 'en' && rev.frente.enCorreto && rev.frente.semImg && rev.frente.semChute && rev.frente.nOps === 4 && rev.frente.umaCerta,
+    'revisão 5 mostra só a palavra em inglês, com 4 opções em português (uma certa) pra escolher');
+  ok(/✓/.test(rev.verso) && rev.btnImg, 'escolher a opção certa confere como acerto e oferece trocar imagem');
+
+  // ---------- opção errada também é reconhecida como erro ----------
+  const revErro = await p.evaluate(async () => {
+    S.w[1] = {s:4,n:Date.now()-1000,l:Date.now()-9e6,e:0,a:1,m:false,r:false};
+    startReview([1]);
+    await new Promise(r => setTimeout(r, 100));
+    const ops = Array.from(document.querySelectorAll('.mc-op'));
+    const errada = ops.find(b => b.dataset.txt.toLowerCase() !== W[1][0].toLowerCase());
+    errada.click();
+    await new Promise(r => setTimeout(r, 100));
+    return { verso: $('.stage').textContent.replace(/\s+/g,' '), sug: !!document.querySelector('#err.sug') };
+  });
+  ok(/✗/.test(revErro.verso) && revErro.sug, 'opção errada é marcada com ✗ e destaca Errei');
 
   // ---------- escudo de sequência ----------
   const esc = await p.evaluate(() => {

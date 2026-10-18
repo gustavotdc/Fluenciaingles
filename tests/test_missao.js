@@ -234,7 +234,7 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
   }, REAL);
   ok(home.temCartao, 'Home ganha o cartão da Missão do Dia');
   ok(home.botao, 'tem botão de começar/continuar direto na Home');
-  ok(home.trilhasIntactas === 5, 'as 5 trilhas existentes continuam do mesmo jeito (Home não foi duplicada)');
+  ok(home.trilhasIntactas === 6, 'as trilhas do dia continuam do mesmo jeito (Home não foi duplicada pela Missão do Dia)');
 
   const marcaFeita = await p.evaluate(doc => {
     S = normaliza(unpack(doc));

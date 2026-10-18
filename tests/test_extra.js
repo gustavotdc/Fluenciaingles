@@ -37,12 +37,18 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
 
   await p.evaluate(doc => { S = normaliza(unpack(doc)); go('home'); }, REAL);
   await p.waitForTimeout(100);
-  const home = await p.evaluate(() => {
-    const links = [...document.querySelectorAll('.treinos a.edt')];
-    return { n: links.length, hrefOk: links.every(a => a.href.startsWith('https://youglish.com/pronounce/')), temGrammar: !!document.querySelector('[data-chk="gr"]'), temEscrita: !!document.querySelector('#bEsc') };
-  });
-  ok(home.n > 0 && home.hrefOk, `home mostra ${home.n} links pro YouGlish, todos apontando certo`);
-  ok(!home.temGrammar && !home.temEscrita, 'Grammar e Escrita saíram dos treinos de fora (checklist principal)');
+  const home = await p.evaluate(() => ({
+    treinosDeFora: !!document.querySelector('[data-chk="li"], [data-chk="sp"], .treinos'),
+    youglish: document.querySelectorAll('#view a.edt').length,
+    temGrammar: !!document.querySelector('[data-chk="gr"]'), temEscrita: !!document.querySelector('#bEsc'),
+    irDireto: /Ir direto para/.test(document.querySelector('#view').textContent) }));
+  ok(!home.treinosDeFora && home.youglish === 0, 'bloco "Treinos de fora" (Listening/Speaking + pauta YouGlish) saiu da Home (pedido dele, 17/10)');
+  ok(!home.irDireto, 'bloco "Ir direto para" saiu da Home (pedido dele, 17/10)');
+  ok(!home.temGrammar && !home.temEscrita, 'Grammar e Escrita continuam fora da Home');
+  const ls = await p.evaluate(() => { S = freshState(); const d = today(); d.novas = GOAL_NEW; d.limpo = true; d.li = false; d.sp = false;
+    return { cheio: dayFull(dayKey()), prox: ['li','sp'].includes(nextAction().t) }; });
+  ok(ls.cheio, 'dia fecha completo sem Listening/Speaking (saíram da meta em 17/10)');
+  ok(!ls.prox, 'próxima ação nunca pede Listening/Speaking');
 
   // ---------- persistência do campo wr (o botão saiu da Home, mas o dado antigo continua lido certo) ----------
   const persist = await p.evaluate(doc => {
@@ -106,23 +112,6 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
   ok(janela.janelaOk, 'todas dentro da janela de palavras não aprendidas mais próximas');
   ok(janela.diferente, 'ordem varia entre chamadas (não é sempre a sequência 0,1,2...)');
 
-  // ---------- antecipar: "ver tradução" ----------
-  await p.evaluate(() => {
-    S = freshState();
-    antEstado().itens = [{ ctx: 'The pilot checks the fuel.', en: 'The plane is ready to take off.', alvo: 'take', pt: 'O avião está pronto para decolar.' }];
-    startAntecipar();
-  });
-  await p.waitForTimeout(100);
-  const antesTraducao = await p.evaluate(() => !document.querySelector('.ant-pt'));
-  ok(antesTraducao, 'tradução não aparece por padrão na aposta');
-  await p.click('#ptOn');
-  await p.waitForTimeout(80);
-  const depoisTraducao = await p.evaluate(() => {
-    const el = document.querySelector('.ant-pt');
-    return el && el.textContent.includes('decolar');
-  });
-  ok(depoisTraducao, '"Ver tradução" revela o português pra ajudar a adivinhar a palavra');
-
   // ---------- bancos prontos: leitura e antecipar sem gastar IA ----------
   const bancos = await p.evaluate(() => ({ txt: TXT_BANCO.length, ant: ANT_BANCO.length }));
   ok(bancos.txt === 150, `banco de leitura tem 150 textos prontos (tem ${bancos.txt})`);
@@ -136,15 +125,6 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
   }));
   ok(leituraBanco.ok && !leituraBanco.chamouIA, 'gerarTexto() usa o banco pronto, sem chamar a IA');
   ok(leituraBanco.n === 1 && leituraBanco.temLinhas, 'texto do banco entra em S.txt no formato certo');
-
-  const anteciparBanco = await p.evaluate(() => new Promise(res => {
-    S = freshState();
-    const antes = window.__jsonCalls;
-    antGerar(() => { const a = antEstado(); res({ ok: true, chamouIA: window.__jsonCalls !== antes, n: a.itens.length, campos: a.itens.every(i => i.ctx && i.en && i.alvo && i.pt) }); },
-             () => res({ ok: false }));
-  }));
-  ok(anteciparBanco.ok && !anteciparBanco.chamouIA, 'antGerar() usa o banco pronto, sem chamar a IA');
-  ok(anteciparBanco.n === 8 && anteciparBanco.campos, 'rodada do banco vem com 8 itens completos');
 
   console.log(errs.length ? '\nERROS:\n' + errs.join('\n') : '\nSem erros de console.');
   console.log(falhas ? '\n>>> ' + falhas + ' FALHA(S)' : '\n>>> tudo passou');

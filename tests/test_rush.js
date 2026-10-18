@@ -220,15 +220,16 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
     S = normaliza(unpack(doc));
     S.rush.hist = [{ t: Date.now(), dur: 180, acertos: 14, erros: 2, seq: 7 }];
     go('home');
-    const t = document.querySelector('#view').textContent.replace(/\s+/g, ' ');
-    return { temCartao: /Recall Rush/.test(t), temUltima: /14 acertos, 2 erros/.test(t),
+    const stats = Array.from(document.querySelectorAll('.tcard-stats b')).map(b => b.textContent);
+    return { temCartao: /Recall Rush/.test(document.querySelector('#view').textContent),
+             temUltima: stats.includes('14') && stats.includes('7') && stats.includes('88%'),
              b2: !!document.querySelector('#aRush2'), b3: !!document.querySelector('#aRush3'), b5: !!document.querySelector('#aRush5'),
              trilhasIntactas: document.querySelectorAll('.hoje .trilha').length };
   }, REAL);
   ok(home.temCartao, 'Home ganha o cartão do Recall Rush');
-  ok(home.temUltima, 'cartão mostra o resultado da última sessão');
+  ok(home.temUltima, 'cartão mostra acertos, sequência e % de acerto da última sessão (14, 7, 88%)');
   ok(home.b2 && home.b3 && home.b5, 'atalhos de 2, 3 e 5 minutos na Home');
-  ok(home.trilhasIntactas === 5, 'as 5 trilhas existentes continuam do mesmo jeito (Home não foi duplicada)');
+  ok(home.trilhasIntactas === 6, 'as 5 trilhas antigas continuam do mesmo jeito, agora com o Recall Rush como a 6ª (pedido dele, 16/10)');
 
   const clique = await p.evaluate(doc => {
     S = normaliza(unpack(doc));
@@ -238,12 +239,30 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
   }, REAL);
   ok(clique.dur === 180, 'clicar em "3 min" na Home já inicia a sessão com 3 minutos');
 
-  // nextAction() nunca escolhe o Recall Rush sozinho (treino complementar, não compete com a agenda)
-  const prox = await p.evaluate(doc => {
-    S = normaliza(unpack(doc));
-    return nextAction().t;
+  /* Recall Rush virou meta do dia (pedido dele, 16/10): nextAction() pode
+     sugeri-lo, mas só quando há vocabulário suficiente pra abrir sessão de
+     verdade (mesmo piso de rushElegiveis() >= 4) — nunca uma meta impossível
+     de cumprir por falta de palavra estudada ainda. */
+  const rushNaFila = await p.evaluate(doc => {
+    const origDue = dueList, origLeitura = temLeitura;
+    dueList = () => [];           // isola o teste do resto da agenda (revisões)
+    temLeitura = () => false;     // idem, da Leitura
+    try{
+      S = normaliza(unpack(doc));                 // REAL já tem palavras aprendidas de sobra
+      let d = today();
+      d.novas = GOAL_NEW; d.verb = metaEfetivaVerb(); d.rel = true; d.rush = 0;
+      const comVocab = nextAction().t;
+
+      S = freshState();                            // base zerada: nada elegível ainda
+      d = today();
+      d.novas = GOAL_NEW; d.verb = metaEfetivaVerb(); d.rel = true; d.rush = 0;
+      const semVocab = nextAction().t;
+
+      return { comVocab, semVocab };
+    } finally { dueList = origDue; temLeitura = origLeitura; }
   }, REAL);
-  ok(prox !== 'rush', `nextAction() não aponta pro Recall Rush ("${prox}" continua sendo a sugestão)`);
+  ok(rushNaFila.comVocab === 'rush', `com vocabulário suficiente e o resto da agenda em dia, nextAction() sugere o Recall Rush ("${rushNaFila.comVocab}")`);
+  ok(rushNaFila.semVocab !== 'rush', `base zerada (sem palavra elegível ainda): nextAction() NUNCA sugere o Recall Rush, mesmo com o resto em dia ("${rushNaFila.semVocab}")`);
 
   // ---------- o cronômetro morre junto com a sessão ----------
   const limpa = await p.evaluate(async doc => {
