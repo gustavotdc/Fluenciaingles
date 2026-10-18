@@ -1,0 +1,1028 @@
+[
+  {
+    "id": "msw_right",
+    "palavra": "right",
+    "categoria": "adverbio_adjetivo",
+    "contextos": [
+      {
+        "id": "right_direcao",
+        "frase": "Turn right after the bank.",
+        "significado": "Direção — à direita",
+        "pt": "Vire à direita depois do banco."
+      },
+      {
+        "id": "right_correto",
+        "frase": "That's right, we start at nine.",
+        "significado": "Confirmação — correto, certo",
+        "pt": "Isso está certo, a gente começa às nove."
+      },
+      {
+        "id": "right_agora",
+        "frase": "Can you call me right now?",
+        "significado": "Ênfase de tempo — agora mesmo",
+        "pt": "Você pode me ligar agora mesmo?"
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_right_d1",
+        "tipo": "escolher_significado",
+        "frase": "Turn right after the bank.",
+        "pergunta": "O que \"right\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Confirmação — correto, certo",
+            "ok": false
+          },
+          {
+            "t": "Direção — à direita",
+            "ok": true
+          },
+          {
+            "t": "Ênfase de tempo — agora mesmo",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_right_d2",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"right\" no sentido de CONFIRMAR que algo está certo?",
+        "opcoes": [
+          {
+            "t": "Can you call me right now?",
+            "ok": false
+          },
+          {
+            "t": "That's right, we start at nine.",
+            "ok": true
+          },
+          {
+            "t": "Turn right after the bank.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_right_d3",
+        "tipo": "escolher_significado",
+        "frase": "Can you call me right now?",
+        "pergunta": "O que \"right\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Direção — à direita",
+            "ok": false
+          },
+          {
+            "t": "Ênfase de tempo — agora mesmo",
+            "ok": true
+          },
+          {
+            "t": "Confirmação — correto, certo",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_like",
+    "palavra": "like",
+    "categoria": "verbo_preposicao",
+    "contextos": [
+      {
+        "id": "like_gostar",
+        "frase": "I like this restaurant.",
+        "significado": "Verbo — gostar de algo",
+        "pt": "Eu gosto deste restaurante."
+      },
+      {
+        "id": "like_parecido",
+        "frase": "She looks like her sister.",
+        "significado": "Preposição — parecido com, semelhante a",
+        "pt": "Ela parece com a irmã dela."
+      },
+      {
+        "id": "like_comoe",
+        "frase": "What's the weather like today?",
+        "significado": "Usado em perguntas (\"what...like\") — como é, qual é a característica",
+        "pt": "Como está o tempo hoje?"
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_like_d1",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"like\" no sentido de GOSTAR de algo?",
+        "opcoes": [
+          {
+            "t": "What's the weather like today?",
+            "ok": false
+          },
+          {
+            "t": "I like this restaurant.",
+            "ok": true
+          },
+          {
+            "t": "She looks like her sister.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_like_d2",
+        "tipo": "escolher_significado",
+        "frase": "She looks like her sister.",
+        "pergunta": "O que \"like\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Preposição — parecido com, semelhante a",
+            "ok": true
+          },
+          {
+            "t": "Usado em perguntas (\"what...like\") — como é, qual é a característica",
+            "ok": false
+          },
+          {
+            "t": "Verbo — gostar de algo",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_like_d3",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"like\" no sentido de perguntar COMO É algo?",
+        "opcoes": [
+          {
+            "t": "I like this restaurant.",
+            "ok": false
+          },
+          {
+            "t": "She looks like her sister.",
+            "ok": false
+          },
+          {
+            "t": "What's the weather like today?",
+            "ok": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_mind",
+    "palavra": "mind",
+    "categoria": "substantivo_verbo",
+    "contextos": [
+      {
+        "id": "mind_mente",
+        "frase": "Keep an open mind.",
+        "significado": "Substantivo — mente",
+        "pt": "Mantenha a mente aberta."
+      },
+      {
+        "id": "mind_importar",
+        "frase": "Do you mind if I open the window?",
+        "significado": "Verbo — se importar, ter problema com algo",
+        "pt": "Você se importa se eu abrir a janela?"
+      },
+      {
+        "id": "mind_cuidado",
+        "frase": "Mind the step.",
+        "significado": "Verbo (imperativo) — cuidado, atenção",
+        "pt": "Cuidado com o degrau."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_mind_d1",
+        "tipo": "escolher_significado",
+        "frase": "Keep an open mind.",
+        "pergunta": "O que \"mind\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Substantivo — mente",
+            "ok": true
+          },
+          {
+            "t": "Verbo (imperativo) — cuidado, atenção",
+            "ok": false
+          },
+          {
+            "t": "Verbo — se importar, ter problema com algo",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_mind_d2",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"mind\" no sentido de SE IMPORTAR com algo?",
+        "opcoes": [
+          {
+            "t": "Do you mind if I open the window?",
+            "ok": true
+          },
+          {
+            "t": "Keep an open mind.",
+            "ok": false
+          },
+          {
+            "t": "Mind the step.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_mind_d3",
+        "tipo": "escolher_significado",
+        "frase": "Mind the step.",
+        "pergunta": "O que \"mind\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo (imperativo) — cuidado, atenção",
+            "ok": true
+          },
+          {
+            "t": "Verbo — se importar, ter problema com algo",
+            "ok": false
+          },
+          {
+            "t": "Substantivo — mente",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_mean",
+    "palavra": "mean",
+    "categoria": "verbo_adjetivo",
+    "contextos": [
+      {
+        "id": "mean_significar",
+        "frase": "What does this word mean?",
+        "significado": "Verbo — significar",
+        "pt": "O que essa palavra significa?"
+      },
+      {
+        "id": "mean_maldoso",
+        "frase": "Don't be so mean to your brother.",
+        "significado": "Adjetivo — maldoso, cruel",
+        "pt": "Não seja tão malvado com seu irmão."
+      },
+      {
+        "id": "mean_pretender",
+        "frase": "I didn't mean to hurt you.",
+        "significado": "Verbo — pretender, ter a intenção de (ao se desculpar)",
+        "pt": "Eu não tive a intenção de te magoar."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_mean_d1",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"mean\" no sentido de SIGNIFICAR algo?",
+        "opcoes": [
+          {
+            "t": "Don't be so mean to your brother.",
+            "ok": false
+          },
+          {
+            "t": "I didn't mean to hurt you.",
+            "ok": false
+          },
+          {
+            "t": "What does this word mean?",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "id": "msw_mean_d2",
+        "tipo": "escolher_significado",
+        "frase": "Don't be so mean to your brother.",
+        "pergunta": "O que \"mean\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo — significar",
+            "ok": false
+          },
+          {
+            "t": "Adjetivo — maldoso, cruel",
+            "ok": true
+          },
+          {
+            "t": "Verbo — pretender, ter a intenção de (ao se desculpar)",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_mean_d3",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"mean\" no sentido de dizer que não teve a INTENÇÃO de fazer algo?",
+        "opcoes": [
+          {
+            "t": "I didn't mean to hurt you.",
+            "ok": true
+          },
+          {
+            "t": "What does this word mean?",
+            "ok": false
+          },
+          {
+            "t": "Don't be so mean to your brother.",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_run",
+    "palavra": "run",
+    "categoria": "verbo",
+    "contextos": [
+      {
+        "id": "run_correr",
+        "frase": "I run every morning.",
+        "significado": "Verbo — correr (exercício)",
+        "pt": "Eu corro toda manhã."
+      },
+      {
+        "id": "run_administrar",
+        "frase": "She runs a small business.",
+        "significado": "Verbo — administrar, dirigir (um negócio)",
+        "pt": "Ela administra um pequeno negócio."
+      },
+      {
+        "id": "run_funcionar",
+        "frase": "The engine runs well now.",
+        "significado": "Verbo — funcionar (uma máquina)",
+        "pt": "O motor está funcionando bem agora."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_run_d1",
+        "tipo": "escolher_significado",
+        "frase": "I run every morning.",
+        "pergunta": "O que \"run\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo — funcionar (uma máquina)",
+            "ok": false
+          },
+          {
+            "t": "Verbo — correr (exercício)",
+            "ok": true
+          },
+          {
+            "t": "Verbo — administrar, dirigir (um negócio)",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_run_d2",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"run\" no sentido de ADMINISTRAR um negócio?",
+        "opcoes": [
+          {
+            "t": "I run every morning.",
+            "ok": false
+          },
+          {
+            "t": "She runs a small business.",
+            "ok": true
+          },
+          {
+            "t": "The engine runs well now.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_run_d3",
+        "tipo": "escolher_significado",
+        "frase": "The engine runs well now.",
+        "pergunta": "O que \"run\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo — administrar, dirigir (um negócio)",
+            "ok": false
+          },
+          {
+            "t": "Verbo — funcionar (uma máquina)",
+            "ok": true
+          },
+          {
+            "t": "Verbo — correr (exercício)",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_well",
+    "palavra": "well",
+    "categoria": "adverbio_interjeicao",
+    "contextos": [
+      {
+        "id": "well_bem",
+        "frase": "She speaks English well.",
+        "significado": "Advérbio — bem, de forma correta",
+        "pt": "Ela fala inglês bem."
+      },
+      {
+        "id": "well_entao",
+        "frase": "Well, let's get started.",
+        "significado": "Interjeição — bem, então (ao começar a falar)",
+        "pt": "Bem, vamos começar."
+      },
+      {
+        "id": "well_tambem",
+        "frase": "I'd like to come as well.",
+        "significado": "Advérbio (em \"as well\") — também",
+        "pt": "Eu também gostaria de ir."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_well_d1",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"well\" no sentido de dizer que algo foi feito BEM, corretamente?",
+        "opcoes": [
+          {
+            "t": "Well, let's get started.",
+            "ok": false
+          },
+          {
+            "t": "She speaks English well.",
+            "ok": true
+          },
+          {
+            "t": "I'd like to come as well.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_well_d2",
+        "tipo": "escolher_significado",
+        "frase": "Well, let's get started.",
+        "pergunta": "O que \"well\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Advérbio (em \"as well\") — também",
+            "ok": false
+          },
+          {
+            "t": "Interjeição — bem, então (ao começar a falar)",
+            "ok": true
+          },
+          {
+            "t": "Advérbio — bem, de forma correta",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_well_d3",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"well\" no sentido de dizer TAMBÉM?",
+        "opcoes": [
+          {
+            "t": "She speaks English well.",
+            "ok": false
+          },
+          {
+            "t": "I'd like to come as well.",
+            "ok": true
+          },
+          {
+            "t": "Well, let's get started.",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_free",
+    "palavra": "free",
+    "categoria": "adjetivo_verbo",
+    "contextos": [
+      {
+        "id": "free_livre",
+        "frase": "Are you free this weekend?",
+        "significado": "Adjetivo — livre, disponível",
+        "pt": "Você está livre neste fim de semana?"
+      },
+      {
+        "id": "free_gratis",
+        "frase": "The app is free to download.",
+        "significado": "Adjetivo — grátis, sem custo",
+        "pt": "O aplicativo é grátis para baixar."
+      },
+      {
+        "id": "free_liberar",
+        "frase": "I'll free up some time tomorrow.",
+        "significado": "Verbo — liberar, abrir espaço (na agenda)",
+        "pt": "Eu vou liberar um tempo amanhã."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_free_d1",
+        "tipo": "escolher_significado",
+        "frase": "Are you free this weekend?",
+        "pergunta": "O que \"free\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Adjetivo — livre, disponível",
+            "ok": true
+          },
+          {
+            "t": "Adjetivo — grátis, sem custo",
+            "ok": false
+          },
+          {
+            "t": "Verbo — liberar, abrir espaço (na agenda)",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_free_d2",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"free\" no sentido de dizer que algo é GRÁTIS?",
+        "opcoes": [
+          {
+            "t": "I'll free up some time tomorrow.",
+            "ok": false
+          },
+          {
+            "t": "The app is free to download.",
+            "ok": true
+          },
+          {
+            "t": "Are you free this weekend?",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_free_d3",
+        "tipo": "escolher_significado",
+        "frase": "I'll free up some time tomorrow.",
+        "pergunta": "O que \"free\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Adjetivo — grátis, sem custo",
+            "ok": false
+          },
+          {
+            "t": "Adjetivo — livre, disponível",
+            "ok": false
+          },
+          {
+            "t": "Verbo — liberar, abrir espaço (na agenda)",
+            "ok": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_fine",
+    "palavra": "fine",
+    "categoria": "adjetivo_substantivo",
+    "contextos": [
+      {
+        "id": "fine_bemok",
+        "frase": "I'm fine, thanks.",
+        "significado": "Adjetivo — bem, tudo certo",
+        "pt": "Estou bem, obrigado."
+      },
+      {
+        "id": "fine_multa",
+        "frase": "He got a fine for parking there.",
+        "significado": "Substantivo — multa",
+        "pt": "Ele recebeu uma multa por estacionar ali."
+      },
+      {
+        "id": "fine_excelente",
+        "frase": "This is a fine wine.",
+        "significado": "Adjetivo — excelente, de ótima qualidade",
+        "pt": "Este é um vinho excelente."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_fine_d1",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"fine\" no sentido de dizer que está tudo BEM?",
+        "opcoes": [
+          {
+            "t": "I'm fine, thanks.",
+            "ok": true
+          },
+          {
+            "t": "This is a fine wine.",
+            "ok": false
+          },
+          {
+            "t": "He got a fine for parking there.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_fine_d2",
+        "tipo": "escolher_significado",
+        "frase": "He got a fine for parking there.",
+        "pergunta": "O que \"fine\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Substantivo — multa",
+            "ok": true
+          },
+          {
+            "t": "Adjetivo — bem, tudo certo",
+            "ok": false
+          },
+          {
+            "t": "Adjetivo — excelente, de ótima qualidade",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_fine_d3",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"fine\" no sentido de dizer que algo é EXCELENTE?",
+        "opcoes": [
+          {
+            "t": "This is a fine wine.",
+            "ok": true
+          },
+          {
+            "t": "He got a fine for parking there.",
+            "ok": false
+          },
+          {
+            "t": "I'm fine, thanks.",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_miss",
+    "palavra": "miss",
+    "categoria": "verbo_substantivo",
+    "contextos": [
+      {
+        "id": "miss_sentirfalta",
+        "frase": "I miss my family.",
+        "significado": "Verbo — sentir falta de alguém",
+        "pt": "Eu sinto falta da minha família."
+      },
+      {
+        "id": "miss_perder",
+        "frase": "I missed the bus this morning.",
+        "significado": "Verbo — perder (um transporte, uma oportunidade)",
+        "pt": "Eu perdi o ônibus hoje de manhã."
+      },
+      {
+        "id": "miss_titulo",
+        "frase": "Miss Johnson is our teacher.",
+        "significado": "Substantivo (título) — senhorita",
+        "pt": "A senhorita Johnson é nossa professora."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_miss_d1",
+        "tipo": "escolher_significado",
+        "frase": "I miss my family.",
+        "pergunta": "O que \"miss\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo — perder (um transporte, uma oportunidade)",
+            "ok": false
+          },
+          {
+            "t": "Verbo — sentir falta de alguém",
+            "ok": true
+          },
+          {
+            "t": "Substantivo (título) — senhorita",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_miss_d2",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"miss\" no sentido de dizer que PERDEU um transporte?",
+        "opcoes": [
+          {
+            "t": "I miss my family.",
+            "ok": false
+          },
+          {
+            "t": "I missed the bus this morning.",
+            "ok": true
+          },
+          {
+            "t": "Miss Johnson is our teacher.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_miss_d3",
+        "tipo": "escolher_significado",
+        "frase": "Miss Johnson is our teacher.",
+        "pergunta": "O que \"miss\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Substantivo (título) — senhorita",
+            "ok": true
+          },
+          {
+            "t": "Verbo — sentir falta de alguém",
+            "ok": false
+          },
+          {
+            "t": "Verbo — perder (um transporte, uma oportunidade)",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_check",
+    "palavra": "check",
+    "categoria": "verbo_substantivo",
+    "contextos": [
+      {
+        "id": "check_verificar",
+        "frase": "Can you check my email for mistakes?",
+        "significado": "Verbo — verificar, confirmar",
+        "pt": "Você pode verificar meu e-mail pra ver se tem erro?"
+      },
+      {
+        "id": "check_conta",
+        "frase": "Can we get the check, please?",
+        "significado": "Substantivo — a conta (no restaurante)",
+        "pt": "Podemos pedir a conta, por favor?"
+      },
+      {
+        "id": "check_checkin",
+        "frase": "We need to check in before 3 pm.",
+        "significado": "Verbo (check in) — fazer registro de entrada",
+        "pt": "A gente precisa fazer check-in antes das 15h."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_check_d1",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"check\" no sentido de VERIFICAR algo?",
+        "opcoes": [
+          {
+            "t": "We need to check in before 3 pm.",
+            "ok": false
+          },
+          {
+            "t": "Can you check my email for mistakes?",
+            "ok": true
+          },
+          {
+            "t": "Can we get the check, please?",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_check_d2",
+        "tipo": "escolher_significado",
+        "frase": "Can we get the check, please?",
+        "pergunta": "O que \"check\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Substantivo — a conta (no restaurante)",
+            "ok": true
+          },
+          {
+            "t": "Verbo (check in) — fazer registro de entrada",
+            "ok": false
+          },
+          {
+            "t": "Verbo — verificar, confirmar",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_check_d3",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"check\" no sentido de fazer CHECK-IN?",
+        "opcoes": [
+          {
+            "t": "Can you check my email for mistakes?",
+            "ok": false
+          },
+          {
+            "t": "Can we get the check, please?",
+            "ok": false
+          },
+          {
+            "t": "We need to check in before 3 pm.",
+            "ok": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_get",
+    "palavra": "get",
+    "categoria": "verbo",
+    "contextos": [
+      {
+        "id": "get_obter",
+        "frase": "I need to get a new phone.",
+        "significado": "Verbo — obter, conseguir algo",
+        "pt": "Eu preciso comprar um celular novo."
+      },
+      {
+        "id": "get_entender",
+        "frase": "I don't get this question.",
+        "significado": "Verbo — entender",
+        "pt": "Eu não entendo essa pergunta."
+      },
+      {
+        "id": "get_chegar",
+        "frase": "What time do you get home?",
+        "significado": "Verbo — chegar (a um lugar)",
+        "pt": "Que horas você chega em casa?"
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_get_d1",
+        "tipo": "escolher_significado",
+        "frase": "I need to get a new phone.",
+        "pergunta": "O que \"get\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo — obter, conseguir algo",
+            "ok": true
+          },
+          {
+            "t": "Verbo — chegar (a um lugar)",
+            "ok": false
+          },
+          {
+            "t": "Verbo — entender",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_get_d2",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"get\" no sentido de ENTENDER algo?",
+        "opcoes": [
+          {
+            "t": "I don't get this question.",
+            "ok": true
+          },
+          {
+            "t": "I need to get a new phone.",
+            "ok": false
+          },
+          {
+            "t": "What time do you get home?",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_get_d3",
+        "tipo": "escolher_significado",
+        "frase": "What time do you get home?",
+        "pergunta": "O que \"get\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo — chegar (a um lugar)",
+            "ok": true
+          },
+          {
+            "t": "Verbo — entender",
+            "ok": false
+          },
+          {
+            "t": "Verbo — obter, conseguir algo",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "msw_watch",
+    "palavra": "watch",
+    "categoria": "verbo_substantivo",
+    "contextos": [
+      {
+        "id": "watch_assistir",
+        "frase": "Let's watch a movie tonight.",
+        "significado": "Verbo — assistir",
+        "pt": "Vamos assistir um filme hoje à noite."
+      },
+      {
+        "id": "watch_relogio",
+        "frase": "I bought a new watch.",
+        "significado": "Substantivo — relógio de pulso",
+        "pt": "Eu comprei um relógio novo."
+      },
+      {
+        "id": "watch_cuidado",
+        "frase": "Watch out for cars when you cross.",
+        "significado": "Verbo (watch out) — ficar atento, cuidado",
+        "pt": "Fique atento aos carros quando atravessar."
+      }
+    ],
+    "desafios": [
+      {
+        "id": "msw_watch_d1",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"watch\" no sentido de ASSISTIR algo?",
+        "opcoes": [
+          {
+            "t": "I bought a new watch.",
+            "ok": false
+          },
+          {
+            "t": "Let's watch a movie tonight.",
+            "ok": true
+          },
+          {
+            "t": "Watch out for cars when you cross.",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_watch_d2",
+        "tipo": "escolher_significado",
+        "frase": "I bought a new watch.",
+        "pergunta": "O que \"watch\" significa aqui?",
+        "opcoes": [
+          {
+            "t": "Verbo — assistir",
+            "ok": false
+          },
+          {
+            "t": "Substantivo — relógio de pulso",
+            "ok": true
+          },
+          {
+            "t": "Verbo (watch out) — ficar atento, cuidado",
+            "ok": false
+          }
+        ]
+      },
+      {
+        "id": "msw_watch_d3",
+        "tipo": "qual_frase",
+        "pergunta": "Qual frase usa \"watch\" no sentido de pedir CUIDADO, atenção?",
+        "opcoes": [
+          {
+            "t": "Watch out for cars when you cross.",
+            "ok": true
+          },
+          {
+            "t": "I bought a new watch.",
+            "ok": false
+          },
+          {
+            "t": "Let's watch a movie tonight.",
+            "ok": false
+          }
+        ]
+      }
+    ]
+  }
+]

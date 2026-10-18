@@ -1,0 +1,565 @@
+[
+ {
+  "id": "lab_how_s_it_going",
+  "frase": "How's it going?",
+  "blocos": [
+   "How's",
+   "it",
+   "going?"
+  ],
+  "pt": "Como vão as coisas?",
+  "categoria": "Social",
+  "decoys": [
+   "actually",
+   "much"
+  ]
+ },
+ {
+  "id": "lab_long_time_no_see",
+  "frase": "Long time no see.",
+  "blocos": [
+   "Long",
+   "time",
+   "no",
+   "see."
+  ],
+  "pt": "Quanto tempo.",
+  "categoria": "Social",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_nice_to_meet_you",
+  "frase": "Nice to meet you.",
+  "blocos": [
+   "Nice",
+   "to",
+   "meet",
+   "you."
+  ],
+  "pt": "Prazer em conhecer.",
+  "categoria": "Social",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_that_makes_sense",
+  "frase": "That makes sense.",
+  "blocos": [
+   "That",
+   "makes",
+   "sense."
+  ],
+  "pt": "Isso faz sentido.",
+  "categoria": "Concordar",
+  "decoys": [
+   "some",
+   "maybe"
+  ]
+ },
+ {
+  "id": "lab_i_agree_with_you",
+  "frase": "I agree with you.",
+  "blocos": [
+   "I",
+   "agree",
+   "with",
+   "you."
+  ],
+  "pt": "Concordo com você.",
+  "categoria": "Concordar",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_i_don_t_think_so",
+  "frase": "I don't think so.",
+  "blocos": [
+   "I",
+   "don't",
+   "think",
+   "so."
+  ],
+  "pt": "Acho que não.",
+  "categoria": "Concordar",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_in_my_opinion",
+  "frase": "In my opinion,",
+  "blocos": [
+   "In",
+   "my",
+   "opinion,"
+  ],
+  "pt": "Na minha opinião,",
+  "categoria": "Opinião",
+  "decoys": [
+   "maybe",
+   "very"
+  ]
+ },
+ {
+  "id": "lab_to_be_honest",
+  "frase": "To be honest,",
+  "blocos": [
+   "To",
+   "be",
+   "honest,"
+  ],
+  "pt": "Pra ser sincero,",
+  "categoria": "Opinião",
+  "decoys": [
+   "always",
+   "did"
+  ]
+ },
+ {
+  "id": "lab_i_feel_like",
+  "frase": "I feel like...",
+  "blocos": [
+   "I",
+   "feel",
+   "like..."
+  ],
+  "pt": "Eu sinto que...",
+  "categoria": "Opinião",
+  "decoys": [
+   "maybe",
+   "very"
+  ]
+ },
+ {
+  "id": "lab_can_you_help_me",
+  "frase": "Can you help me?",
+  "blocos": [
+   "Can",
+   "you",
+   "help",
+   "me?"
+  ],
+  "pt": "Você pode me ajudar?",
+  "categoria": "Pedir",
+  "decoys": [
+   "actually",
+   "much"
+  ]
+ },
+ {
+  "id": "lab_do_you_need_a_hand",
+  "frase": "Do you need a hand?",
+  "blocos": [
+   "Do",
+   "you",
+   "need",
+   "a",
+   "hand?"
+  ],
+  "pt": "Precisa de uma ajuda?",
+  "categoria": "Pedir",
+  "decoys": [
+   "some",
+   "maybe"
+  ]
+ },
+ {
+  "id": "lab_i_was_wondering_if",
+  "frase": "I was wondering if...",
+  "blocos": [
+   "I",
+   "was",
+   "wondering",
+   "if..."
+  ],
+  "pt": "Eu queria saber se...",
+  "categoria": "Pedir",
+  "decoys": [
+   "the",
+   "never"
+  ]
+ },
+ {
+  "id": "lab_what_do_you_mean",
+  "frase": "What do you mean?",
+  "blocos": [
+   "What",
+   "do",
+   "you",
+   "mean?"
+  ],
+  "pt": "O que você quer dizer?",
+  "categoria": "Entender",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_could_you_say_that_again",
+  "frase": "Could you say that again?",
+  "blocos": [
+   "Could",
+   "you",
+   "say",
+   "that",
+   "again?"
+  ],
+  "pt": "Pode repetir?",
+  "categoria": "Entender",
+  "decoys": [
+   "this",
+   "your"
+  ]
+ },
+ {
+  "id": "lab_can_you_speak_more_slowly",
+  "frase": "Can you speak more slowly?",
+  "blocos": [
+   "Can",
+   "you",
+   "speak",
+   "more",
+   "slowly?"
+  ],
+  "pt": "Pode falar mais devagar?",
+  "categoria": "Entender",
+  "decoys": [
+   "your",
+   "actually"
+  ]
+ },
+ {
+  "id": "lab_in_a_minute",
+  "frase": "In a minute.",
+  "blocos": [
+   "In",
+   "a",
+   "minute."
+  ],
+  "pt": "Em um minuto.",
+  "categoria": "Tempo",
+  "decoys": [
+   "never",
+   "just"
+  ]
+ },
+ {
+  "id": "lab_as_soon_as_possible",
+  "frase": "As soon as possible.",
+  "blocos": [
+   "As",
+   "soon",
+   "as",
+   "possible."
+  ],
+  "pt": "O quanto antes.",
+  "categoria": "Tempo",
+  "decoys": [
+   "was",
+   "never"
+  ]
+ },
+ {
+  "id": "lab_from_time_to_time",
+  "frase": "From time to time.",
+  "blocos": [
+   "From",
+   "time",
+   "to",
+   "time."
+  ],
+  "pt": "De vez em quando.",
+  "categoria": "Tempo",
+  "decoys": [
+   "some",
+   "maybe"
+  ]
+ },
+ {
+  "id": "lab_let_s_get_started",
+  "frase": "Let's get started.",
+  "blocos": [
+   "Let's",
+   "get",
+   "started."
+  ],
+  "pt": "Vamos começar.",
+  "categoria": "Trabalho",
+  "decoys": [
+   "did",
+   "does"
+  ]
+ },
+ {
+  "id": "lab_can_you_see_my_screen",
+  "frase": "Can you see my screen?",
+  "blocos": [
+   "Can",
+   "you",
+   "see",
+   "my",
+   "screen?"
+  ],
+  "pt": "Consegue ver minha tela?",
+  "categoria": "Trabalho",
+  "decoys": [
+   "were",
+   "was"
+  ]
+ },
+ {
+  "id": "lab_go_ahead_i_m_listening",
+  "frase": "Go ahead, I'm listening.",
+  "blocos": [
+   "Go",
+   "ahead,",
+   "I'm",
+   "listening."
+  ],
+  "pt": "Pode falar, estou ouvindo.",
+  "categoria": "Trabalho",
+  "decoys": [
+   "this",
+   "your"
+  ]
+ },
+ {
+  "id": "lab_tell_me_more_about_that",
+  "frase": "Tell me more about that.",
+  "blocos": [
+   "Tell",
+   "me",
+   "more",
+   "about",
+   "that."
+  ],
+  "pt": "Me conta mais sobre isso.",
+  "categoria": "Vendas",
+  "decoys": [
+   "the",
+   "some"
+  ]
+ },
+ {
+  "id": "lab_walk_me_through_it",
+  "frase": "Walk me through it.",
+  "blocos": [
+   "Walk",
+   "me",
+   "through",
+   "it."
+  ],
+  "pt": "Me explica passo a passo.",
+  "categoria": "Vendas",
+  "decoys": [
+   "did",
+   "does"
+  ]
+ },
+ {
+  "id": "lab_i_hear_you",
+  "frase": "I hear you.",
+  "blocos": [
+   "I",
+   "hear",
+   "you."
+  ],
+  "pt": "Eu te entendo.",
+  "categoria": "Vendas",
+  "decoys": [
+   "just",
+   "were"
+  ]
+ },
+ {
+  "id": "lab_are_you_serious",
+  "frase": "Are you serious?",
+  "blocos": [
+   "Are",
+   "you",
+   "serious?"
+  ],
+  "pt": "Você está falando sério?",
+  "categoria": "Reação",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_that_s_too_bad",
+  "frase": "That's too bad.",
+  "blocos": [
+   "That's",
+   "too",
+   "bad."
+  ],
+  "pt": "Que pena.",
+  "categoria": "Reação",
+  "decoys": [
+   "actually",
+   "much"
+  ]
+ },
+ {
+  "id": "lab_good_for_you",
+  "frase": "Good for you.",
+  "blocos": [
+   "Good",
+   "for",
+   "you."
+  ],
+  "pt": "Que bom pra você.",
+  "categoria": "Reação",
+  "decoys": [
+   "always",
+   "did"
+  ]
+ },
+ {
+  "id": "lab_by_the_way",
+  "frase": "By the way,",
+  "blocos": [
+   "By",
+   "the",
+   "way,"
+  ],
+  "pt": "A propósito,",
+  "categoria": "Conectar",
+  "decoys": [
+   "never",
+   "very"
+  ]
+ },
+ {
+  "id": "lab_the_thing_is",
+  "frase": "The thing is,",
+  "blocos": [
+   "The",
+   "thing",
+   "is,"
+  ],
+  "pt": "O negócio é que,",
+  "categoria": "Conectar",
+  "decoys": [
+   "maybe",
+   "your"
+  ]
+ },
+ {
+  "id": "lab_that_reminds_me",
+  "frase": "That reminds me.",
+  "blocos": [
+   "That",
+   "reminds",
+   "me."
+  ],
+  "pt": "Isso me lembra uma coisa.",
+  "categoria": "Conectar",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_how_much_is_it",
+  "frase": "How much is it?",
+  "blocos": [
+   "How",
+   "much",
+   "is",
+   "it?"
+  ],
+  "pt": "Quanto custa?",
+  "categoria": "Dia a dia",
+  "decoys": [
+   "maybe"
+  ]
+ },
+ {
+  "id": "lab_where_is_the_bathroom",
+  "frase": "Where is the bathroom?",
+  "blocos": [
+   "Where",
+   "is",
+   "the",
+   "bathroom?"
+  ],
+  "pt": "Onde é o banheiro?",
+  "categoria": "Dia a dia",
+  "decoys": [
+   "this",
+   "was"
+  ]
+ },
+ {
+  "id": "lab_to_go_please",
+  "frase": "To go, please.",
+  "blocos": [
+   "To",
+   "go,",
+   "please."
+  ],
+  "pt": "Para viagem, por favor.",
+  "categoria": "Dia a dia",
+  "decoys": [
+   "maybe",
+   "very"
+  ]
+ },
+ {
+  "id": "lab_that_s_about_it",
+  "frase": "That's about it.",
+  "blocos": [
+   "That's",
+   "about",
+   "it."
+  ],
+  "pt": "É isso.",
+  "categoria": "Fechar",
+  "decoys": [
+   "much",
+   "this"
+  ]
+ },
+ {
+  "id": "lab_sounds_like_a_plan",
+  "frase": "Sounds like a plan.",
+  "blocos": [
+   "Sounds",
+   "like",
+   "a",
+   "plan."
+  ],
+  "pt": "Combinado.",
+  "categoria": "Fechar",
+  "decoys": [
+   "did",
+   "does"
+  ]
+ },
+ {
+  "id": "lab_count_me_in",
+  "frase": "Count me in.",
+  "blocos": [
+   "Count",
+   "me",
+   "in."
+  ],
+  "pt": "Conta comigo.",
+  "categoria": "Fechar",
+  "decoys": [
+   "never",
+   "just"
+  ]
+ }
+]

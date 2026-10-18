@@ -1,0 +1,451 @@
+[
+  {
+    "id": "surv_cartao_recusado",
+    "titulo": "Cartão recusado no mercado",
+    "categoria": "compras",
+    "cenario": "Você está no caixa do mercado pagando as compras e o seu cartão é recusado.",
+    "objetivo": "Resolver o problema do pagamento e sair do mercado com as compras.",
+    "palavras": ["card", "cash", "pay", "sorry", "problem", "again", "back", "money"],
+    "passoInicial": "p1",
+    "passos": {
+      "p1": {
+        "tipo": "intencao",
+        "falante": "Caixa",
+        "en": "I'm sorry, your card was declined. Do you have another way to pay?",
+        "pergunta": "Como você responde?",
+        "opcoes": [
+          {"t": "I have cash.", "ok": true, "proximo": "p_cash"},
+          {"t": "Can you try the card again, please?", "ok": true, "proximo": "p_retry"},
+          {"t": "I don't have any money.", "ok": false, "explicacao": "Isso parece que você não vai pagar — pode criar um problema maior.", "proximo": "p_problem"}
+        ]
+      },
+      "p_cash": {
+        "tipo": "compreensao",
+        "falante": "Caixa",
+        "en": "Okay, no problem. That's twenty dollars.",
+        "pergunta": "O que o caixa está dizendo?",
+        "opcoes": [
+          {"t": "O valor total é vinte dólares", "ok": true},
+          {"t": "O cartão já está funcionando", "ok": false}
+        ],
+        "proximo": "p_end_cash"
+      },
+      "p_retry": {
+        "tipo": "compreensao",
+        "falante": "Caixa",
+        "en": "Let me try one more time... I'm sorry, it's still not working.",
+        "pergunta": "O que aconteceu?",
+        "opcoes": [
+          {"t": "O cartão não funcionou de novo", "ok": true},
+          {"t": "O caixa aceitou o cartão", "ok": false}
+        ],
+        "proximo": "p_decision"
+      },
+      "p_problem": {
+        "tipo": "compreensao",
+        "falante": "Caixa",
+        "en": "I understand, but I need another way for you to pay.",
+        "pergunta": "O que o caixa precisa agora?",
+        "opcoes": [
+          {"t": "Uma outra forma de pagamento", "ok": true},
+          {"t": "O seu número de telefone", "ok": false}
+        ],
+        "proximo": "p_decision"
+      },
+      "p_decision": {
+        "tipo": "intencao",
+        "falante": "Caixa",
+        "en": "What would you like to do?",
+        "pergunta": "Como você resolve o problema?",
+        "opcoes": [
+          {"t": "I have cash.", "ok": true, "proximo": "p_cash"},
+          {"t": "I'll put some things back.", "ok": true, "proximo": "p_putback"}
+        ]
+      },
+      "p_putback": {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase dizendo que você vai colocar alguns itens de volta.",
+        "resposta": ["I'll", "put", "these", "back."],
+        "proximo": "p_end_putback"
+      },
+      "p_end_cash": {
+        "tipo": "fim",
+        "texto": "Você pagou em dinheiro e saiu do mercado com todas as compras."
+      },
+      "p_end_putback": {
+        "tipo": "fim",
+        "texto": "Você devolveu alguns itens e pagou o resto com o dinheiro que tinha. Problema resolvido."
+      }
+    }
+  },
+  {
+    "id": "surv_ac_quebrado",
+    "titulo": "Ar-condicionado quebrado no hotel",
+    "categoria": "viagem",
+    "cenario": "Você está no seu quarto de hotel e o ar-condicionado não está funcionando. Você liga para a recepção.",
+    "objetivo": "Explicar o problema e conseguir uma solução.",
+    "palavras": ["room", "hot", "broken", "fix", "change", "sorry", "now", "problem"],
+    "passoInicial": "p1",
+    "passos": {
+      "p1": {
+        "tipo": "intencao",
+        "falante": "Recepção",
+        "en": "Hello, front desk. How can I help?",
+        "pergunta": "Como você explica o problema?",
+        "opcoes": [
+          {"t": "The air conditioning in my room is broken.", "ok": true, "proximo": "p_ask"},
+          {"t": "My room is very hot.", "ok": true, "proximo": "p_ask"},
+          {"t": "I don't like my room.", "ok": false, "explicacao": "Isso não explica qual é o problema de verdade.", "proximo": "p_clarify"}
+        ]
+      },
+      "p_clarify": {
+        "tipo": "compreensao",
+        "falante": "Recepção",
+        "en": "I'm sorry, but what exactly is the problem with the room?",
+        "pergunta": "O que a recepção está perguntando?",
+        "opcoes": [
+          {"t": "Qual é o problema exatamente", "ok": true},
+          {"t": "Se você quer fazer o check-out", "ok": false}
+        ],
+        "proximo": "p1b"
+      },
+      "p1b": {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase explicando que o ar-condicionado está quebrado.",
+        "resposta": ["The", "air", "conditioning", "is", "broken."],
+        "proximo": "p_ask"
+      },
+      "p_ask": {
+        "tipo": "compreensao",
+        "falante": "Recepção",
+        "en": "I'm sorry about that. I can send someone to fix it, or move you to another room. Which do you prefer?",
+        "pergunta": "O que a recepção está oferecendo?",
+        "opcoes": [
+          {"t": "Mandar alguém arrumar, ou trocar de quarto", "ok": true},
+          {"t": "Um desconto na diária", "ok": false}
+        ],
+        "proximo": "p_choice"
+      },
+      "p_choice": {
+        "tipo": "intencao",
+        "falante": "Recepção",
+        "en": "So, what would you like?",
+        "pergunta": "O que você decide?",
+        "opcoes": [
+          {"t": "Please fix it. I'll wait in the room.", "ok": true, "proximo": "p_end_fix"},
+          {"t": "I'd like another room, please.", "ok": true, "proximo": "p_end_room"}
+        ]
+      },
+      "p_end_fix": {
+        "tipo": "fim",
+        "texto": "Alguém veio arrumar o ar-condicionado e agora o quarto está fresco de novo."
+      },
+      "p_end_room": {
+        "tipo": "fim",
+        "texto": "Você trocou de quarto e o novo tem o ar-condicionado funcionando perfeitamente."
+      }
+    }
+  },
+  {
+    "id": "surv_pedido_entrega_errado",
+    "titulo": "Pedido de entrega errado",
+    "categoria": "resolver_problema",
+    "cenario": "Você pediu comida por delivery, mas o pedido chegou errado. Você liga para reclamar.",
+    "objetivo": "Explicar o problema e conseguir uma solução.",
+    "palavras": ["order", "wrong", "sorry", "again", "refund", "food", "free", "problem"],
+    "passoInicial": "p1",
+    "passos": {
+      "p1": {
+        "tipo": "intencao",
+        "falante": "Atendente",
+        "en": "Hi, thanks for calling. What's the problem?",
+        "pergunta": "Como você explica o que aconteceu?",
+        "opcoes": [
+          {"t": "This is the wrong order.", "ok": true, "proximo": "p_wrong"},
+          {"t": "My food never arrived.", "ok": true, "proximo": "p_notarrived"},
+          {"t": "I want to cancel my account.", "ok": false, "explicacao": "Isso não tem nada a ver com o problema do pedido de hoje.", "proximo": "p_offtrack"}
+        ]
+      },
+      "p_offtrack": {
+        "tipo": "compreensao",
+        "falante": "Atendente",
+        "en": "I think there's a misunderstanding. Can you tell me what happened with your order today?",
+        "pergunta": "O que o atendente está pedindo?",
+        "opcoes": [
+          {"t": "Pra você explicar o que aconteceu com o pedido de hoje", "ok": true},
+          {"t": "Pra você fazer um novo pedido", "ok": false}
+        ],
+        "proximo": "p1b"
+      },
+      "p1b": {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase dizendo que o pedido está errado.",
+        "resposta": ["This", "is", "the", "wrong", "order."],
+        "proximo": "p_wrong"
+      },
+      "p_wrong": {
+        "tipo": "compreensao",
+        "falante": "Atendente",
+        "en": "I'm very sorry about that. Would you like a refund, or a new order?",
+        "pergunta": "O que o atendente está oferecendo?",
+        "opcoes": [
+          {"t": "Reembolso ou um novo pedido", "ok": true},
+          {"t": "Um presente grátis na próxima compra", "ok": false}
+        ],
+        "proximo": "p_choice_wrong"
+      },
+      "p_choice_wrong": {
+        "tipo": "intencao",
+        "falante": "Atendente",
+        "en": "So, which one would you like?",
+        "pergunta": "O que você decide?",
+        "opcoes": [
+          {"t": "A refund, please.", "ok": true, "proximo": "p_end_refund"},
+          {"t": "A new order, please.", "ok": true, "proximo": "p_end_neworder"}
+        ]
+      },
+      "p_notarrived": {
+        "tipo": "compreensao",
+        "falante": "Atendente",
+        "en": "I'm sorry about that! I'll send your order again right now, free of charge.",
+        "pergunta": "O que o atendente vai fazer?",
+        "opcoes": [
+          {"t": "Enviar o pedido de novo, sem custo", "ok": true},
+          {"t": "Cancelar o seu pedido", "ok": false}
+        ],
+        "proximo": "p_end_free"
+      },
+      "p_end_refund": {
+        "tipo": "fim",
+        "texto": "Você recebeu o reembolso do pedido errado."
+      },
+      "p_end_neworder": {
+        "tipo": "fim",
+        "texto": "Um novo pedido, certo desta vez, está a caminho."
+      },
+      "p_end_free": {
+        "tipo": "fim",
+        "texto": "Seu pedido está sendo enviado de novo, sem custo."
+      }
+    }
+  },
+  {
+    "id": "surv_amigo_cancela",
+    "titulo": "Amigo cancela o encontro",
+    "categoria": "social",
+    "cenario": "Seu amigo manda uma mensagem cancelando os planos de hoje à noite.",
+    "objetivo": "Responder bem e combinar um novo plano.",
+    "palavras": ["sorry", "busy", "free", "another", "day", "okay", "understand", "weekend"],
+    "passoInicial": "p1",
+    "passos": {
+      "p1": {
+        "tipo": "intencao",
+        "falante": "Amigo (mensagem)",
+        "en": "Hey, I'm really sorry, but I can't come tonight. Something came up.",
+        "pergunta": "Como você responde?",
+        "opcoes": [
+          {"t": "That's okay, no problem!", "ok": true, "proximo": "p_ask"},
+          {"t": "Why didn't you tell me earlier?", "ok": false, "explicacao": "Isso soa bravo e pode criar uma discussão com o seu amigo.", "proximo": "p_tension"},
+          {"t": "No problem, let's talk tomorrow.", "ok": true, "proximo": "p_end_tomorrow"}
+        ]
+      },
+      "p_tension": {
+        "tipo": "compreensao",
+        "falante": "Amigo (mensagem)",
+        "en": "I'm sorry, I know it's late notice. Can we talk about it another time?",
+        "pergunta": "O que o amigo está pedindo?",
+        "opcoes": [
+          {"t": "Pra conversar sobre isso em outro momento", "ok": true},
+          {"t": "Pra você ligar pra ele agora", "ok": false}
+        ],
+        "proximo": "p_ask"
+      },
+      "p_ask": {
+        "tipo": "compreensao",
+        "falante": "Amigo (mensagem)",
+        "en": "Thanks for understanding! Are you free this weekend?",
+        "pergunta": "O que o amigo está perguntando?",
+        "opcoes": [
+          {"t": "Se você está livre no fim de semana", "ok": true},
+          {"t": "Se você está bravo com ele", "ok": false}
+        ],
+        "proximo": "p_choice"
+      },
+      "p_choice": {
+        "tipo": "intencao",
+        "falante": "Amigo (mensagem)",
+        "en": "So, are you free this weekend?",
+        "pergunta": "Como você responde?",
+        "opcoes": [
+          {"t": "Yes, Saturday works for me.", "ok": true, "proximo": "p_end_saturday"},
+          {"t": "I'm not sure yet, I'll check.", "ok": true, "proximo": "p_end_later"}
+        ]
+      },
+      "p_end_tomorrow": {
+        "tipo": "fim",
+        "texto": "Vocês combinaram de se falar de novo amanhã. Sem estresse."
+      },
+      "p_end_saturday": {
+        "tipo": "fim",
+        "texto": "Vocês marcaram um novo encontro para sábado."
+      },
+      "p_end_later": {
+        "tipo": "fim",
+        "texto": "Você disse que vai checar a agenda e avisa o amigo em breve."
+      }
+    }
+  },
+  {
+    "id": "surv_devolver_produto",
+    "titulo": "Devolvendo um produto com defeito",
+    "categoria": "compras",
+    "cenario": "Você comprou um produto que não funciona e vai até a loja para devolver.",
+    "objetivo": "Explicar o problema e conseguir um reembolso ou troca.",
+    "palavras": ["return", "broken", "receipt", "refund", "exchange", "sorry", "new", "work"],
+    "passoInicial": "p1",
+    "passos": {
+      "p1": {
+        "tipo": "intencao",
+        "falante": "Vendedor",
+        "en": "Hi, how can I help you today?",
+        "pergunta": "Como você explica o motivo?",
+        "opcoes": [
+          {"t": "This doesn't work. I'd like to return it.", "ok": true, "proximo": "p_receipt"},
+          {"t": "I just don't want it anymore.", "ok": false, "explicacao": "Sem um motivo como defeito, fica mais difícil conseguir o reembolso completo.", "proximo": "p_pushback"}
+        ]
+      },
+      "p_pushback": {
+        "tipo": "compreensao",
+        "falante": "Vendedor",
+        "en": "I see. Without a reason like a defect, I can usually only offer store credit. Do you have the receipt?",
+        "pergunta": "O que o vendedor está explicando?",
+        "opcoes": [
+          {"t": "Sem defeito, geralmente só dá pra oferecer crédito na loja", "ok": true},
+          {"t": "A loja não aceita devoluções", "ok": false}
+        ],
+        "proximo": "p_receipt"
+      },
+      "p_receipt": {
+        "tipo": "compreensao",
+        "falante": "Vendedor",
+        "en": "Okay. Do you have the receipt?",
+        "pergunta": "O que o vendedor está perguntando?",
+        "opcoes": [
+          {"t": "Se você tem o recibo", "ok": true},
+          {"t": "Se você quer um produto novo", "ok": false}
+        ],
+        "proximo": "p_choice"
+      },
+      "p_choice": {
+        "tipo": "intencao",
+        "falante": "Vendedor",
+        "en": "Do you have the receipt with you?",
+        "pergunta": "Como você responde?",
+        "opcoes": [
+          {"t": "Yes, here it is.", "ok": true, "proximo": "p_refund_ask"},
+          {"t": "No, I don't have it.", "ok": true, "proximo": "p_end_credit"}
+        ]
+      },
+      "p_refund_ask": {
+        "tipo": "compreensao",
+        "falante": "Vendedor",
+        "en": "Great, thank you. Would you like a refund, or a new one?",
+        "pergunta": "O que o vendedor está oferecendo?",
+        "opcoes": [
+          {"t": "Reembolso ou um produto novo", "ok": true},
+          {"t": "Um desconto na próxima compra", "ok": false}
+        ],
+        "proximo": "p_choice2"
+      },
+      "p_choice2": {
+        "tipo": "intencao",
+        "falante": "Vendedor",
+        "en": "So, a refund or a new one?",
+        "pergunta": "O que você decide?",
+        "opcoes": [
+          {"t": "A refund, please.", "ok": true, "proximo": "p_end_refund"},
+          {"t": "A new one, please.", "ok": true, "proximo": "p_end_exchange"}
+        ]
+      },
+      "p_end_credit": {
+        "tipo": "fim",
+        "texto": "Sem o recibo, você recebeu um crédito na loja para usar em outra compra."
+      },
+      "p_end_refund": {
+        "tipo": "fim",
+        "texto": "Você recebeu o reembolso completo do produto com defeito."
+      },
+      "p_end_exchange": {
+        "tipo": "fim",
+        "texto": "Você trocou o produto com defeito por um novo, que funciona bem."
+      }
+    }
+  },
+  {
+    "id": "surv_vizinho_barulho",
+    "titulo": "Vizinho com música alta",
+    "categoria": "cotidiano",
+    "cenario": "É tarde da noite e a música do seu vizinho está muito alta. Você vai até a porta dele.",
+    "objetivo": "Resolver o problema sem criar uma discussão.",
+    "palavras": ["noise", "loud", "sorry", "night", "sleep", "quiet", "again", "problem"],
+    "passoInicial": "p1",
+    "passos": {
+      "p1": {
+        "tipo": "intencao",
+        "falante": "Vizinho",
+        "en": "Oh, hi! What's going on?",
+        "pergunta": "Como você começa a falar sobre o problema?",
+        "opcoes": [
+          {"t": "Sorry to bother you, but the music is very loud.", "ok": true, "proximo": "p_apology"},
+          {"t": "Turn that music off right now!", "ok": false, "explicacao": "Isso soa agressivo e pode começar uma discussão.", "proximo": "p_conflict"}
+        ]
+      },
+      "p_conflict": {
+        "tipo": "compreensao",
+        "falante": "Vizinho",
+        "en": "Whoa, okay, you don't have to be rude. What's the problem, exactly?",
+        "pergunta": "O que o vizinho está pedindo?",
+        "opcoes": [
+          {"t": "Pra você explicar o problema sem ser rude", "ok": true},
+          {"t": "Pra você ir embora", "ok": false}
+        ],
+        "proximo": "p1b"
+      },
+      "p1b": {
+        "tipo": "producaoB",
+        "contexto": "Monte a frase explicando que a música está muito alta.",
+        "resposta": ["The", "music", "is", "very", "loud."],
+        "proximo": "p_apology"
+      },
+      "p_apology": {
+        "tipo": "compreensao",
+        "falante": "Vizinho",
+        "en": "Oh, I'm sorry! I didn't realize. Is it bothering you a lot?",
+        "pergunta": "O que ele está perguntando?",
+        "opcoes": [
+          {"t": "Se o barulho está incomodando muito", "ok": true},
+          {"t": "Se você quer entrar na festa", "ok": false}
+        ],
+        "proximo": "p_choice"
+      },
+      "p_choice": {
+        "tipo": "intencao",
+        "falante": "Vizinho",
+        "en": "So, is it bothering you a lot?",
+        "pergunta": "Como você responde?",
+        "opcoes": [
+          {"t": "Yes, I can't sleep.", "ok": true, "proximo": "p_end_lower"},
+          {"t": "A little, but it's okay for ten more minutes.", "ok": true, "proximo": "p_end_later"}
+        ]
+      },
+      "p_end_lower": {
+        "tipo": "fim",
+        "texto": "O vizinho baixou a música imediatamente. Você já pode dormir em paz."
+      },
+      "p_end_later": {
+        "tipo": "fim",
+        "texto": "O vizinho prometeu baixar a música em dez minutos, e assim foi feito."
+      }
+    }
+  }
+]
