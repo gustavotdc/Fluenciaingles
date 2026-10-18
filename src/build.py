@@ -49,11 +49,19 @@ def load_json_opt(path):
 TXT_BANCO = load_json_opt(os.path.join(ROOT, "data", "txt_banco.json"))
 ANT_BANCO = load_json_opt(os.path.join(ROOT, "data", "ant_banco.json"))
 VERBOS = load_json_opt(os.path.join(ROOT, "data", "verbos.json"))
+VERB_USOS = load_json_opt(os.path.join(ROOT, "data", "verbos_usos.json"))
 MISSOES = load_json_opt(os.path.join(ROOT, "data", "missoes.json"))
+LAB = load_json_opt(os.path.join(ROOT, "data", "lab.json"))
+DETECTIVE = load_json_opt(os.path.join(ROOT, "data", "detective.json"))
+MEANING = load_json_opt(os.path.join(ROOT, "data", "meaning.json"))
+STORIES = load_json_opt(os.path.join(ROOT, "data", "stories.json"))
+SURVIVAL = load_json_opt(os.path.join(ROOT, "data", "survival.json"))
 
 print("palavras", len(W), "| reducoes", len(R), "| blocos", len(C), "| familias", len(FAM),
       "| textos prontos", len(TXT_BANCO), "| antecipar prontos", len(ANT_BANCO),
-      "| verbos prontos", len(VERBOS), "| missoes prontas", len(MISSOES))
+      "| verbos prontos", len(VERBOS), "| usos de verbos", len(VERB_USOS), "| missoes prontas", len(MISSOES),
+      "| academia: lab", len(LAB), "detective", len(DETECTIVE), "meaning", len(MEANING),
+      "stories", len(STORIES), "survival", len(SURVIVAL))
 
 tpl = open(TPL, encoding="utf-8").read()
 html = (tpl
@@ -64,8 +72,14 @@ html = (tpl
         .replace("/*__TXTBANCO__*/[]", json.dumps(TXT_BANCO, ensure_ascii=False, separators=(",", ":")))
         .replace("/*__ANTBANCO__*/[]", json.dumps(ANT_BANCO, ensure_ascii=False, separators=(",", ":")))
         .replace("/*__VERBOS__*/[]", json.dumps(VERBOS, ensure_ascii=False, separators=(",", ":")))
-        .replace("/*__MISSOES__*/[]", json.dumps(MISSOES, ensure_ascii=False, separators=(",", ":"))))
-assert not any(m in html for m in ("__WORDS__", "__RED__", "__CHK__", "__FAM__", "__TXTBANCO__", "__ANTBANCO__", "__VERBOS__", "__MISSOES__"))
+        .replace("/*__VERBUSOS__*/[]", json.dumps(VERB_USOS, ensure_ascii=False, separators=(",", ":")))
+        .replace("/*__MISSOES__*/[]", json.dumps(MISSOES, ensure_ascii=False, separators=(",", ":")))
+        .replace("/*__LAB__*/[]", json.dumps(LAB, ensure_ascii=False, separators=(",", ":")))
+        .replace("/*__DETECTIVE__*/[]", json.dumps(DETECTIVE, ensure_ascii=False, separators=(",", ":")))
+        .replace("/*__MEANING__*/[]", json.dumps(MEANING, ensure_ascii=False, separators=(",", ":")))
+        .replace("/*__STORIES__*/[]", json.dumps(STORIES, ensure_ascii=False, separators=(",", ":")))
+        .replace("/*__SURVIVAL__*/[]", json.dumps(SURVIVAL, ensure_ascii=False, separators=(",", ":"))))
+assert not any(m in html for m in ("__WORDS__", "__RED__", "__CHK__", "__FAM__", "__TXTBANCO__", "__ANTBANCO__", "__VERBOS__", "__VERBUSOS__", "__MISSOES__", "__LAB__", "__DETECTIVE__", "__MEANING__", "__STORIES__", "__SURVIVAL__"))
 
 os.makedirs(OUT_DIR, exist_ok=True)
 open(os.path.join(OUT_DIR, "index.html"), "w", encoding="utf-8").write(html)
