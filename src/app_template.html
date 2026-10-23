@@ -1889,10 +1889,82 @@ async function pushRemote(){
 window.addEventListener("online", () => { if(syncEstado !== "on") pushRemote(); });
 /* dbRef "de mentira" que fala com o Supabase pela REST (PostgREST), com a
    mesma forma (get/set) que o dbRef do Claude Artifact usa. */
+/* ---- LOGIN (23/10) --------------------------------------------------------
+   E-mail + senha no Supabase Auth. O progresso fica ligado à CONTA, não ao
+   aparelho: celular e notebook entram com o mesmo login e veem o mesmo
+   sistema. A sessão fica guardada no aparelho (renova sozinha); o banco só
+   aceita gravação de quem estiver logado como o dono (RLS). */
+const AUTH_KEY = "fluencia_auth";
+let AUTH = null;
+try{ AUTH = JSON.parse(localStorage.getItem(AUTH_KEY) || "null"); }catch(e){ AUTH = null; }
+function authSalva(j){
+  AUTH = {access: j.access_token, refresh: j.refresh_token, exp: (Date.now()/1000|0) + (j.expires_in||3600), email: (j.user && j.user.email) || (AUTH && AUTH.email) || ""};
+  try{ localStorage.setItem(AUTH_KEY, JSON.stringify(AUTH)); }catch(e){}
+}
+function authLimpa(){ AUTH = null; try{ localStorage.removeItem(AUTH_KEY); }catch(e){} }
+async function authPost(path, corpo){
+  const r = await fetch(SUPA_URL + "/auth/v1/" + path, {method:"POST", headers:{apikey:SUPA_KEY, "Content-Type":"application/json"}, body: JSON.stringify(corpo)});
+  const j = await r.json().catch(() => ({}));
+  if(!r.ok) throw new Error(j.msg || j.error_description || j.message || ("erro " + r.status));
+  return j;
+}
+/* devolve o token válido (renova perto de vencer). null = precisa entrar de novo.
+   Sem internet, mantém o token velho: o app segue local e tenta de novo depois. */
+async function authToken(){
+  if(!AUTH) return null;
+  if(AUTH.exp - 60 > Date.now()/1000) return AUTH.access;
+  try{
+    const j = await authPost("token?grant_type=refresh_token", {refresh_token: AUTH.refresh});
+    authSalva(j); return AUTH.access;
+  }catch(e){
+    if(!navigator.onLine || /Failed to fetch|NetworkError|Load failed/i.test(String(e.message))) return AUTH.access;
+    authLimpa(); return null;
+  }
+}
+function telaLogin(){
+  return new Promise(resolve => {
+    const box = document.createElement("div");
+    box.className = "modal"; box.style.zIndex = 200; box.style.background = "#030407F2";
+    box.innerHTML = `<form id="lgf" style="width:min(340px,100%);display:flex;flex-direction:column;gap:12px">
+      <h2 style="margin:0">Entrar</h2>
+      <p class="muted" style="font-size:13.5px;margin:0">Seu progresso fica na sua conta e é o mesmo no celular e no notebook.</p>
+      <input id="lge" type="email" autocomplete="username" placeholder="e-mail" required style="padding:12px;border-radius:10px;border:1px solid var(--ink-3);background:#0B0E17;color:var(--ink);font-size:16px">
+      <input id="lgs" type="password" autocomplete="current-password" placeholder="senha (mín. 6)" required minlength="6" style="padding:12px;border-radius:10px;border:1px solid var(--ink-3);background:#0B0E17;color:var(--ink);font-size:16px">
+      <div id="lgm" style="min-height:18px;font-size:13px;color:#FFB0AE"></div>
+      <button class="btn" id="lgin" type="submit">Entrar</button>
+      <button class="btn" id="lgcad" type="button">Criar conta (primeira vez)</button></form>`;
+    document.body.appendChild(box);
+    const msg = t => { box.querySelector("#lgm").textContent = t; };
+    const pega = () => ({email: box.querySelector("#lge").value.trim(), password: box.querySelector("#lgs").value});
+    const fim = () => { box.remove(); resolve(true); };
+    box.querySelector("#lgf").onsubmit = async e => {
+      e.preventDefault(); msg("Entrando…");
+      try{ authSalva(await authPost("token?grant_type=password", pega())); fim(); }
+      catch(er){ msg(/invalid/i.test(er.message) ? "E-mail ou senha incorretos." : "Não consegui entrar: " + er.message); }
+    };
+    box.querySelector("#lgcad").onclick = async () => {
+      const d = pega(); if(!d.email || d.password.length < 6){ msg("Preencha e-mail e uma senha de 6+ caracteres."); return; }
+      msg("Criando conta…");
+      try{
+        const j = await authPost("signup", d);
+        if(j.access_token){ authSalva(j); fim(); }
+        else msg("Conta criada. Confirme pelo e-mail que chegou e depois toque em Entrar.");
+      }catch(er){ msg("Não consegui criar: " + er.message); }
+    };
+  });
+}
+async function garanteLogin(){
+  if(await authToken()) return true;
+  await telaLogin();
+  return true;
+}
+function sair(){ authLimpa(); location.reload(); }
+
 function supaRef(){
-  const H = { apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY };
+  const hdr = async () => { const t = await authToken(); if(!t){ authLimpa(); throw new Error("sem login"); } return { apikey: SUPA_KEY, Authorization: "Bearer " + t }; };
   return {
     get: async () => {
+      const H = await hdr();
       const r = await fetch(SUPA_URL + "/rest/v1/estado?id=eq." + SUPA_ROW + "&select=dados,atualizado_em", { headers: H });
       if(!r.ok) throw new Error("supa get " + r.status);
       const rows = await r.json();
@@ -1901,6 +1973,7 @@ function supaRef(){
     },
     /* com ts: só grava se ninguém mexeu desde a leitura (devolve false se mexeram) */
     set: async (obj, ts) => {
+      const H = await hdr();
       if(ts){
         const r = await fetch(SUPA_URL + "/rest/v1/estado?id=eq." + SUPA_ROW + "&atualizado_em=eq." + encodeURIComponent(ts), {
           method: "PATCH",
@@ -1977,6 +2050,11 @@ async function initSync(){
   }
   /* fora do Claude Artifact (ex: GitHub Pages / Cloudflare): usa o Supabase */
   if(!SUPA_URL || !SUPA_KEY){ setSync("off"); SYNC_PRONTO = true; return; }
+  /* login só é exigido no site de verdade (https fora do localhost); em arquivo
+     local e nos testes o app roda sem nuvem, a menos que já exista sessão */
+  const exigeLogin = /^https?:$/.test(location.protocol) && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  if(!exigeLogin && !AUTH){ setSync("off"); SYNC_PRONTO = true; return; }
+  await garanteLogin();
   dbRef = supaRef();
   try{ await sincroniza(); setSync("on"); }
   catch(e){ setSync("wait"); agendaRetry(8000); }
@@ -6464,11 +6542,17 @@ function viewCfg(v){
     </div>
 
     <div class="card" style="margin-top:14px">
+      <h2>Conta</h2>
+      <p class="muted" style="font-size:13.5px;margin-bottom:14px">${AUTH && AUTH.email ? "Entrou como <b>" + esc(AUTH.email) + "</b>. O progresso é o mesmo em todos os aparelhos em que você entrar com esta conta." : "Sem login neste aparelho."}</p>
+      <button class="btn" id="sair">Sair deste aparelho</button>
+    </div>
+    <div class="card" style="margin-top:14px">
       <h2>Zerar progresso</h2>
       <p class="muted" style="font-size:13.5px;margin-bottom:14px">Apaga todo o histórico e volta ao dia zero. As 1.200 palavras, os PAVs e as imagens continuam.</p>
       <button class="btn bad" id="zerar">Zerar tudo</button>
     </div>`;
   if($("#conn")) $("#conn").onclick = () => window.__pendingHandle && !fileHandle ? reauthFile() : connectFile();
+  if($("#sair")) $("#sair").onclick = sair;
   $("#exp").onclick = exportJSON;
   if($("#exp2")) $("#exp2").onclick = exportJSON;
   if($("#imp2")) $("#imp2").onclick = importJSON;
