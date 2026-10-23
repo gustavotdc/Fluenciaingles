@@ -73,28 +73,12 @@ const REAL = JSON.parse(fs.readFileSync(require('path').resolve(__dirname, '../d
   await p.waitForTimeout(100);
   const antesZerar = await p.evaluate(() => Object.keys(S.w).length);
   ok(antesZerar > 0, `estado real tem ${antesZerar} palavras antes de zerar`);
+  // 23/10: "Zerar tudo" não zera mais por aqui (proteção contra apagão): só avisa
   await p.click('#zerar');
-  await p.waitForTimeout(80);
-  const modalUm = await p.evaluate(() => !!document.querySelector('.modal'));
-  ok(modalUm, 'clicar em "Zerar tudo" abre modal próprio (não trava em confirm() bloqueado)');
-  await p.click('.modal #cfS');
-  await p.waitForTimeout(80);
-  const modalDois = await p.evaluate(() => !!document.querySelector('.modal'));
-  ok(modalDois, 'pede a segunda confirmação antes de apagar');
-  await p.click('.modal #cfS');
   await p.waitForTimeout(120);
-  const depoisZerar = await p.evaluate(() => Object.keys(S.w).length);
-  ok(depoisZerar === 0, 'confirmando as duas vezes, zera o progresso de verdade');
-
-  // cancelar não apaga nada
-  await p.evaluate(doc => { S = normaliza(unpack(doc)); go('cfg'); }, REAL);
-  await p.waitForTimeout(80);
-  await p.click('#zerar');
-  await p.waitForTimeout(80);
-  await p.click('.modal #cfN');
-  await p.waitForTimeout(80);
-  const cancelou = await p.evaluate(() => Object.keys(S.w).length);
-  ok(cancelou > 0, 'cancelar no modal não apaga o progresso');
+  const semModal = await p.evaluate(() => !document.querySelector('.modal'));
+  const mantem = await p.evaluate(() => Object.keys(S.w).length);
+  ok(semModal && mantem === antesZerar, 'clicar em "Zerar tudo" não apaga nada (zerar é só pelo Claude)');
 
   // ---------- sorteio das palavras novas: janela, não sempre a mesma ordem ----------
   const janela = await p.evaluate(() => {

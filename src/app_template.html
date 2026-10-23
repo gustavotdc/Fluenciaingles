@@ -970,6 +970,7 @@ function freshState(){
     vb:{w:{}, hoje:null}, // verbo do dia (17/10): id -> {s,n,l,e,a,m,r} (mesma agenda de 8 revisões das palavras); hoje:{k,id}
     acum:{verb:0},     // regra de acúmulo: meta de verbos não batida vira pendência pro dia seguinte
     ultimoDiaAtivo: null, // última chave 'YYYY-MM-DD' em que o dia foi tocado (pro cálculo do acúmulo)
+    apg:{},            // id -> quando o Gustavo voltou a palavra para "Nova" à mão (a mesclagem entre aparelhos respeita)
     ultimo: null
   };
 }
@@ -1216,7 +1217,7 @@ function dia(k){
   return d;
 }
 function wd(id){
-  if(!S.w[id]) S.w[id] = {s:0, n:null, l:null, e:0, a:0, m:false, r:false};
+  if(!S.w[id]){ S.w[id] = {s:0, n:null, l:null, e:0, a:0, m:false, r:false}; if(S.apg) delete S.apg[id]; }
   return S.w[id];
 }
 function isLearned(id){ return !!(S.w[id] && S.w[id].l); }
@@ -1226,7 +1227,7 @@ function isLearned(id){ return !!(S.w[id] && S.w[id].l); }
    estágios — Dominada = estágio 8 + m; as outras caem num estágio da faixa. */
 function trocarEtiqueta(id, st){
   if(statusOf(id) === st) return false;
-  if(st === "nova"){ delete S.w[id]; }
+  if(st === "nova"){ delete S.w[id]; (S.apg = S.apg || {})[id] = Date.now(); }
   else {
     const w = wd(id);
     w.l = w.l || Date.now();
@@ -1725,7 +1726,8 @@ function pack(){
           reactor:packReactor(S.reactor),
           lab:packAcademia(S.lab), det:packAcademia(S.det), msw:packAcademia(S.msw),
           story:packAcademia(S.story), surv:packAcademia(S.surv),
-          verb:S.verb||{}, vb:packVb(S.vb), acum:S.acum||{verb:0}, uda:S.ultimoDiaAtivo||null};
+          verb:S.verb||{}, vb:packVb(S.vb), acum:S.acum||{verb:0}, uda:S.ultimoDiaAtivo||null,
+          apg:porId(S.apg, idW)};
 }
 function unpack(p){
   if(!p) return null;
@@ -1745,7 +1747,8 @@ function unpack(p){
              verb:(p.verb && typeof p.verb === "object") ? p.verb : {},
              vb:unpackVb(p.vb),
              acum:(p.acum && typeof p.acum === "object") ? {verb:p.acum.verb|0} : {verb:0},
-             ultimoDiaAtivo:p.uda||null};
+             ultimoDiaAtivo:p.uda||null,
+             apg:(p.apg && typeof p.apg === "object") ? porIndiceOuNumero(p.apg, ixW) : {}};
   for(const id in p.w){
     const a = p.w[id];
     let i = id;
@@ -1762,7 +1765,7 @@ function unpack(p){
   return o;
 }
 function schedulePush(){
-  if(!dbRef) return;
+  if(!dbRef || !SYNC_PRONTO) return;
   setSync("wait");
   clearTimeout(pushTimer);
   pushTimer = setTimeout(pushRemote, 1200);
@@ -1776,41 +1779,145 @@ function flushPush(){
 document.addEventListener("visibilitychange", () => { if(document.hidden) flushPush(); });
 window.addEventListener("pagehide", flushPush);
 window.addEventListener("blur", flushPush);
+/* ---- MESCLAGEM (23/10) ----------------------------------------------------
+   Antes: "quem gravou por último vence" (ultimo mais novo). Um aparelho com
+   estado vazio/velho, ou uma falha de rede no primeiro carregamento, podia
+   sobrescrever o progresso inteiro na nuvem. Agora NADA é sobrescrito: antes
+   de gravar, o app busca a nuvem, JUNTA com o que tem local (palavras e dias
+   somam, o mais avançado de cada palavra vence) e só então grava, de forma
+   condicional (se alguém gravou no meio, tenta de novo). Celular e notebook
+   viram um sistema só, sem importar qual abriu primeiro. */
+function canon(v){
+  if(Array.isArray(v)) return v.map(canon);
+  if(v && typeof v === "object"){ const o = {}; Object.keys(v).sort().forEach(k => { o[k] = canon(v[k]); }); return o; }
+  return v;
+}
+function packDe(obj){ const bak = S; S = obj; try{ return pack(); } finally { S = bak; } }
+function sigDe(obj){ return JSON.stringify(canon(packDe(obj))); }
+function contaW(o){ return Object.keys((o && o.w) || {}).length; }
+function melhorPalavra(a, b){
+  const rk = x => [x.m?1:0, x.s|0, (x.a|0) + (x.e|0), x.l?1:0];
+  const ra = rk(a), rb = rk(b);
+  for(let i = 0; i < ra.length; i++){ if(ra[i] !== rb[i]) return ra[i] > rb[i] ? a : b; }
+  return a;
+}
+function uniao(base, outro){ return Object.assign({}, outro || {}, base || {}); }
+function juntaDia(a, b){
+  if(!a) return b; if(!b) return a;
+  const o = {};
+  for(const k of new Set([...Object.keys(a), ...Object.keys(b)])){
+    const x = a[k], y = b[k];
+    o[k] = (typeof x === "boolean" || typeof y === "boolean") ? !!(x || y) : Math.max(x|0, y|0);
+  }
+  return o;
+}
+function mesclar(L, R){
+  if(!R) return L;
+  if(!L) return R;
+  const localNovo = (L.ultimo||0) >= (R.ultimo||0);
+  const base = localNovo ? L : R, outro = localNovo ? R : L;
+  const M = JSON.parse(JSON.stringify(base));
+  for(const k of ["pav","img","r","c","verb"]) M[k] = JSON.parse(JSON.stringify(uniao(base[k], outro[k])));
+  M.w = {};
+  for(const id of new Set([...Object.keys(L.w||{}), ...Object.keys(R.w||{})])){
+    const a = (L.w||{})[id], b = (R.w||{})[id];
+    M.w[id] = JSON.parse(JSON.stringify(!a ? b : !b ? a : melhorPalavra(a, b)));
+  }
+  M.apg = Object.assign({}, R.apg || {}, L.apg || {});
+  for(const id in M.apg){ if(M.w[id] && (M.apg[id]||0) > (M.w[id].l||0)) delete M.w[id]; }
+  M.dias = {};
+  for(const k of new Set([...Object.keys(L.dias||{}), ...Object.keys(R.dias||{})])) M.dias[k] = JSON.parse(JSON.stringify(juntaDia((L.dias||{})[k], (R.dias||{})[k])));
+  const vbw = {};
+  for(const id of new Set([...Object.keys((L.vb||{}).w||{}), ...Object.keys((R.vb||{}).w||{})])){
+    const a = ((L.vb||{}).w||{})[id], b = ((R.vb||{}).w||{})[id];
+    vbw[id] = JSON.parse(JSON.stringify(!a ? b : !b ? a : melhorPalavra(a, b)));
+  }
+  M.vb = Object.assign({}, base.vb || {}, {w:vbw});
+  if(!M.vb.hoje) M.vb.hoje = (outro.vb||{}).hoje || null;
+  if(M.rush && outro.rush && outro.rush.recs) M.rush.recs = JSON.parse(JSON.stringify(uniao(M.rush.recs, outro.rush.recs)));
+  M.acum = {verb: Math.max((L.acum||{}).verb|0, (R.acum||{}).verb|0)};
+  M.criado = Math.min(L.criado || Infinity, R.criado || Infinity);
+  if(!isFinite(M.criado)) M.criado = Date.now();
+  M.ultimo = Math.max(L.ultimo||0, R.ultimo||0);
+  M.frasesDesde = [L.frasesDesde, R.frasesDesde].filter(Boolean).sort()[0] || null;
+  M.ultimoDiaAtivo = [L.ultimoDiaAtivo, R.ultimoDiaAtivo].filter(Boolean).sort().pop() || null;
+  return normaliza(M);
+}
+let syncRetry = null;
+function agendaRetry(ms){
+  clearTimeout(syncRetry);
+  syncRetry = setTimeout(() => { pushRemote(); }, ms || 15000);
+}
+/* busca → mescla → grava (condicional). Devolve true se terminou. */
+async function sincroniza(avisa){
+  for(let tent = 0; tent < 4; tent++){
+    const snap = await dbRef.get();
+    const remoto = snap.exists ? unpack(snap.data()) : null;
+    const mesclado = mesclar(S, remoto);
+    if(remoto && contaW(mesclado) < contaW(remoto)) throw new Error("trava: a gravação reduziria o progresso");
+    const sigM = sigDe(mesclado);
+    const difLocal = sigM !== sigDe(S);
+    const difRemoto = !remoto || sigM !== sigDe(remoto);
+    if(difRemoto){
+      const ok = await dbRef.set(packDe(mesclado), snap.ts);
+      if(ok === false) continue;           // alguém gravou no meio: busca de novo
+    }
+    if(difLocal && !SESSION){
+      S = mesclado;
+      try{ localStorage.setItem(STORE, JSON.stringify(pack())); }catch(e){}
+      render();
+      if(avisa) toast(avisa);
+    }
+    return true;
+  }
+  return false;
+}
 async function pushRemote(){
-  if(!dbRef) return;
+  if(!dbRef || !SYNC_PRONTO) return;
   if(pushing){ pushAgain = true; return; }
   pushing = true;
-  try{ await dbRef.set(pack()); setSync("on"); }
-  catch(e){ setSync("wait"); }
+  try{
+    const ok = await sincroniza();
+    if(ok){ setSync("on"); clearTimeout(syncRetry); } else { setSync("wait"); agendaRetry(8000); }
+  }
+  catch(e){ setSync("wait"); agendaRetry(15000); }
   finally{
     pushing = false;
     if(pushAgain){ pushAgain = false; setTimeout(pushRemote, 500); }
   }
 }
+window.addEventListener("online", () => { if(syncEstado !== "on") pushRemote(); });
 /* dbRef "de mentira" que fala com o Supabase pela REST (PostgREST), com a
    mesma forma (get/set) que o dbRef do Claude Artifact usa. */
 function supaRef(){
+  const H = { apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY };
   return {
     get: async () => {
-      const r = await fetch(SUPA_URL + "/rest/v1/estado?id=eq." + SUPA_ROW + "&select=dados", {
-        headers: { apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY }
-      });
+      const r = await fetch(SUPA_URL + "/rest/v1/estado?id=eq." + SUPA_ROW + "&select=dados,atualizado_em", { headers: H });
       if(!r.ok) throw new Error("supa get " + r.status);
       const rows = await r.json();
       const dados = rows.length ? rows[0].dados : null;
-      return { exists: !!dados, data: () => dados };
+      return { exists: !!dados, data: () => dados, ts: rows.length ? rows[0].atualizado_em : null };
     },
-    set: async (obj) => {
+    /* com ts: só grava se ninguém mexeu desde a leitura (devolve false se mexeram) */
+    set: async (obj, ts) => {
+      if(ts){
+        const r = await fetch(SUPA_URL + "/rest/v1/estado?id=eq." + SUPA_ROW + "&atualizado_em=eq." + encodeURIComponent(ts), {
+          method: "PATCH",
+          headers: Object.assign({ "Content-Type": "application/json", Prefer: "return=representation" }, H),
+          body: JSON.stringify({ dados: obj })
+        });
+        if(!r.ok) throw new Error("supa set " + r.status);
+        const rows = await r.json();
+        return rows.length > 0;
+      }
       const r = await fetch(SUPA_URL + "/rest/v1/estado", {
         method: "POST",
-        headers: {
-          apikey: SUPA_KEY, Authorization: "Bearer " + SUPA_KEY,
-          "Content-Type": "application/json",
-          Prefer: "resolution=merge-duplicates,return=minimal"
-        },
+        headers: Object.assign({ "Content-Type": "application/json", Prefer: "resolution=ignore-duplicates,return=minimal" }, H),
         body: JSON.stringify([{ id: SUPA_ROW, dados: obj }])
       });
       if(!r.ok) throw new Error("supa set " + r.status);
+      return true;
     }
   };
 }
@@ -1840,6 +1947,7 @@ function normaliza(o){
   if(!o.vb.w || typeof o.vb.w !== "object") o.vb.w = {};
   if(!o.acum || typeof o.acum !== "object") o.acum = {verb:0};
   if(o.acum.verb === undefined) o.acum.verb = 0;
+  if(!o.apg || typeof o.apg !== "object") o.apg = {};
   if(o.ultimoDiaAtivo === undefined) o.ultimoDiaAtivo = Object.keys(o.dias||{}).sort().pop() || null;
   return o;
 }
@@ -1854,45 +1962,31 @@ async function initSync(){
   try{ db = (window.claude && window.claude.use) ? await window.claude.use("db") : null; }catch(e){ db = null; }
   if(db){
     dbRef = db.doc("estado/principal");
-    try{
-      const snap = await dbRef.get();
-      const remoto = snap.exists ? unpack(snap.data()) : null;
-      if(remoto && (remoto.ultimo||0) > (S.ultimo||0)) adota(remoto, null);
-      else if(!remoto || (S.ultimo||0) > (remoto.ultimo||0)) await pushRemote();
-      setSync("on");
-    }catch(e){ setSync("wait"); }
+    try{ await sincroniza(); setSync("on"); }catch(e){ setSync("wait"); }
     dbUnsub = dbRef.onSnapshot(snap => {
       if(!snap.exists || snap.metadata.hasPendingWrites) return;
       const r = unpack(snap.data());
-      if(!r || (r.ultimo||0) <= (S.ultimo||0)) return;
-      if(SESSION) return;                       // não troca o estado no meio de uma sessão
-      adota(r, "Progresso atualizado do outro aparelho.");
+      if(!r || SESSION) return;                 // não troca o estado no meio de uma sessão
+      const m = mesclar(S, r);
+      if(sigDe(m) === sigDe(S)) return;
+      adota(m, "Progresso atualizado do outro aparelho.");
       setSync("on");
     }, () => { dbRef = null; dbUnsub = null; setSync("off"); });
     SYNC_PRONTO = true;
     return;
   }
-  /* fora do Claude Artifact (ex: GitHub Pages): usa o Supabase, se configurado */
+  /* fora do Claude Artifact (ex: GitHub Pages / Cloudflare): usa o Supabase */
   if(!SUPA_URL || !SUPA_KEY){ setSync("off"); SYNC_PRONTO = true; return; }
   dbRef = supaRef();
-  try{
-    const snap = await dbRef.get();
-    const remoto = snap.exists ? unpack(snap.data()) : null;
-    if(remoto && (remoto.ultimo||0) > (S.ultimo||0)) adota(remoto, null);
-    else if(!remoto || (S.ultimo||0) > (remoto.ultimo||0)) await pushRemote();
-    setSync("on");
-  }catch(e){ setSync("wait"); }
+  try{ await sincroniza(); setSync("on"); }
+  catch(e){ setSync("wait"); agendaRetry(8000); }
   SYNC_PRONTO = true;
-  /* sem tempo real por REST simples: ao voltar pra aba, busca de novo pra
-     pegar o que foi feito no outro aparelho */
+  schedulePush();   // qualquer coisa feita enquanto o sync inicial rodava
+  /* ao voltar pra aba: busca, mescla e mostra o que foi feito no outro aparelho */
   document.addEventListener("visibilitychange", async () => {
     if(document.hidden || !dbRef || SESSION) return;
-    try{
-      const snap = await dbRef.get();
-      const r = snap.exists ? unpack(snap.data()) : null;
-      if(r && (r.ultimo||0) > (S.ultimo||0)) adota(r, "Progresso atualizado do outro aparelho.");
-      setSync("on");
-    }catch(e){ setSync("wait"); }
+    try{ await sincroniza("Progresso atualizado do outro aparelho."); setSync("on"); }
+    catch(e){ setSync("wait"); agendaRetry(8000); }
   });
 }
 async function writeFile(){
@@ -1967,8 +2061,8 @@ function importJSON(){
     try{
       const j = JSON.parse(await f.text());
       if(!j || !j.w || !j.dias) throw 0;
-      if(!(await confirmar("Isso substitui o progresso atual pelo do arquivo. Continuar?"))) return;
-      S = normaliza(j); save(); toast("Progresso restaurado."); render();
+      if(!(await confirmar("Isso JUNTA o progresso do arquivo ao atual (nada é apagado). Continuar?"))) return;
+      S = mesclar(S, normaliza(j.f ? unpack(j) : j)); save(); toast("Progresso restaurado."); render();
     }catch(e){ toast("Arquivo inválido."); }
   };
   inp.click();
@@ -6400,10 +6494,10 @@ function viewCfg(v){
   };
   $("#imp").onclick = importJSON;
   $("#zerar").onclick = async () => {
-    if(!(await confirmar("Apagar TODO o progresso? Isso não tem volta."))) return;
-    if(!(await confirmar("Confirma mesmo?", "Recomendo exportar antes."))) return;
-    const imgs = S.img || {};
-    S = freshState(); S.img = imgs; save(); toast("Progresso zerado."); go("home");
+    /* 23/10: o sistema agora protege o progresso contra apagão (mesclagem entre
+       aparelhos + trava no banco). Zerar de propósito não é feito por aqui:
+       peça ao Claude, que faz isso de forma controlada e guarda uma cópia. */
+    toast("Zerar é feito só pelo Claude (proteção contra apagão). Peça a ele.");
   };
 }
 
